@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
+const moment = require("moment");
 
 module.exports = {
+  moment,
   /**
    * 加盐加密
    * @param {*} password  用户输入的密码
@@ -37,7 +39,10 @@ module.exports = {
   /**
    * 统一返回客户端数据
    */
-  success({ ctx, res = null }) {
+  success({
+    ctx,
+    res = null
+  }) {
     ctx.status = res.status ? res.status : 200;
     if (res.status) {
       delete res.status;
@@ -48,4 +53,5 @@ module.exports = {
       msg: res.msg ? res.msg : "请求成功",
     };
   },
+
 };

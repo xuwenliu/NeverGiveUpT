@@ -46,6 +46,8 @@ module.exports = (appInfo) => {
   const userConfig = {
     myAppName: "blog-server-admin",
     baseRouter: "/api/v1", // 基本路由
+    PAGE:1,
+    PAGE_SIZE:10,
   };
 
   return {

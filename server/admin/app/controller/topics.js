@@ -1,5 +1,3 @@
-'use strict';
-
 const Controller = require('egg').Controller;
 
 // 定义创建接口的请求参数规则

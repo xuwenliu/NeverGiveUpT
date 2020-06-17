@@ -1,21 +1,15 @@
-"use strict";
-
 const Controller = require("egg").Controller;
 
 // 定义创建接口的请求参数规则
 const createRule = {
   userName: {
     type: "string",
-    require: true,
-    allowEmpty: false,
     format: /^[\u4E00-\u9FA5A-Za-z0-9_]{5,20}$/,
     min: 5,
     max: 20,
   },
   password: {
     type: "password",
-    require: true,
-    allowEmpty: false,
     format: /^[A-Za-z0-9_]{6,20}$/,
     min: 6,
     max: 20,

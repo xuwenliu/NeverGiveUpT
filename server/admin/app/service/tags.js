@@ -1,11 +1,11 @@
 const Service = require("egg").Service;
 
-class CategoriesService extends Service {
+class TagsService extends Service {
     constructor(ctx) {
         super(ctx);
     }
 
-    // 分类列表
+    // 标签列表
     async index(params) {
         const {
             ctx,
@@ -14,12 +14,12 @@ class CategoriesService extends Service {
 
         const page = params.page * 1 || ctx.config.PAGE;
         const pageSize = params.pageSize * 1 || ctx.config.PAGE_SIZE;
-        const totalCount = await ctx.model.Categories.find().countDocuments();
+        const totalCount = await ctx.model.Tags.find().countDocuments();
 
         const queryCon = params.name ? {
             name: params.name
         } : {};
-        const data = await ctx.model.Categories.find(queryCon).skip((page - 1) * pageSize).limit(pageSize);
+        const data = await ctx.model.Tags.find(queryCon).skip((page - 1) * pageSize).limit(pageSize);
         return {
             data: {
                 page,
@@ -27,80 +27,80 @@ class CategoriesService extends Service {
                 totalCount,
                 list: data
             },
-            msg: "分类列表获取成功",
+            msg: "标签列表获取成功",
         };
     }
 
-    // 添加分类
+    // 添加标签
     async create(params) {
         const {
             ctx
         } = this;
-        const oldCategories = await ctx.model.Categories.findOne({
+        const oldTags = await ctx.model.Tags.findOne({
             name: params.name
         });
-        if(oldCategories){
+        if(oldTags){
             return {
-                msg: "该分类已存在",
+                msg: "该标签已存在",
             }
         }
         const data = {
             ...params,
             createTime: ctx.helper.moment().unix()
         }
-        const res = await ctx.model.Categories.create(data);
+        const res = await ctx.model.Tags.create(data);
         return {
-            msg: "分类添加成功",
+            msg: "标签添加成功",
             data: res
         }
     }
 
-    // 删除分类
+    // 删除标签
     async destroy(id) {
         const {
             ctx
         } = this;
 
-        const oldCategories = await ctx.model.Categories.findOne({
+        const oldTags = await ctx.model.Tags.findOne({
             _id: id
         });
-        if (!oldCategories) {
+        if (!oldTags) {
             return {
-                msg: "分类不存在",
+                msg: "标签不存在",
             }
         }
 
-        await ctx.model.Categories.remove({
+        await ctx.model.Tags.remove({
             _id: id
         });
         return {
-            msg: "分类删除成功",
+            msg: "标签删除成功",
         }
     }
 
-    // 修改分类
+    // 修改标签
     async update(params) {
         const {
             ctx
         } = this;
 
-        const oldIdCategories = await ctx.model.Categories.findOne({
+        const oldIdTags = await ctx.model.Tags.findOne({
             _id: params.id
         });
 
-        if (oldIdCategories) {
+        if (oldIdTags) {
             // 这里查询是因为可以修改不同id的数据为相同的name，需要通过name判断是否已经存在相同的name
-            const oldNameCategories = await ctx.model.Categories.findOne({
+            const oldNameTags = await ctx.model.Tags.findOne({
                 name: params.name
             });
-            if(oldNameCategories){
+            if(oldNameTags){
                 return {
-                    msg: "分类已存在，请重新修改",
+                    msg: "标签已存在，请重新修改",
                 }
             }
         }else {
             return {
-                msg: "分类不存在",
+                msg: "标签不存在",
             }
         }
 
@@ -108,13 +108,13 @@ class CategoriesService extends Service {
             updateTime: ctx.helper.moment().unix(),
             name: params.name
         }
-        await ctx.model.Categories.updateOne({
+        await ctx.model.Tags.updateOne({
             _id: params.id
         }, updateData);
         return {
-            msg: "分类修改成功",
+            msg: "标签修改成功",
         }
     }
 }
 
-module.exports = CategoriesService;
+module.exports = TagsService;

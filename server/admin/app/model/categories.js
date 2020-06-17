@@ -6,7 +6,7 @@ module.exports = (app) => {
             type: "string",
             min: 2,
             max: 20,
-            format: /^[\u4E00-\u9FA5A-Za-z0-9_]{2,20}$/,
+            format: /^[\u4E00-\u9FA5A-Za-z0-9_.]{2,20}$/,
         },
         createTime: {
             type: "number",

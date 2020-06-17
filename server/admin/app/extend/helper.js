@@ -49,6 +49,7 @@ module.exports = {
     }
     ctx.body = {
       ...res,
+      data: res.data ? res.data : null,
       code: res.code ? res.code : 0, // 0代表成功 ，其他代表失败
       msg: res.msg ? res.msg : "请求成功",
     };

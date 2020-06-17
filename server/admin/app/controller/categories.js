@@ -1,5 +1,3 @@
-"use strict";
-
 const Controller = require("egg").Controller;
 
 class CategoriesController extends Controller {
@@ -24,7 +22,7 @@ class CategoriesController extends Controller {
                 min: 2,
                 max: 20,
                 allowEmpty: true,
-                format: /^[\u4E00-\u9FA5A-Za-z0-9_]{2,20}$/,
+                format: /^[\u4E00-\u9FA5A-Za-z0-9_.]{2,20}$/,
             }
         }
 
@@ -34,20 +32,7 @@ class CategoriesController extends Controller {
                 min: 2,
                 max: 20,
                 allowEmpty: false,
-                format: /^[\u4E00-\u9FA5A-Za-z0-9_]{2,20}$/,
-            }
-        }
-
-        this.updateRule = {
-            id: {
-                type: "string",
-            },
-            name: {
-                type: "string",
-                min: 2,
-                max: 20,
-                allowEmpty: false,
-                format: /^[\u4E00-\u9FA5A-Za-z0-9_]{2,20}$/,
+                format: /^[\u4E00-\u9FA5A-Za-z0-9_.]{2,20}$/,
             }
         }
     }
@@ -88,7 +73,7 @@ class CategoriesController extends Controller {
         const {
             ctx
         } = this;
-        const data = ctx.request.body;
+        const data = ctx.params;
         const res = await ctx.service.categories.destroy(data.id);
         ctx.helper.success({
             ctx,

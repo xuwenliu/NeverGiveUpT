@@ -14,7 +14,7 @@ class CategoriesService extends Service {
 
         const page = params.page * 1 || ctx.config.PAGE;
         const pageSize = params.pageSize * 1 || ctx.config.PAGE_SIZE;
-        const totalCount = await ctx.model.Categories.find().countDocuments();
+        const totalCount = await ctx.model.Categories.count();
 
         const queryCon = params.name ? {
             name: params.name

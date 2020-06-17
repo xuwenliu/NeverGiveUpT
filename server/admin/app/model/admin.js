@@ -8,24 +8,21 @@ module.exports = (app) => {
     {
       userName: {
         type: String,
-        required: true,
-        trim: true,
         min: 5,
         max: 20,
         match: /^[\u4E00-\u9FA5A-Za-z0-9_]{5,20}$/,
       },
       password: {
         type: String,
-        required: true,
       },
     },
     {
-      collection: "user",
+      collection: "admin",
       versionKey: false,
     }
   );
 
-  const AdminModel = mongoose.model("User", AdminSchema);
+  const AdminModel = mongoose.model("Admin", AdminSchema);
 
   //默认创建一个管理员
   let adminUser = {

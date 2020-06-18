@@ -13,4 +13,6 @@ module.exports = (app) => {
   router.resources("tags", baseRouter + "/tags", jwt, controller.tags); // 标签
   router.resources("about", baseRouter + "/about", jwt, controller.about); // 关于
   router.resources("user", baseRouter + "/user", jwt, controller.user); // 用户
+
+  router.post(baseRouter + "/upload", controller.utils.uploadFiles);
 };

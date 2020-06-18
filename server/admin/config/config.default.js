@@ -42,8 +42,13 @@ module.exports = (appInfo) => {
   const userConfig = {
     myAppName: "blog-server-admin",
     baseRouter: "/api/v1", // 基本路由
-    PAGE:1,
-    PAGE_SIZE:10,
+    PAGE: 1,
+    PAGE_SIZE: 10,
+    // 七牛云配置
+    bucket: "nevergiveupt-blog", //要上传的空间名
+    imageUrl: "http://qc437ldbv.bkt.clouddn.com/", // 空间绑定的域名
+    accessKey: "9qMN42CxUM0zrWrLtbd6DnTvEgDZFneWOlCR0HC-", //Access Key
+    secretKey: "CvWnHFlY9iZOaFdMG4jgYMVtmhzCXN3bVAv5NLZ3", //Secret Key
   };
 
   return {

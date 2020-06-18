@@ -1,10 +1,6 @@
-const fs = require("fs");
 const path = require("path");
 const qiniu = require("qiniu");
-const awaitWriteStream = require("await-stream-ready").write;
-const sendToWormhole = require("stream-wormhole");
 const md5 = require("md5");
-
 const Service = require("egg").Service;
 
 class UtilsService extends Service {
@@ -13,57 +9,63 @@ class UtilsService extends Service {
   }
   async uploadFiles() {
     const { ctx, app } = this;
+
     const mac = new qiniu.auth.digest.Mac(
       app.config.accessKey,
       app.config.secretKey
     );
+    const config = new qiniu.conf.Config();
+    config.zone = qiniu.zone.Zone_z2;
     const options = {
       scope: app.config.bucket,
+      expires: 7200,
+      force: true,
+      callbackBodyType: "application/json",
     };
+
     const putPolicy = new qiniu.rs.PutPolicy(options);
     const uploadToken = putPolicy.uploadToken(mac);
-    let config = new qiniu.conf.Config();
-    config.zone = qiniu.zone.Zone_z2;
+    const timestamp = new Date().getTime(); // 当前时间戳
+    const randomNum = Math.ceil(Math.random() * 1000); // 取1000以下的随机数
 
-    const stream = await ctx.getFileStream();
-    const filename =
-      md5(stream.filename) + path.extname(stream.filename).toLocaleLowerCase();
-    const localFilePath = path.join(__dirname, "../public/uploads", filename);
-    const writeStream = fs.createWriteStream(localFilePath);
     try {
-      await awaitWriteStream(stream.pipe(writeStream));
+      const stream = await ctx.getFileStream(); // 文件不存在将响应400错误
+      const extname = path.extname(stream.filename).toLocaleLowerCase();
+      const filename =
+        md5(path.basename(stream.filename, extname) + timestamp + randomNum) +
+        extname;
       const formUploader = new qiniu.form_up.FormUploader(config);
       const putExtra = new qiniu.form_up.PutExtra();
-      const imgSrc = await new Promise((resolve, reject) => {
-        formUploader.putFile(
+
+      const result = await new Promise((resolve, reject) => {
+        formUploader.putStream(
           uploadToken,
           filename,
-          localFilePath,
+          stream,
           putExtra,
           (respErr, respBody, respInfo) => {
             if (respErr) {
-              reject("");
+              throw respErr;
             }
             if (respInfo.statusCode == 200) {
-              resolve(app.config.imageUrl + respBody.key);
+              resolve(respBody);
             } else {
-              reject("");
+              reject(respBody);
             }
-            // 上传之后删除本地文件
-            fs.unlinkSync(localFilePath);
           }
         );
       });
-      if (imgSrc !== "") {
+      if (result !== "") {
         return {
-          url: imgSrc,
+          data: {
+            ...result,
+            url: app.config.cdn + result.key,
+          },
         };
       } else {
         return false;
       }
     } catch (err) {
-      //如果出现错误，关闭管道
-      await sendToWormhole(stream);
       return false;
     }
   }

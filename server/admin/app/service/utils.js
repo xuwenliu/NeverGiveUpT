@@ -29,42 +29,45 @@ class UtilsService extends Service {
     const randomNum = Math.ceil(Math.random() * 1000); // 取1000以下的随机数
 
     try {
-      const stream = await ctx.getFileStream(); // 文件不存在将响应400错误
-      const extname = path.extname(stream.filename).toLocaleLowerCase();
-      const filename =
-        md5(path.basename(stream.filename, extname) + timestamp + randomNum) +
-        extname;
-      const formUploader = new qiniu.form_up.FormUploader(config);
-      const putExtra = new qiniu.form_up.PutExtra();
+      // const stream = await ctx.getFileStream(); // 上传单个文件 文件不存在将响应400错误
+      const parts = this.ctx.multipart({ autoFields: true });
+      let stream;
+      const files = [];
+      while ((stream = await parts()) != null) {
+        const extname = path.extname(stream.filename).toLocaleLowerCase();
+        const filename =
+          md5(path.basename(stream.filename, extname) + timestamp + randomNum) +
+          extname;
+        const formUploader = new qiniu.form_up.FormUploader(config);
+        const putExtra = new qiniu.form_up.PutExtra();
 
-      const result = await new Promise((resolve, reject) => {
-        formUploader.putStream(
-          uploadToken,
-          filename,
-          stream,
-          putExtra,
-          (respErr, respBody, respInfo) => {
-            if (respErr) {
-              throw respErr;
+        const result = await new Promise((resolve, reject) => {
+          formUploader.putStream(
+            uploadToken,
+            filename,
+            stream,
+            putExtra,
+            (respErr, respBody, respInfo) => {
+              if (respErr) {
+                throw respErr;
+              }
+              if (respInfo.statusCode == 200) {
+                resolve(respBody);
+              } else {
+                reject(respBody);
+              }
             }
-            if (respInfo.statusCode == 200) {
-              resolve(respBody);
-            } else {
-              reject(respBody);
-            }
-          }
-        );
-      });
-      if (result !== "") {
-        return {
-          data: {
+          );
+        });
+        if (result !== "") {
+          const data = {
             ...result,
             url: app.config.cdn + result.key,
-          },
-        };
-      } else {
-        return false;
+          };
+          files.push(data);
+        }
       }
+      return files;
     } catch (err) {
       return false;
     }

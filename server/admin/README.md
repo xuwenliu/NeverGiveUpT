@@ -115,3 +115,4 @@ module.exports = (app) => {
 
 - https://github.com/heimi-block/egg-RESTfulAPI
 - https://github.com/xuwenliu/node-phone/blob/master/v2 node+koa2+mongoose
+- https://www.jianshu.com/p/c3c9b1469fee  Egg上传文件到七牛云

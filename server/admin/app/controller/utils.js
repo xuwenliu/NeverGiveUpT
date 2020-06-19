@@ -2,8 +2,11 @@ const Controller = require("egg").Controller;
 
 class UtilsController extends Controller {
   async uploadFiles() {
-    const { ctx } = this;
-    const data = await ctx.service.utils.uploadFiles();
+    const {
+      ctx,
+      service
+    } = this;
+    const data = await service.utils.uploadFiles();
     if (data) {
       ctx.body = data;
     } else {

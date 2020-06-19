@@ -1,13 +1,13 @@
 const Service = require("egg").Service;
 
-class HomeConfigService extends Service {
+class HomeService extends Service {
   constructor(ctx) {
     super(ctx);
   }
 
   async index() {
     const { ctx } = this;
-    const res = await ctx.model.HomeConfig.findOne();
+    const res = await ctx.model.Config.Home.findOne();
     return {
       msg: "首页配置信息获取成功",
       data: res,
@@ -20,9 +20,9 @@ class HomeConfigService extends Service {
       ...params,
       createTime: ctx.helper.moment().unix(),
     };
-    const oldHomeConfigCount = await ctx.model.HomeConfig.find({}).countDocuments();
-    if (oldHomeConfigCount === 0) {
-      const res = await ctx.model.HomeConfig.create(data);
+    const oldHomeCount = await ctx.model.Config.Home.find({}).countDocuments();
+    if (oldHomeCount === 0) {
+      const res = await ctx.model.Config.Home.create(data);
       return {
         msg: "首页配置信息添加成功",
         data: res,
@@ -40,11 +40,11 @@ class HomeConfigService extends Service {
       ...params,
       updateTime: ctx.helper.moment().unix(),
     };
-    const oldHomeConfig = await ctx.model.HomeConfig.findOne({
+    const oldHome = await ctx.model.Config.Home.findOne({
       _id: params.id,
     });
-    if (oldHomeConfig) {
-      const res = await ctx.model.HomeConfig.findByIdAndUpdate(
+    if (oldHome) {
+      const res = await ctx.model.Config.Home.findByIdAndUpdate(
         {
           _id: params.id,
         },
@@ -66,4 +66,4 @@ class HomeConfigService extends Service {
   }
 }
 
-module.exports = HomeConfigService;
+module.exports = HomeService;

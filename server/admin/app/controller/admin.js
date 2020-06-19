@@ -20,11 +20,12 @@ class AdminController extends Controller {
   }
   async adminLogin() {
     const {
-      ctx
+      ctx,
+      service
     } = this;
     const data = ctx.request.body;
     ctx.validate(this.createRule, data);
-    const res = await ctx.service.admin.adminLogin(data);
+    const res = await service.admin.adminLogin(data);
     ctx.helper.success({
       ctx,
       res

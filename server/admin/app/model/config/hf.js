@@ -66,7 +66,7 @@ module.exports = (app) => {
       max: 200,
     },
   });
-  const HfConfigSchema = new Schema(
+  const HfSchema = new Schema(
     {
       header: {
         type: HeaderSchema,
@@ -84,10 +84,10 @@ module.exports = (app) => {
       },
     },
     {
-      collection: "hfConfig",
+      collection: "hf",
       versionKey: false,
     }
   );
 
-  return mongoose.model("HfConfig", HfConfigSchema);
+  return mongoose.model("Hf", HfSchema);
 };

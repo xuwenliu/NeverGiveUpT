@@ -1,6 +1,6 @@
 const Controller = require("egg").Controller;
 
-class HfConfigController extends Controller {
+class HfController extends Controller {
   constructor(ctx) {
     super(ctx);
 
@@ -80,8 +80,11 @@ class HfConfigController extends Controller {
     };
   }
   async index() {
-    const { ctx } = this;
-    const res = await ctx.service.hfConfig.index();
+    const {
+      ctx,
+      service
+    } = this;
+    const res = await service.config.hf.index();
     ctx.helper.success({
       ctx,
       res,
@@ -89,21 +92,27 @@ class HfConfigController extends Controller {
   }
 
   async create() {
-    const { ctx } = this;
+    const {
+      ctx,
+      service
+    } = this;
     const data = ctx.request.body;
     ctx.validate(this.createRule, data);
-    const res = await ctx.service.hfConfig.create(data);
+    const res = await service.config.hf.create(data);
     ctx.helper.success({
       ctx,
       res,
     });
   }
   async update() {
-    const { ctx } = this;
+    const {
+      ctx,
+      service
+    } = this;
     const data = ctx.request.body;
     const id = ctx.params.id;
     ctx.validate(this.createRule, data);
-    const res = await ctx.service.hfConfig.update({
+    const res = await service.config.hf.update({
       id,
       ...data,
     });
@@ -114,4 +123,4 @@ class HfConfigController extends Controller {
   }
 }
 
-module.exports = HfConfigController;
+module.exports = HfController;

@@ -7,7 +7,7 @@ class HfService extends Service {
 
   async index() {
     const { ctx } = this;
-    const res = await ctx.model.HfConfig.findOne();
+    const res = await ctx.model.Config.Hf.findOne();
     return {
       msg: "Header/Footer配置信息获取成功",
       data: res,
@@ -20,9 +20,9 @@ class HfService extends Service {
       ...params,
       createTime: ctx.helper.moment().unix(),
     };
-    const oldHfConfigCount = await ctx.model.HfConfig.find({}).countDocuments();
-    if (oldHfConfigCount === 0) {
-      const res = await ctx.model.HfConfig.create(data);
+    const oldHfCount = await ctx.model.Config.Hf.find({}).countDocuments();
+    if (oldHfCount === 0) {
+      const res = await ctx.model.Config.Hf.create(data);
       return {
         msg: "Header/Footer配置信息添加成功",
         data: res,
@@ -40,11 +40,11 @@ class HfService extends Service {
       ...params,
       updateTime: ctx.helper.moment().unix(),
     };
-    const oldHfConfig = await ctx.model.HfConfig.findOne({
+    const oldHf = await ctx.model.Config.Hf.findOne({
       _id: params.id,
     });
-    if (oldHfConfig) {
-      const res = await ctx.model.HfConfig.findByIdAndUpdate(
+    if (oldHf) {
+      const res = await ctx.model.Config.Hf.findByIdAndUpdate(
         {
           _id: params.id,
         },

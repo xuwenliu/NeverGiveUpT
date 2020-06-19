@@ -1,7 +1,7 @@
 module.exports = (app) => {
     const mongoose = app.mongoose;
     const Schema = mongoose.Schema;
-    const HomeConfigSchema = new Schema({
+    const HomeSchema = new Schema({
         homeBgImg: {
             type: "string",
         },
@@ -53,9 +53,9 @@ module.exports = (app) => {
         },
 
     }, {
-        collection: "homeConfig",
+        collection: "home",
         versionKey: false,
     });
 
-    return mongoose.model("HomeConfig", HomeConfigSchema);
+    return mongoose.model("Home", HomeSchema);
 };

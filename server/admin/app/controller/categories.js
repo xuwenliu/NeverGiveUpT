@@ -41,11 +41,12 @@ class CategoriesController extends Controller {
     // 分类列表
     async index() {
         const {
-            ctx
+            ctx,
+            service
         } = this;
         const data = ctx.request.query;
         ctx.validate(this.queryListParamsRules, data);
-        const res = await ctx.service.categories.index(data);
+        const res = await service.categories.index(data);
         ctx.helper.success({
             ctx,
             res
@@ -55,11 +56,12 @@ class CategoriesController extends Controller {
     // 添加分类
     async create() {
         const {
-            ctx
+            ctx,
+            service
         } = this;
         const data = ctx.request.body;
         ctx.validate(this.createRule, data);
-        const res = await ctx.service.categories.create(data);
+        const res = await service.categories.create(data);
         ctx.helper.success({
             ctx,
             res
@@ -71,10 +73,11 @@ class CategoriesController extends Controller {
     // 删除分类
     async destroy() {
         const {
-            ctx
+            ctx,
+            service
         } = this;
         const data = ctx.params;
-        const res = await ctx.service.categories.destroy(data.id);
+        const res = await service.categories.destroy(data.id);
         ctx.helper.success({
             ctx,
             res
@@ -84,12 +87,13 @@ class CategoriesController extends Controller {
     // 修改分类
     async update() {
         const {
-            ctx
+            ctx,
+            service
         } = this;
         const data = ctx.request.body;
         const id = ctx.params.id;
         ctx.validate(this.createRule, data);
-        const res = await ctx.service.categories.update({
+        const res = await service.categories.update({
             id,
             name: data.name
         });

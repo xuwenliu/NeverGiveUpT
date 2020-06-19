@@ -5,7 +5,7 @@ module.exports = (app) => {
   const {
     router,
     controller,
-    jwt
+    jwt,
   } = app;
   const baseRouter = app.config.baseRouter; // /api/v1
   router.post(baseRouter + "/admin/login", controller.admin.adminLogin); // 管理员登录
@@ -15,7 +15,7 @@ module.exports = (app) => {
   router.resources("tags", baseRouter + "/tags", jwt, controller.tags); // 标签
   router.resources("about", baseRouter + "/about", jwt, controller.about); // 关于
   router.resources("user", baseRouter + "/user", jwt, controller.user); // 用户
-  router.resources("homeConfig", baseRouter + "/homeConfig", jwt, controller.homeConfig); // 首页配置
-  router.resources("hfConfig", baseRouter + "/hfConfig", jwt, controller.hfConfig); // header/footer配置
+  router.resources("config", baseRouter + "/config/home", jwt, controller.config.home); // 首页配置
+  router.resources("config", baseRouter + "/config/hf", jwt, controller.config.hf); // header/footer配置
 
 };

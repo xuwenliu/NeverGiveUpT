@@ -1,6 +1,6 @@
 const Controller = require("egg").Controller;
 
-class HomeConfigController extends Controller {
+class HomeController extends Controller {
     constructor(ctx) {
         super(ctx);
 
@@ -50,9 +50,10 @@ class HomeConfigController extends Controller {
     }
     async index() {
         const {
-            ctx
+            ctx,
+            service
         } = this;
-        const res = await ctx.service.homeConfig.index();
+        const res = await service.config.home.index();
         ctx.helper.success({
             ctx,
             res
@@ -61,11 +62,12 @@ class HomeConfigController extends Controller {
 
     async create() {
         const {
-            ctx
+            ctx,
+            service
         } = this;
         const data = ctx.request.body;
         ctx.validate(this.createRule, data);
-        const res = await ctx.service.homeConfig.create(data);
+        const res = await service.config.home.create(data);
         ctx.helper.success({
             ctx,
             res
@@ -73,12 +75,13 @@ class HomeConfigController extends Controller {
     }
     async update() {
         const {
-            ctx
+            ctx,
+            service
         } = this;
         const data = ctx.request.body;
         const id = ctx.params.id;
         ctx.validate(this.createRule, data);
-        const res = await ctx.service.homeConfig.update({
+        const res = await service.config.home.update({
             id,
             ...data,
         });
@@ -89,4 +92,4 @@ class HomeConfigController extends Controller {
     }
 }
 
-module.exports = HomeConfigController;
+module.exports = HomeController;

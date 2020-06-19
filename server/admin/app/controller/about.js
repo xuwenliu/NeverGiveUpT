@@ -36,28 +36,46 @@ class AboutController extends Controller {
     };
   }
   async index() {
-    const { ctx } = this;
-    const res = await ctx.service.about.index();
-    ctx.helper.success({ ctx, res });
+    const {
+      ctx,
+      service
+    } = this;
+    const res = await service.about.index();
+    ctx.helper.success({
+      ctx,
+      res
+    });
   }
 
   async create() {
-    const { ctx } = this;
+    const {
+      ctx,
+      service
+    } = this;
     const data = ctx.request.body;
     ctx.validate(this.createRule, data);
-    const res = await ctx.service.about.create(data);
-    ctx.helper.success({ ctx, res });
+    const res = await service.about.create(data);
+    ctx.helper.success({
+      ctx,
+      res
+    });
   }
   async update() {
-    const { ctx } = this;
+    const {
+      ctx,
+      service
+    } = this;
     const data = ctx.request.body;
     const id = ctx.params.id;
     ctx.validate(this.createRule, data);
-    const res = await ctx.service.about.update({
+    const res = await service.about.update({
       id,
       ...data,
     });
-    ctx.helper.success({ ctx, res });
+    ctx.helper.success({
+      ctx,
+      res
+    });
   }
 }
 

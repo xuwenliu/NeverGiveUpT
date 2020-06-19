@@ -24,13 +24,13 @@ class UserController extends Controller {
     }
   }
   async index() {
-
     const {
-      ctx
+      ctx,
+      service
     } = this;
     const data = ctx.request.query;
     ctx.validate(this.queryListParamsRules, data);
-    const res = await ctx.service.user.index(data);
+    const res = await service.user.index(data);
     ctx.helper.success({
       ctx,
       res
@@ -39,12 +39,13 @@ class UserController extends Controller {
 
   async destroy() {
     const {
-      ctx
+      ctx,
+      service
     } = this;
     const {
       id
     } = ctx.params;
-    const res = await ctx.service.user.destroy(id);
+    const res = await service.user.destroy(id);
     ctx.helper.success({
       ctx,
       res

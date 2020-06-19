@@ -41,11 +41,12 @@ class TagsController extends Controller {
     // 标签列表
     async index() {
         const {
-            ctx
+            ctx,
+            service
         } = this;
         const data = ctx.request.query;
         ctx.validate(this.queryListParamsRules, data);
-        const res = await ctx.service.tags.index(data);
+        const res = await service.tags.index(data);
         ctx.helper.success({
             ctx,
             res
@@ -55,11 +56,12 @@ class TagsController extends Controller {
     // 添加标签
     async create() {
         const {
-            ctx
+            ctx,
+            service
         } = this;
         const data = ctx.request.body;
         ctx.validate(this.createRule, data);
-        const res = await ctx.service.tags.create(data);
+        const res = await service.tags.create(data);
         ctx.helper.success({
             ctx,
             res
@@ -71,10 +73,11 @@ class TagsController extends Controller {
     // 删除标签
     async destroy() {
         const {
-            ctx
+            ctx,
+            service
         } = this;
-		const data = ctx.params;
-        const res = await ctx.service.tags.destroy(data.id);
+        const data = ctx.params;
+        const res = await service.tags.destroy(data.id);
         ctx.helper.success({
             ctx,
             res
@@ -84,12 +87,13 @@ class TagsController extends Controller {
     // 修改标签
     async update() {
         const {
-            ctx
+            ctx,
+            service
         } = this;
         const data = ctx.request.body;
         const id = ctx.params.id;
         ctx.validate(this.createRule, data);
-        const res = await ctx.service.tags.update({
+        const res = await service.tags.update({
             id,
             name: data.name
         });

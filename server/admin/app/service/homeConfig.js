@@ -20,7 +20,7 @@ class HomeConfigService extends Service {
       ...params,
       createTime: ctx.helper.moment().unix(),
     };
-    const oldHomeConfigCount = await ctx.model.HomeConfig.count();
+    const oldHomeConfigCount = await ctx.model.HomeConfig.find({}).countDocuments();
     if (oldHomeConfigCount === 0) {
       const res = await ctx.model.HomeConfig.create(data);
       return {

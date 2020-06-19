@@ -10,7 +10,7 @@ class TagsService extends Service {
     const { ctx, app } = this;
     const page = params.page * 1 || app.config.PAGE;
     const pageSize = params.pageSize * 1 || app.config.PAGE_SIZE;
-    const totalCount = await ctx.model.Tags.count();
+    const totalCount = await ctx.model.Tags.find({}).countDocuments();
 
     const queryCon = params.name
       ? {
@@ -67,7 +67,7 @@ class TagsService extends Service {
       };
     }
 
-    await ctx.model.Tags.remove({
+    await ctx.model.Tags.deleteOne({
       _id: id,
     });
     return {

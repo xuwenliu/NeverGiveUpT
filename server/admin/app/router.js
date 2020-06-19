@@ -15,6 +15,7 @@ module.exports = (app) => {
   router.resources("tags", baseRouter + "/tags", jwt, controller.tags); // 标签
   router.resources("about", baseRouter + "/about", jwt, controller.about); // 关于
   router.resources("user", baseRouter + "/user", jwt, controller.user); // 用户
-  router.resources("homeConfig", baseRouter + "/homeConfig", jwt, controller.homeConfig); // 用户
+  router.resources("homeConfig", baseRouter + "/homeConfig", jwt, controller.homeConfig); // 首页配置
+  router.resources("hfConfig", baseRouter + "/hfConfig", jwt, controller.hfConfig); // header/footer配置
 
 };

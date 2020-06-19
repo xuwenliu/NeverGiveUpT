@@ -11,7 +11,7 @@ class CategoriesService extends Service {
 
     const page = params.page * 1 || app.config.PAGE;
     const pageSize = params.pageSize * 1 || app.config.PAGE_SIZE;
-    const totalCount = await ctx.model.Categories.count();
+    const totalCount = await ctx.model.Categories.find({}).countDocuments();
 
     const queryCon = params.name
       ? {
@@ -68,7 +68,7 @@ class CategoriesService extends Service {
       };
     }
 
-    await ctx.model.Categories.remove({
+    await ctx.model.Categories.deleteOne({
       _id: id,
     });
     return {

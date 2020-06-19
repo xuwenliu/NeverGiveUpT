@@ -1,5 +1,3 @@
-const helper = require("../extend/helper");
-
 module.exports = (app) => {
     const mongoose = app.mongoose;
     const Schema = mongoose.Schema;
@@ -55,7 +53,7 @@ module.exports = (app) => {
         },
 
     }, {
-        collection: "HomeConfig",
+        collection: "homeConfig",
         versionKey: false,
     });
 

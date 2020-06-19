@@ -10,7 +10,7 @@ class UserService extends Service {
 
     const page = params.page * 1 || app.config.PAGE;
     const pageSize = params.pageSize * 1 || app.config.PAGE_SIZE;
-    const totalCount = await ctx.model.User.count();
+    const totalCount = await ctx.model.User.find({}).countDocuments();
 
     const queryCon = params.nickName
       ? {
@@ -44,7 +44,7 @@ class UserService extends Service {
       };
     }
 
-    await ctx.model.User.remove({
+    await ctx.model.User.deleteOne({
       _id: id,
     });
     return {

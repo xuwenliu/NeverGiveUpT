@@ -1,15 +1,15 @@
 const Service = require("egg").Service;
 
-class AboutService extends Service {
+class HfService extends Service {
   constructor(ctx) {
     super(ctx);
   }
 
   async index() {
     const { ctx } = this;
-    const res = await ctx.model.About.findOne();
+    const res = await ctx.model.HfConfig.findOne();
     return {
-      msg: "关于信息获取成功",
+      msg: "Header/Footer配置信息获取成功",
       data: res,
     };
   }
@@ -20,16 +20,16 @@ class AboutService extends Service {
       ...params,
       createTime: ctx.helper.moment().unix(),
     };
-    const oldAboutCount = await ctx.model.About.find({}).countDocuments();
-    if (oldAboutCount === 0) {
-      const res = await ctx.model.About.create(data);
+    const oldHfConfigCount = await ctx.model.HfConfig.find({}).countDocuments();
+    if (oldHfConfigCount === 0) {
+      const res = await ctx.model.HfConfig.create(data);
       return {
-        msg: "关于信息添加成功",
+        msg: "Header/Footer配置信息添加成功",
         data: res,
       };
     } else {
       return {
-        msg: "关于信息已存在",
+        msg: "Header/Footer配置信息已存在",
       };
     }
   }
@@ -40,11 +40,11 @@ class AboutService extends Service {
       ...params,
       updateTime: ctx.helper.moment().unix(),
     };
-    const oldAbout = await ctx.model.About.findOne({
+    const oldHfConfig = await ctx.model.HfConfig.findOne({
       _id: params.id,
     });
-    if (oldAbout) {
-      const res = await ctx.model.About.findByIdAndUpdate(
+    if (oldHfConfig) {
+      const res = await ctx.model.HfConfig.findByIdAndUpdate(
         {
           _id: params.id,
         },
@@ -55,15 +55,15 @@ class AboutService extends Service {
         }
       );
       return {
-        msg: "关于信息修改成功",
+        msg: "Header/Footer配置信息修改成功",
         data: res,
       };
     } else {
       return {
-        msg: "关于信息不存在",
+        msg: "Header/Footer配置信息不存在",
       };
     }
   }
 }
 
-module.exports = AboutService;
+module.exports = HfService;

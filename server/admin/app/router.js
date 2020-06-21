@@ -17,5 +17,6 @@ module.exports = (app) => {
   router.resources("user", baseRouter + "/user", jwt, controller.user); // 用户
   router.resources("config", baseRouter + "/config/home", jwt, controller.config.home); // 首页配置
   router.resources("config", baseRouter + "/config/hf", jwt, controller.config.hf); // header/footer配置
+  router.resources("config", baseRouter + "/config/right", jwt, controller.config.right); // 右侧配置
 
 };

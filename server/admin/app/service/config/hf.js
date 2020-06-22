@@ -36,14 +36,16 @@ class HfService extends Service {
 
   async update(params) {
     const { ctx } = this;
-    const updateData = {
-      ...params,
-      updateTime: ctx.helper.moment().unix(),
-    };
+
     const oldHf = await ctx.model.Config.Hf.findOne({
       _id: params.id,
     });
     if (oldHf) {
+      const updateData = {
+        ...params,
+        createTime: oldHf.createTime,
+        updateTime: ctx.helper.moment().unix(),
+      };
       const res = await ctx.model.Config.Hf.findByIdAndUpdate(
         {
           _id: params.id,

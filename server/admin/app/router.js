@@ -17,6 +17,8 @@ module.exports = (app) => {
   router.resources("user", baseRouter + "/user", jwt, controller.user); // 用户
   router.resources("config", baseRouter + "/config/home", jwt, controller.config.home); // 首页配置
   router.resources("config", baseRouter + "/config/hf", jwt, controller.config.hf); // header/footer配置
-  router.resources("config", baseRouter + "/config/right", jwt, controller.config.right); // 右侧配置
+  router.resources("config", baseRouter + "/config/right/introduction", jwt, controller.config.right.introduction); // 右侧配置-个人简介
+  router.resources("config", baseRouter + "/config/right/ad", jwt, controller.config.right.ad); // 右侧配置-广告设置
+  router.resources("config", baseRouter + "/config/right/recommend", jwt, controller.config.right.recommend); // 右侧配置-推荐设置
 
 };

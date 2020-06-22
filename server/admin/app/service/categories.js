@@ -101,6 +101,7 @@ class CategoriesService extends Service {
     }
 
     const updateData = {
+      createTime: oldIdCategories.createTime,
       updateTime: ctx.helper.moment().unix(),
       name: params.name,
     };

@@ -1,15 +1,15 @@
 const Service = require("egg").Service;
 
-class HomeService extends Service {
+class RightAdService extends Service {
   constructor(ctx) {
     super(ctx);
   }
 
   async index() {
     const { ctx } = this;
-    const res = await ctx.model.Config.Home.findOne();
+    const res = await ctx.model.Config.Right.Ad.findOne();
     return {
-      msg: "首页配置信息获取成功",
+      msg: `广告设置获取成功`,
       data: res,
     };
   }
@@ -20,32 +20,40 @@ class HomeService extends Service {
       ...params,
       createTime: ctx.helper.moment().unix(),
     };
-    const oldHomeCount = await ctx.model.Config.Home.find({}).countDocuments();
-    if (oldHomeCount === 0) {
-      const res = await ctx.model.Config.Home.create(data);
+
+    const oldRightAdCount = await ctx.model.Config.Right.Ad.find(
+      {}
+    ).countDocuments();
+
+    if (oldRightAdCount === 0) {
+      const res = await ctx.model.Config.Right.Ad.create(data);
       return {
-        msg: "首页配置信息添加成功",
+        msg: "广告设置添加成功",
         data: res,
       };
     } else {
       return {
-        msg: "首页配置信息已存在",
+        msg: "广告设置已存在",
       };
     }
   }
 
   async update(params) {
     const { ctx } = this;
-    const oldHome = await ctx.model.Config.Home.findOne({
-      _id: params.id,
-    });
-    if (oldHome) {
+
+    const oldRightAd = await ctx.model.Config.Right.Ad.findOne(
+      {
+        _id: params.id,
+      }
+    );
+
+    if (oldRightAd) {
       const updateData = {
         ...params,
-        createTime: oldHome.createTime,
+        createTime: oldRightAd.createTime,
         updateTime: ctx.helper.moment().unix(),
       };
-      const res = await ctx.model.Config.Home.findByIdAndUpdate(
+      const res = await ctx.model.Config.Right.Ad.findByIdAndUpdate(
         {
           _id: params.id,
         },
@@ -56,15 +64,15 @@ class HomeService extends Service {
         }
       );
       return {
-        msg: "首页配置信息修改成功",
+        msg: "广告设置修改成功",
         data: res,
       };
     } else {
       return {
-        msg: "首页配置信息不存在",
+        msg: "广告设置不存在",
       };
     }
   }
 }
 
-module.exports = HomeService;
+module.exports = RightAdService;

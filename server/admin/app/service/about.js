@@ -36,14 +36,15 @@ class AboutService extends Service {
 
   async update(params) {
     const { ctx } = this;
-    const updateData = {
-      ...params,
-      updateTime: ctx.helper.moment().unix(),
-    };
     const oldAbout = await ctx.model.About.findOne({
       _id: params.id,
     });
     if (oldAbout) {
+      const updateData = {
+        ...params,
+        createTime: oldAbout.createTime,
+        updateTime: ctx.helper.moment().unix(),
+      };
       const res = await ctx.model.About.findByIdAndUpdate(
         {
           _id: params.id,

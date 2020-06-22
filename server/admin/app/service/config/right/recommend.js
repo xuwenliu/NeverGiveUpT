@@ -1,15 +1,17 @@
 const Service = require("egg").Service;
 
-class HomeService extends Service {
+class RightRecommendService extends Service {
   constructor(ctx) {
     super(ctx);
   }
 
-  async index() {
+  async index(params) {
     const { ctx } = this;
-    const res = await ctx.model.Config.Home.findOne();
+    const res = await ctx.model.Config.Right.Recommend.find({
+      project: params.project,
+    });
     return {
-      msg: "首页配置信息获取成功",
+      msg: `推荐设置获取成功`,
       data: res,
     };
   }
@@ -20,32 +22,38 @@ class HomeService extends Service {
       ...params,
       createTime: ctx.helper.moment().unix(),
     };
-    const oldHomeCount = await ctx.model.Config.Home.find({}).countDocuments();
-    if (oldHomeCount === 0) {
-      const res = await ctx.model.Config.Home.create(data);
+
+    const oldRightRecommend = await ctx.model.Config.Right.Recommend.find({
+      name: params.name,
+    });
+
+    if (oldRightRecommend.length === 0) {
+      const res = await ctx.model.Config.Right.Recommend.create(data);
       return {
-        msg: "首页配置信息添加成功",
+        msg: "推荐设置添加成功",
         data: res,
       };
     } else {
       return {
-        msg: "首页配置信息已存在",
+        msg: "推荐设置已存在",
       };
     }
   }
 
   async update(params) {
     const { ctx } = this;
-    const oldHome = await ctx.model.Config.Home.findOne({
+
+    const oldRightRecommend = await ctx.model.Config.Right.Recommend.findOne({
       _id: params.id,
     });
-    if (oldHome) {
+
+    if (oldRightRecommend) {
       const updateData = {
         ...params,
-        createTime: oldHome.createTime,
+        createTime: oldRightRecommend.createTime,
         updateTime: ctx.helper.moment().unix(),
       };
-      const res = await ctx.model.Config.Home.findByIdAndUpdate(
+      const res = await ctx.model.Config.Right.Recommend.findByIdAndUpdate(
         {
           _id: params.id,
         },
@@ -56,15 +64,15 @@ class HomeService extends Service {
         }
       );
       return {
-        msg: "首页配置信息修改成功",
+        msg: "推荐设置修改成功",
         data: res,
       };
     } else {
       return {
-        msg: "首页配置信息不存在",
+        msg: "推荐设置不存在",
       };
     }
   }
 }
 
-module.exports = HomeService;
+module.exports = RightRecommendService;

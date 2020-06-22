@@ -100,6 +100,7 @@ class TagsService extends Service {
     }
 
     const updateData = {
+      createTime: oldIdTags.createTime,
       updateTime: ctx.helper.moment().unix(),
       name: params.name,
     };

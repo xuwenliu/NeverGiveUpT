@@ -11,6 +11,7 @@ module.exports = (app) => {
   router.post(baseRouter + "/admin/login", controller.admin.adminLogin); // 管理员登录
   router.post(baseRouter + "/upload", jwt, controller.utils.uploadFiles); //上传文件到七牛云
 
+  router.resources("articles", baseRouter + "/articles", jwt, controller.articles); // 文章
   router.resources("categories", baseRouter + "/categories", jwt, controller.categories); // 分类
   router.resources("tags", baseRouter + "/tags", jwt, controller.tags); // 标签
   router.resources("about", baseRouter + "/about", jwt, controller.about); // 关于

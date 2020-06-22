@@ -17,22 +17,9 @@ class RightIntroductionController extends Controller {
       },
       tags: {
         type: "array",
-        itemType: "object",
-        min: 1,
-        max: 10,
-        rule: {
-          _id: {
-            type: "string",
-          },
-          name: {
-            type: "string",
-            min: 2,
-            max: 20,
-            format: /^[\u4E00-\u9FA5A-Za-z0-9_.]{2,20}$/,
-          },
-        },
+        itemType:'string'
       },
-      frendLink: {
+      friendLink: {
         type: "array",
         itemType: "object",
         rule: {
@@ -48,15 +35,7 @@ class RightIntroductionController extends Controller {
       },
       showPosition: {
         type: "array",
-        itemType: "object",
-        rule: {
-          _id: {
-            type: "string",
-          },
-          name: {
-            type: "string",
-          },
-        },
+        itemType: "string",
         min: 1,
         max: 10,
       },

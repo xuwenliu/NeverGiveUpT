@@ -16,7 +16,7 @@ module.exports = (app) => {
             type: "number",
             default: 0,
         },
-        acticleNum: {
+        articleNum: {
             type: "number",
             default: 0,
         }

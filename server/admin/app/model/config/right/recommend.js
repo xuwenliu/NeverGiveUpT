@@ -2,15 +2,6 @@ module.exports = (app) => {
   const mongoose = app.mongoose;
   const Schema = mongoose.Schema;
 
-  const ShowPositionSchema = new Schema({
-    _id: {
-      type: "ObjectId",
-    },
-    name: {
-      type: "string",
-    },
-  });
-
   const RightRecommendSchema = new Schema(
     {
       project: {
@@ -19,7 +10,7 @@ module.exports = (app) => {
         max: 3,
       },
       showPosition: {
-        type: [ShowPositionSchema],
+        type: [String],
         min: 1,
         max: 10,
       },
@@ -28,7 +19,7 @@ module.exports = (app) => {
         min: 2,
         max: 50,
       },
-      coverImg: {
+      cover: {
         type: "string",
       },
       link: {
@@ -54,10 +45,10 @@ module.exports = (app) => {
       },
     },
     {
-      collection: "right_recomment",
+      collection: "right_recommend",
       versionKey: false,
     }
   );
 
-  return mongoose.model("RightRecomment", RightRecommendSchema);
+  return mongoose.model("RightRecommend", RightRecommendSchema);
 };

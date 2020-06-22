@@ -2,15 +2,6 @@ module.exports = (app) => {
   const mongoose = app.mongoose;
   const Schema = mongoose.Schema;
 
-  const ShowPositionSchema = new Schema({
-    _id: {
-      type: "ObjectId",
-    },
-    name: {
-      type: "string",
-    },
-  });
-
   const ImgsSchema = new Schema({
     url: {
       type: "string",
@@ -27,7 +18,7 @@ module.exports = (app) => {
         max: 3,
       },
       showPosition: {
-        type: [ShowPositionSchema],
+        type: [String],
         min: 1,
         max: 10,
       },

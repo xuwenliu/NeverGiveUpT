@@ -7,9 +7,12 @@ class RightRecommendService extends Service {
 
   async index(params) {
     const { ctx } = this;
-    const res = await ctx.model.Config.Right.Recommend.find({
-      project: params.project,
-    });
+    const queryCon = params.project
+      ? {
+          project: params.project,
+        }
+      : {};
+    const res = await ctx.model.Config.Right.Recommend.find(queryCon);
     return {
       msg: `推荐设置获取成功`,
       data: res,

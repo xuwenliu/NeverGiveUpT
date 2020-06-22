@@ -39,10 +39,7 @@ module.exports = {
   /**
    * 统一返回客户端数据
    */
-  success({
-    ctx,
-    res = null
-  }) {
+  success({ ctx, res = null }) {
     ctx.status = res.status ? res.status : 200;
     if (res.status) {
       delete res.status;
@@ -53,6 +50,14 @@ module.exports = {
       code: res.code ? res.code : 0, // 0代表成功 ，其他代表失败
       msg: res.msg ? res.msg : "请求成功",
     };
-  }
-
+  },
+  filterEmptyField(trans) {
+    let pam = {};
+    for (let i in trans) {
+      if (trans[i]) {
+        pam[i] = trans[i];
+      }
+    }
+    return pam;
+  },
 };

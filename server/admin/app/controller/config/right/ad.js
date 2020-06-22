@@ -20,15 +20,7 @@ class RightAdController extends Controller {
       },
       showPosition: {
         type: "array",
-        itemType: "object",
-        rule: {
-          _id: {
-            type: "string",
-          },
-          name: {
-            type: "string",
-          },
-        },
+        itemType: "string",
         min: 1,
         max: 10,
       },

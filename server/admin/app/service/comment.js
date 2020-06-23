@@ -8,11 +8,10 @@ class CommentService extends Service {
   // 评论列表
   async index(params) {
     const { ctx, app } = this;
-    const page = params.page * 1 || app.config.PAGE;
-    const pageSize = params.pageSize * 1 || app.config.PAGE_SIZE;
-    const totalCount = await ctx.model.Comment.find({}).countDocuments();
-    delete params.page;
-    delete params.pageSize;
+    const page = params.page * 1;
+    const pageSize = params.pageSize * 1;
+    params = ctx.helper.filterEmptyField(params);
+
 
     let mustCon = {};
     if (params.auditStatus !== "0") {
@@ -28,29 +27,21 @@ class CommentService extends Service {
       $and: [
         mustCon,
         {
-          $or: [
-            {
-              nickName: { $regex: params.nickName ? params.nickName : "" },
-            },
-          ],
+          nickName: { $regex: params.nickName ? new RegExp(params.nickName,'i')  : "" },
         },
         {
-          $or: [
-            {
-              articleTitle: {
-                $regex: params.articleTitle ? params.articleTitle : "",
-              },
-            },
-          ],
+          articleTitle: {
+            $regex: params.articleTitle ? new RegExp(params.articleTitle,'i') : "",
+          },
         },
       ],
     };
-
+    const totalCount = await ctx.model.Comment.find(queryCon).countDocuments();
     const data = await ctx.model.Comment.find(queryCon)
       .sort({ createTime: -1 })
       .skip((page - 1) * pageSize)
       .limit(pageSize);
-    console.log(data);
+
     return {
       data: {
         page,
@@ -105,7 +96,7 @@ class CommentService extends Service {
       updateData
     );
     return {
-      msg: "评论修改成功",
+      msg: "评论审核状态修改成功",
     };
   }
 

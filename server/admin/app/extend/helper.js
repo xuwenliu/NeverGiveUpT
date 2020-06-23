@@ -55,7 +55,9 @@ module.exports = {
     let pam = {};
     for (let i in trans) {
       if (trans[i]) {
-        pam[i] = trans[i];
+        if(i !== 'page' && i !== 'pageSize'){
+          pam[i] = trans[i];
+        }
       }
     }
     return pam;

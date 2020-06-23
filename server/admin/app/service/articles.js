@@ -7,21 +7,68 @@ class ArticlesService extends Service {
 
   async index(params) {
     const { ctx, app } = this;
-    const page = params.page * 1 || app.config.PAGE;
-    const pageSize = params.pageSize * 1 || app.config.PAGE_SIZE;
-    const totalCount = await ctx.model.Articles.find({}).countDocuments();
-    delete params.page;
-    delete params.pageSize;
-    const queryCon = ctx.helper.filterEmptyField(params);
+    const page = params.page * 1;
+    const pageSize = params.pageSize * 1;
+    params = ctx.helper.filterEmptyField(params);
 
-    const data = await ctx.model.Articles.find({
-      ...queryCon,
-      title: { $regex: params.title ? params.title : "" },
-    })
+
+    let mustCon = {};
+    if (params.categories) {
+      mustCon.categories = params.categories;
+    }
+    if (params.tags) {
+      mustCon.tags = {
+        $regex: new RegExp(params.tags)
+      };
+    }
+    if (params.status !== "0") {
+      mustCon.status = params.status;
+    }
+    if (params.publishStatus !== "0") {
+      mustCon.publishStatus = params.publishStatus;
+    }
+
+    let timeQuery = {};
+    if(params.createStartTime){
+      timeQuery.createTime = { $gt:params.createStartTime };
+    }
+    if(params.createEndTime){
+      timeQuery.createTime = { $lt:params.createEndTime };
+    }
+
+    if( params.createStartTime && params.createEndTime){
+      timeQuery.createTime = { $gt:params.createStartTime,$lt:params.createEndTime };
+    }
+
+    if(params.updateStartTime){
+      timeQuery.updateTime = { $gt:params.updateStartTime };
+    }
+    if(params.updateEndTime){
+      timeQuery.updateTime = { $lt:params.updateEndTime };
+    }
+    if( params.updateStartTime && params.updateEndTime){
+      timeQuery.updateTime = { $gt:params.updateStartTime,$lt:params.updateEndTime };
+    }
+
+    const queryCon = {
+      $and: [
+        mustCon,
+        timeQuery,
+        {
+          title: { $regex: params.title ? new RegExp(params.title,'i')  : "" },
+        },
+      ],
+    };
+
+
+
+    const totalCount = await ctx.model.Articles.find(queryCon).countDocuments();
+    const data = await ctx.model.Articles.find(queryCon)
       .sort({ sort: 1 })
       .sort({ createTime: -1 })
       .skip((page - 1) * pageSize)
       .limit(pageSize);
+
     return {
       data: {
         page,

@@ -8,19 +8,22 @@ class TagsService extends Service {
   // 标签列表
   async index(params) {
     const { ctx, app } = this;
-    const page = params.page * 1 || app.config.PAGE;
-    const pageSize = params.pageSize * 1 || app.config.PAGE_SIZE;
-    const totalCount = await ctx.model.Tags.find({}).countDocuments();
+    const page = params.page * 1;
+    const pageSize = params.pageSize * 1;
+    params = ctx.helper.filterEmptyField(params);
 
     const queryCon = params.name
-      ? {
-          name: { $regex: params.name },
-        }
-      : {};
+    ? {
+        name: { $regex: new RegExp(params.name,'i') } ,
+      }
+    : {};
+
+    const totalCount = await ctx.model.Tags.find(queryCon).countDocuments();
     const data = await ctx.model.Tags.find(queryCon)
       .sort({ createTime: -1 })
       .skip((page - 1) * pageSize)
       .limit(pageSize);
+
     return {
       data: {
         page,

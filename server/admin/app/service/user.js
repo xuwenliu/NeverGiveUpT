@@ -7,20 +7,22 @@ class UserService extends Service {
 
   async index(params) {
     const { ctx, app } = this;
-
-    const page = params.page * 1 || app.config.PAGE;
-    const pageSize = params.pageSize * 1 || app.config.PAGE_SIZE;
-    const totalCount = await ctx.model.User.find({}).countDocuments();
+    const page = params.page * 1;
+    const pageSize = params.pageSize * 1;
+    params = ctx.helper.filterEmptyField(params);
 
     const queryCon = params.nickName
       ? {
-          nickName: { $regex: params.nickName },
+          nickName: { $regex: new RegExp(params.nickName,'i') },
         }
       : {};
+
+    const totalCount = await ctx.model.User.find(queryCon).countDocuments();
     const data = await ctx.model.User.find(queryCon)
       .sort({ loginTime: -1 })
       .skip((page - 1) * pageSize)
       .limit(pageSize);
+
     return {
       data: {
         page,

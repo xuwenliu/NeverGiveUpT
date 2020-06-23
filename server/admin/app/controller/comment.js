@@ -33,6 +33,11 @@ class CommentController extends Controller {
         default: "0",
       },
     };
+    this.updateAuditStatusRules = {
+      auditStatus: {
+        type: "number", // 1=通过 2=驳回 3=未审核
+      },
+    }
   }
 
   async index() {
@@ -61,6 +66,7 @@ class CommentController extends Controller {
     const { ctx, service } = this;
     const data = ctx.request.body;
     const id = ctx.params.id;
+    ctx.validate(this.updateAuditStatusRules, data);
     const res = await service.comment.update({
       id,
       auditStatus: data.auditStatus,

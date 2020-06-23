@@ -36,14 +36,14 @@ class ArticlesController extends Controller {
         default: "",
       },
       status: {
-        type: "number",
+        type: "string",
         required: false,
-        default: 0,
+        default: "0",
       },
       publishStatus: {
-        type: "number",
+        type: "string",
         required: false,
-        default: 0,
+        default: "0",
       },
       createStartTime: {
         type: "number",
@@ -88,8 +88,7 @@ class ArticlesController extends Controller {
         format: /^[\u4E00-\u9FA5A-Za-z0-9_.]{2,20}$/,
       },
       tags: {
-        type: "array",
-        itemType: "string",
+        type: "string",
       },
       content: {
         type: "string",

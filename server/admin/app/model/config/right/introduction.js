@@ -21,7 +21,7 @@ module.exports = (app) => {
       desc: {
         type: "string",
         min: 2,
-        max: 500,
+        max: 100,
       },
       tags: {
         type: [String],

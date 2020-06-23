@@ -23,30 +23,27 @@ class ArticlesController extends Controller {
         min: 2,
         max: 200,
         allowEmpty: true,
-        format: /^[\u4E00-\u9FA5A-Za-z0-9_.]{2,200}$/,
       },
       categories: {
         type: "string",
         required: false,
         default: "",
-        min: 2,
-        max: 20,
-        format: /^[\u4E00-\u9FA5A-Za-z0-9_.]{2,20}$/,
       },
       tags: {
         // vue,react,
         type: "string",
         required: false,
+        default: "",
       },
       status: {
-        type: "string",
+        type: "number",
         required: false,
-        default: "",
+        default: 0,
       },
       publishStatus: {
-        type: "string",
+        type: "number",
         required: false,
-        default: "",
+        default: 0,
       },
       createStartTime: {
         type: "number",
@@ -75,7 +72,6 @@ class ArticlesController extends Controller {
         type: "string",
         min: 2,
         max: 200,
-        format: /^[\u4E00-\u9FA5A-Za-z0-9_.]{2,200}$/,
       },
       cover: {
         type: "url",
@@ -120,12 +116,20 @@ class ArticlesController extends Controller {
       },
       isCollect: {
         type: "boolean",
-        default: true,
+        default: false,
       },
       // 是否开启打赏
       isReward: {
         type: "boolean",
         default: false,
+      },
+      status: {
+        type: "number",
+        default: 1,
+      },
+      publishStatus: {
+        type: "number",
+        default: 2,
       },
       createTime: {
         type: "number",
@@ -136,6 +140,35 @@ class ArticlesController extends Controller {
         type: "number",
         required: false,
         default: 0,
+      },
+    };
+
+    this.changeStatusRule = {
+      status: {
+        type: "number",
+        default: 1,
+      },
+    };
+
+    this.changePublishStatusRule = {
+      publishStatus: {
+        type: "number",
+        default: 2,
+      },
+    };
+
+    this.changeSortRule = {
+      sort: {
+        type: "number",
+        required: false,
+        default: 0,
+        min: -9999,
+        max: 9999,
+      },
+      top: {
+        type: "boolean",
+        required: false,
+        default: false,
       },
     };
   }
@@ -180,6 +213,55 @@ class ArticlesController extends Controller {
     const res = await service.articles.update({
       id,
       ...data,
+    });
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
+
+  // 启用、停用
+  async changeStatus() {
+    const { ctx, service } = this;
+    const data = ctx.request.body;
+    const id = ctx.params.id;
+    ctx.validate(this.changeStatusRule, data);
+    const res = await service.articles.changeStatus({
+      id,
+      status: data.status,
+    });
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
+
+  // 更改发布状态
+  async changePublishStatus() {
+    const { ctx, service } = this;
+    const data = ctx.request.body;
+    const id = ctx.params.id;
+    ctx.validate(this.changePublishStatusRule, data);
+    const res = await service.articles.changePublishStatus({
+      id,
+      publishStatus: data.publishStatus,
+    });
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
+
+  // 更改文章权重
+  async changeSort() {
+    const { ctx, service } = this;
+    const data = ctx.request.body;
+    const id = ctx.params.id;
+    ctx.validate(this.changeSortRule, data);
+    const res = await service.articles.changeSort({
+      id,
+      sort: data.sort,
+      top: data.top,
     });
     ctx.helper.success({
       ctx,

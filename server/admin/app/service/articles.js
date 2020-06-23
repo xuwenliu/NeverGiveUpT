@@ -18,7 +18,7 @@ class ArticlesService extends Service {
       ...queryCon,
       title: { $regex: params.title ? params.title : "" },
     })
-      .sort({ sort: -1 })
+      .sort({ sort: 1 })
       .sort({ createTime: -1 })
       .skip((page - 1) * pageSize)
       .limit(pageSize);
@@ -84,7 +84,7 @@ class ArticlesService extends Service {
     });
 
     if (oldIdArticles) {
-      // 这里查询是因为可以修改不同id的数据为相同的title，需要通过title判断是否已经存在相同的name
+      // 这里查询是因为可以修改不同id的数据为相同的title，需要通过title判断是否已经存在相同的title
       const oldNameArticles = await ctx.model.Articles.findOne({
         title: params.title,
       });
@@ -112,6 +112,93 @@ class ArticlesService extends Service {
     );
     return {
       msg: "文章修改成功",
+    };
+  }
+
+  // 启用、停用
+  async changeStatus(params) {
+    const { ctx } = this;
+    const oldIdArticles = await ctx.model.Articles.findOne({
+      _id: params.id,
+    });
+    if (!oldIdArticles) {
+      return {
+        msg: "文章不存在",
+      };
+    }
+
+    const updateData = {
+      status: params.status,
+    };
+    await ctx.model.Articles.updateOne(
+      {
+        _id: params.id,
+      },
+      updateData
+    );
+    return {
+      msg: `文章${params.status === 1 ? "启用" : "停用"}成功`,
+    };
+  }
+
+  // 更改发布状态
+  async changePublishStatus(params) {
+    const { ctx } = this;
+    const oldIdArticles = await ctx.model.Articles.findOne({
+      _id: params.id,
+    });
+    if (!oldIdArticles) {
+      return {
+        msg: "文章不存在",
+      };
+    }
+
+    const updateData = {
+      publishStatus: params.publishStatus,
+    };
+    console.log(updateData);
+    await ctx.model.Articles.updateOne(
+      {
+        _id: params.id,
+      },
+      updateData
+    );
+    return {
+      msg: `文章${params.publishStatus === 1 ? "发布" : "取消发布"}成功`,
+    };
+  }
+
+  // 修改权重和置顶
+  async changeSort(params) {
+    const { ctx } = this;
+    const oldIdArticles = await ctx.model.Articles.findOne({
+      _id: params.id,
+    });
+    if (!oldIdArticles) {
+      return {
+        msg: "文章不存在",
+      };
+    }
+    // 置顶
+    if (params.top) {
+      const oldArr = await ctx.model.Articles.find();
+      if (oldArr.length === 0) return;
+      const arr = oldArr.map((item) => item.sort).sort((a, b) => a - b);
+      const currentMin = arr[0];
+      params.sort = currentMin - 1;
+    }
+
+    const updateData = {
+      sort: params.sort,
+    };
+    await ctx.model.Articles.updateOne(
+      {
+        _id: params.id,
+      },
+      updateData
+    );
+    return {
+      msg: `文章排序成功`,
     };
   }
 }

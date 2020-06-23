@@ -15,6 +15,7 @@ class HfController extends Controller {
           title: {
             type: "string",
             required: false,
+            max: 20,
           },
           fixedHeader: {
             type: "boolean",
@@ -51,6 +52,7 @@ class HfController extends Controller {
               },
               sort: {
                 type: "number",
+                min: -9999,
                 max: 9999,
                 default: 0,
               },
@@ -80,10 +82,7 @@ class HfController extends Controller {
     };
   }
   async index() {
-    const {
-      ctx,
-      service
-    } = this;
+    const { ctx, service } = this;
     const res = await service.config.hf.index();
     ctx.helper.success({
       ctx,
@@ -92,10 +91,7 @@ class HfController extends Controller {
   }
 
   async create() {
-    const {
-      ctx,
-      service
-    } = this;
+    const { ctx, service } = this;
     const data = ctx.request.body;
     ctx.validate(this.createRule, data);
     const res = await service.config.hf.create(data);
@@ -105,10 +101,7 @@ class HfController extends Controller {
     });
   }
   async update() {
-    const {
-      ctx,
-      service
-    } = this;
+    const { ctx, service } = this;
     const data = ctx.request.body;
     const id = ctx.params.id;
     ctx.validate(this.createRule, data);

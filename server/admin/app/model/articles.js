@@ -8,7 +8,6 @@ module.exports = (app) => {
         type: "string",
         min: 2,
         max: 200,
-        format: /^[\u4E00-\u9FA5A-Za-z0-9_.]{2,200}$/,
       },
       cover: {
         type: "string",
@@ -20,9 +19,6 @@ module.exports = (app) => {
       },
       categories: {
         type: "string",
-        min: 2,
-        max: 20,
-        format: /^[\u4E00-\u9FA5A-Za-z0-9_.]{2,20}$/,
       },
       tags: {
         type: [String],
@@ -44,16 +40,18 @@ module.exports = (app) => {
         default: 0,
       },
       status: {
-        type: "string",
-        default: "1",
+        type: "number",
+        default: 1,
       },
       publishStatus: {
-        type: "string",
-        default: "2",
+        type: "number",
+        default: 2,
       },
       sort: {
         type: "number",
         default: 0,
+        min: -9999,
+        max: 9999,
       },
       createTime: {
         type: "number",

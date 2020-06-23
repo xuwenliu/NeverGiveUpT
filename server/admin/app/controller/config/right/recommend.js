@@ -3,6 +3,12 @@ const Controller = require("egg").Controller;
 class RightRecommendController extends Controller {
   constructor(ctx) {
     super(ctx);
+    this.queryRule = {
+      project: {
+        type: "enum",
+        values: [1, 2, 3],
+      },
+    };
 
     this.createRecommendRule = {
       project: {
@@ -50,6 +56,7 @@ class RightRecommendController extends Controller {
   async index() {
     const { ctx, service } = this;
     const data = ctx.request.query;
+    ctx.validate(this.queryRule, data);
     const res = await service.config.right.recommend.index(data);
     ctx.helper.success({
       ctx,

@@ -13,7 +13,7 @@ class RightIntroductionController extends Controller {
       desc: {
         type: "string",
         min: 2,
-        max: 500,
+        max: 100,
       },
       tags: {
         type: "array",

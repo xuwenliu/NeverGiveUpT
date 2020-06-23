@@ -15,6 +15,7 @@ module.exports = (app) => {
     },
     sort: {
       type: "number",
+      min: -9999,
       max: 9999,
       default: 0,
     },
@@ -31,6 +32,7 @@ module.exports = (app) => {
     title: {
       type: "string",
       required: false,
+      max: 20,
     },
     fixedHeader: {
       type: "boolean",

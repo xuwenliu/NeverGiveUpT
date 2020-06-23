@@ -15,7 +15,7 @@ module.exports = (app) => {
         introduction: { // 简介
             type: "string",
             min: 2,
-            max: 1000,
+            max: 100,
         },
         effects: { // 打字特效
             type: "boolean",

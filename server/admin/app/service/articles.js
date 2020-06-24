@@ -6,11 +6,10 @@ class ArticlesService extends Service {
   }
 
   async index(params) {
-    const { ctx, app } = this;
+    const { ctx } = this;
     const page = params.page * 1;
     const pageSize = params.pageSize * 1;
     params = ctx.helper.filterEmptyField(params);
-
 
     let mustCon = {};
     if (params.categories) {
@@ -18,7 +17,7 @@ class ArticlesService extends Service {
     }
     if (params.tags) {
       mustCon.tags = {
-        $regex: new RegExp(params.tags)
+        $all: params.tags.split(","),
       };
     }
     if (params.status !== "0") {
@@ -28,39 +27,17 @@ class ArticlesService extends Service {
       mustCon.publishStatus = params.publishStatus;
     }
 
-    let timeQuery = {};
-    if(params.createStartTime){
-      timeQuery.createTime = { $gt:params.createStartTime };
-    }
-    if(params.createEndTime){
-      timeQuery.createTime = { $lt:params.createEndTime };
-    }
-
-    if( params.createStartTime && params.createEndTime){
-      timeQuery.createTime = { $gt:params.createStartTime,$lt:params.createEndTime };
-    }
-
-    if(params.updateStartTime){
-      timeQuery.updateTime = { $gt:params.updateStartTime };
-    }
-    if(params.updateEndTime){
-      timeQuery.updateTime = { $lt:params.updateEndTime };
-    }
-    if( params.updateStartTime && params.updateEndTime){
-      timeQuery.updateTime = { $gt:params.updateStartTime,$lt:params.updateEndTime };
-    }
+    let timeQuery = ctx.helper.getTimeQueryCon(params);
 
     const queryCon = {
       $and: [
         mustCon,
         timeQuery,
         {
-          title: { $regex: params.title ? new RegExp(params.title,'i')  : "" },
+          title: { $regex: params.title ? new RegExp(params.title, "i") : "" },
         },
       ],
     };
-
-
 
     const totalCount = await ctx.model.Articles.find(queryCon).countDocuments();
     const data = await ctx.model.Articles.find(queryCon)

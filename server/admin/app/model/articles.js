@@ -21,7 +21,8 @@ module.exports = (app) => {
         type: "string",
       },
       tags: {
-        type: "string",
+        type: "array",
+        itemType: "string",
       },
       views: {
         type: "number",

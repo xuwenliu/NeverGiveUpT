@@ -46,22 +46,22 @@ class ArticlesController extends Controller {
         default: "0",
       },
       createStartTime: {
-        type: "number",
+        type: "string",
         required: false,
         default: 0,
       },
       createEndTime: {
-        type: "number",
+        type: "string",
         required: false,
         default: 0,
       },
       updateStartTime: {
-        type: "number",
+        type: "string",
         required: false,
         default: 0,
       },
       updateEndTime: {
-        type: "number",
+        type: "string",
         required: false,
         default: 0,
       },
@@ -88,7 +88,8 @@ class ArticlesController extends Controller {
         format: /^[\u4E00-\u9FA5A-Za-z0-9_.]{2,20}$/,
       },
       tags: {
-        type: "string",
+        type: "array",
+        itemType: "string",
       },
       content: {
         type: "string",

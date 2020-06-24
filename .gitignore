@@ -6,7 +6,8 @@ bin-release/
 
 server/admin/node_modules
 server/web/node_modules
-front/node_modules
+front/admin/node_modules
+front/web/node_modules
 
 # Other files and folders
 .settings/

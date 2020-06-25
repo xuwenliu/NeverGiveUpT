@@ -7,20 +7,27 @@ class TagsService extends Service {
 
   // 标签列表
   async index(params) {
-    const { ctx, app } = this;
+    const {
+      ctx,
+      app
+    } = this;
     const page = params.page * 1;
     const pageSize = params.pageSize * 1;
     params = ctx.helper.filterEmptyField(params);
 
-    const queryCon = params.name
-    ? {
-        name: { $regex: new RegExp(params.name,'i') } ,
-      }
-    : {};
+    const queryCon = params.name ?
+      {
+        name: {
+          $regex: new RegExp(params.name, 'i')
+        },
+      } :
+      {};
 
     const totalCount = await ctx.model.Tags.find(queryCon).countDocuments();
     const data = await ctx.model.Tags.find(queryCon)
-      .sort({ createTime: -1 })
+      .sort({
+        createTime: -1
+      })
       .skip((page - 1) * pageSize)
       .limit(pageSize);
 
@@ -37,7 +44,9 @@ class TagsService extends Service {
 
   // 添加标签
   async create(params) {
-    const { ctx } = this;
+    const {
+      ctx
+    } = this;
     const oldTags = await ctx.model.Tags.findOne({
       name: params.name,
     });
@@ -59,7 +68,9 @@ class TagsService extends Service {
 
   // 删除标签
   async destroy(id) {
-    const { ctx } = this;
+    const {
+      ctx
+    } = this;
 
     const oldTags = await ctx.model.Tags.findOne({
       _id: id,
@@ -80,7 +91,9 @@ class TagsService extends Service {
 
   // 修改标签
   async update(params) {
-    const { ctx } = this;
+    const {
+      ctx
+    } = this;
 
     const oldIdTags = await ctx.model.Tags.findOne({
       _id: params.id,
@@ -107,14 +120,41 @@ class TagsService extends Service {
       updateTime: ctx.helper.moment().unix(),
       name: params.name,
     };
-    await ctx.model.Tags.updateOne(
-      {
+    await ctx.model.Tags.updateOne({
         _id: params.id,
       },
       updateData
     );
     return {
       msg: "标签修改成功",
+    };
+  }
+
+  async updateStatus(params) {
+    const {
+      ctx
+    } = this;
+
+    const oldIdTags = await ctx.model.Tags.findOne({
+      _id: params.id,
+    });
+
+    if (!oldIdTags) {
+      return {
+        msg: "标签不存在",
+      };
+    }
+
+    const updateData = {
+      status: params.status,
+    };
+    await ctx.model.Tags.updateOne({
+        _id: params.id,
+      },
+      updateData
+    );
+    return {
+      msg: `标签${params.status?'启用':'停用'}成功`,
     };
   }
 }

@@ -18,7 +18,10 @@ module.exports = (app) => {
 
 
   router.resources("categories", baseRouter + "/categories", jwt, controller.categories); // 分类
+
   router.resources("tags", baseRouter + "/tags", jwt, controller.tags); // 标签
+  router.put(baseRouter + "/tags/status/:id", jwt, controller.tags.updateStatus); // 标签-修改状态
+  
   router.resources("about", baseRouter + "/about", jwt, controller.about); // 关于
   router.resources("user", baseRouter + "/user", jwt, controller.user); // 用户
   router.resources("comment", baseRouter + "/comment", jwt, controller.comment); // 评论

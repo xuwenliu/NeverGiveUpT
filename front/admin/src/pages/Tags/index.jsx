@@ -3,93 +3,92 @@ import {
   CloseOutlined,
   PlusOutlined,
   DeleteOutlined,
-  EditOutlined,
 } from '@ant-design/icons';
-import { Button, Divider, Dropdown, Menu, message, Switch, Form, Input } from 'antd';
+import { Button, Divider, Dropdown, Menu, message, Switch, Form, Input, Popconfirm } from 'antd';
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
-import UpdateForm from './components/UpdateForm';
-import { queryRule, updateRule, addRule, removeRule } from './service';
+import { queryTags, addTags, removeTags, updateTags, updateTagsStatus } from './service';
+import { connect } from 'umi';
 
 import './index.less';
 import moment from 'moment';
 const EditableContext = React.createContext();
-/**
- * 添加节点
- * @param fields
- */
 
-const handleAdd = async (fields) => {
-  const hide = message.loading('正在添加');
-
+const handleAdd = async (params) => {
   try {
-    await addRule({ ...fields });
-    hide();
-    message.success('添加成功');
-    return true;
+    const res = await addTags({ ...params });
+    if (res.code === 0) {
+      message.success(res.msg);
+      return true;
+    }
   } catch (error) {
-    hide();
     message.error('添加失败请重试！');
     return false;
   }
 };
-/**
- * 更新节点
- * @param fields
- */
 
-const handleUpdate = async (fields) => {
-  const hide = message.loading('正在配置');
-
+const handleUpdate = async (params, actionRef) => {
   try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
-    hide();
-    message.success('配置成功');
-    return true;
+    const res = await updateTags({ id: params._id, name: params.name });
+    if (res.code === 0) {
+      message.success(res.msg);
+      if (actionRef.current) {
+        actionRef.current.reload();
+      }
+      return true;
+    }
   } catch (error) {
-    hide();
-    message.error('配置失败请重试！');
-    return false;
-  }
-};
-/**
- *  删除节点
- * @param selectedRows
- */
-
-const handleRemove = async (selectedRows) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
-
-  try {
-    await removeRule({
-      key: selectedRows.map((row) => row.key),
-    });
-    hide();
-    message.success('删除成功，即将刷新');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请重试');
+    message.error('修改失败请重试！');
     return false;
   }
 };
 
-const TableList = () => {
+const handleRemove = async (params, actionRef) => {
+  try {
+    const res = await removeTags({ id: params._id });
+    if (res.code === 0) {
+      message.success(res.msg);
+      if (actionRef.current) {
+        actionRef.current.reload();
+      }
+      return true;
+    }
+  } catch (error) {
+    message.error('删除失败请重试！');
+    return false;
+  }
+};
+
+const handleupdateStatus = async (status, params, actionRef) => {
+  try {
+    const res = await updateTagsStatus({ id: params._id, status });
+    if (res.code === 0) {
+      message.success(res.msg);
+      if (actionRef.current) {
+        actionRef.current.reload();
+      }
+      return true;
+    }
+  } catch (error) {
+    message.error('启用/停用失败请重试！');
+    return false;
+  }
+}
+
+const Tags = (props) => {
   const [createModalVisible, handleModalVisible] = useState(false);
-  const [updateModalVisible, handleUpdateModalVisible] = useState(false);
-  const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef();
 
-  const handleSave = (row) => {
-    console.log(row);
-  };
+  // useEffect(() => {
+  //   const { dispatch } = props;
+  //   if (dispatch) {
+  //     dispatch({
+  //       type: 'tags/queryList',
+  //     })
+  //   }
+  // }, [])
 
   let columns = [
     {
@@ -103,6 +102,16 @@ const TableList = () => {
       dataIndex: 'name',
       editable: true,
       width: '30%',
+      rules: [
+        {
+          required: true,
+          message: '标签名称为必填项',
+        },
+        {
+          pattern: /^[\u4E00-\u9FA5A-Za-z0-9_.]{2,20}$/,
+          message: '标签格式为: 2-20个_.中文大小写字母',
+        }
+      ],
     },
     {
       title: '文章数量',
@@ -122,6 +131,7 @@ const TableList = () => {
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
             checked={record.status}
+            onChange={(checked) => handleupdateStatus(checked, record, actionRef)}
           />
         );
       },
@@ -138,7 +148,7 @@ const TableList = () => {
       dataIndex: 'updateTime',
       hideInSearch: true,
       hideInForm: true,
-      render: (_, record) => moment(record.updateTime * 1000).format('YYYY-MM-DD HH:mm:ss'),
+      render: (_, record) => record.updateTime === 0 ? '-' : moment(record.updateTime * 1000).format('YYYY-MM-DD HH:mm:ss'),
     },
 
     {
@@ -146,13 +156,19 @@ const TableList = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => {
-        return record.articleNum === 0 ? (
-          <a>
-            <DeleteOutlined onClick={handleRemove} style={{ color: '#ff4d4f' }} />
-          </a>
+        return record.articleNum === 0 && !record.status ? (
+          <Popconfirm
+            placement="topLeft"
+            title={`你确定删除标签【${record.name}】吗？`}
+            onConfirm={() => handleRemove(record, actionRef)}
+          >
+            <a>
+              <DeleteOutlined style={{ color: '#ff4d4f' }} />
+            </a>
+          </Popconfirm>
         ) : (
-          <DeleteOutlined />
-        );
+            <DeleteOutlined />
+          );
       },
     },
   ];
@@ -169,7 +185,7 @@ const TableList = () => {
         editable: col.editable,
         dataIndex: col.dataIndex,
         title: col.title,
-        handleSave,
+        handleUpdate,
       }),
     };
   });
@@ -190,7 +206,7 @@ const TableList = () => {
     children,
     dataIndex,
     record,
-    handleSave,
+    handleUpdate,
     ...restProps
   }) => {
     const [editing, setEditing] = useState(false);
@@ -199,23 +215,33 @@ const TableList = () => {
     useEffect(() => {
       if (editing) {
         inputRef.current.focus();
+        inputRef.current.oldValue = record.name;
       }
     }, [editing]);
 
     const toggleEdit = () => {
+      if(record.status){
+        return message.info('启用状态标签不能修改');
+      }else {
+        if( record.articleNum > 0){
+          return message.info('该标签下有文章不能修改');
+        }
+      }
       setEditing(!editing);
       form.setFieldsValue({
         [dataIndex]: record[dataIndex],
       });
     };
 
-    const save = async (e) => {
+    const update = async (e) => {
       try {
         const values = await form.validateFields();
-        toggleEdit();
-        handleSave({ ...record, ...values });
-      } catch (errInfo) {
-        console.log('Save failed:', errInfo);
+      if(inputRef.current.oldValue !== values.name){
+        handleUpdate({ ...record, ...values }, actionRef);
+      }
+      toggleEdit();
+      } catch (error) {
+        console.log('修改失败:', error);
       }
     };
 
@@ -235,19 +261,19 @@ const TableList = () => {
             },
           ]}
         >
-          <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+          <Input ref={inputRef} onPressEnter={update} onBlur={update} />
         </Form.Item>
       ) : (
-        <div
-          className="editable-cell-value-wrap"
-          style={{
-            paddingRight: 24,
-          }}
-          onClick={toggleEdit}
-        >
-          {children}
-        </div>
-      );
+          <div
+            className="editable-cell-value-wrap"
+            style={{
+              paddingRight: 24,
+            }}
+            onClick={toggleEdit}
+          >
+            {children}
+          </div>
+        );
     }
 
     return <td {...restProps}>{childNode}</td>;
@@ -263,17 +289,18 @@ const TableList = () => {
   return (
     <PageHeaderWrapper>
 
-      
+
       <ProTable
         actionRef={actionRef}
-        rowKey="key"
+        rowKey="_id"
         toolBarRender={(action, { selectedRows }) => [
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 添加
           </Button>,
         ]}
-        request={(params, sorter, filter) => queryRule({ ...params, sorter, filter })}
+        request={(params, sorter, filter) => queryTags({ ...params })}
         columns={columns}
+        // dataSource={props.list}
         components={components}
         rowClassName={() => 'editable-row'}
       />
@@ -284,6 +311,7 @@ const TableList = () => {
         <ProTable
           onSubmit={async (value) => {
             const success = await handleAdd(value);
+            console.log('success', success)
 
             if (success) {
               handleModalVisible(false);
@@ -299,30 +327,12 @@ const TableList = () => {
           rowSelection={{}}
         />
       </CreateForm>
-      {stepFormValues && Object.keys(stepFormValues).length ? (
-        <UpdateForm
-          onSubmit={async (value) => {
-            const success = await handleUpdate(value);
-
-            if (success) {
-              handleUpdateModalVisible(false);
-              setStepFormValues({});
-
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          onCancel={() => {
-            handleUpdateModalVisible(false);
-            setStepFormValues({});
-          }}
-          updateModalVisible={updateModalVisible}
-          values={stepFormValues}
-        />
-      ) : null}
     </PageHeaderWrapper>
   );
 };
 
-export default TableList;
+export default connect(({ tags, loading }) => ({
+  list: tags.list,
+  queryList: loading.effects['tags/list'],
+}))(Tags);
+

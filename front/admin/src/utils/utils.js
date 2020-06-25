@@ -1,4 +1,6 @@
-import { parse } from 'querystring';
+import {
+  parse
+} from 'querystring';
 import pathRegexp from 'path-to-regexp';
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
@@ -13,7 +15,9 @@ export const isAntDesignPro = () => {
 }; // 给官方演示站点用，用于关闭真实开发环境不需要使用的特性
 
 export const isAntDesignProOrDev = () => {
-  const { NODE_ENV } = process.env;
+  const {
+    NODE_ENV
+  } = process.env;
 
   if (NODE_ENV === 'development') {
     return true;
@@ -30,9 +34,13 @@ export const getPageQuery = () => parse(window.location.href.split('?')[1]);
 
 export const getAuthorityFromRouter = (router = [], pathname) => {
   const authority = router.find(
-    ({ routes, path = '/', target = '_self' }) =>
-      (path && target !== '_blank' && pathRegexp(path).exec(pathname)) ||
-      (routes && getAuthorityFromRouter(routes, pathname)),
+    ({
+      routes,
+      path = '/',
+      target = '_self'
+    }) =>
+    (path && target !== '_blank' && pathRegexp(path).exec(pathname)) ||
+    (routes && getAuthorityFromRouter(routes, pathname)),
   );
   if (authority) return authority;
   return undefined;
@@ -57,3 +65,15 @@ export const getRouteAuthority = (path, routeData) => {
   });
   return authorities;
 };
+
+export const replacePage = (params) => {
+  let obj = {};
+  for (let i in params) {
+    const value = params[i];
+    if (i === 'current') {
+      i = 'page'
+    }
+    obj[i] = value;
+  }
+  return obj;
+}

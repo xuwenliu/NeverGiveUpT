@@ -25,19 +25,13 @@ export default defineConfig({
   // umi routes: https://umijs.org/docs/routing
   routes: [
     {
-      path: '/user',
+      path: '/admin',
       component: '../layouts/UserLayout',
       routes: [
         {
           name: 'login',
-          path: '/user/login',
-          component: './user/login',
-        },
-        {
-          name: '登录页',
-          icon: 'smile',
-          path: '/userlogin',
-          component: './UserLogin',
+          path: '/admin/login',
+          component: './Login',
         },
       ],
     },
@@ -115,7 +109,7 @@ export default defineConfig({
     '/api': {
       target: 'http://127.0.0.1:7001',
       changeOrigin: true,
-      pathRewrite: { '^/api': '' },
+      pathRewrite: { '^/api': '/api/v1' },
     },
   },
   manifest: {

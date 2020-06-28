@@ -14,22 +14,28 @@ const Option = Select.Option;
 
 const UploadImageItem = (props) => {
   const {
-    onRemove,
-    onAdd,
-    url,
+    imgUrl,
     link,
     icon,
-    hideIcon = false,
-    showReduce = true,
+    index = 0,
+
+    onRemove,
+    onAdd,
+    onChange,
+
+    showImg = true,
+    showLink = true,
+    showIcon = false,
+    showAction = true,
+
+    showReduce = false,
     showAdd = true,
   } = props;
+  console.log('imgUrl', imgUrl)
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState(url || '');
-  const [linkUrl, setLink] = useState(link || '');
-  const [iconName, setIcon] = useState(icon || '');
+  const [imageUrl, setImageUrl] = useState(imgUrl || '');
 
   const beforeUpload = async (file) => {
-    setLoading(true);
     const isJpgOrPng =
       file.type === 'image/jpeg' ||
       file.type === 'image/jpg' ||
@@ -44,22 +50,36 @@ const UploadImageItem = (props) => {
       message.error('图片不能超过2MB');
       return;
     }
+    setLoading(true);
     const formData = new FormData();
     formData.append('file', file);
     const res = await upload(formData);
     if (res) {
       setImageUrl(res[0].url);
+      onChange({
+        index,
+        field: 'imgUrl',
+        value: res[0].url,
+      });
       setLoading(false);
     }
     return false;
   };
 
   const handleChangeLink = (e) => {
-    setLink(e.target.value);
+    onChange({
+      index,
+      field: 'link',
+      value: e.target.value,
+    });
   };
 
   const handleChangeIcon = (e) => {
-    setIcon(e.target.value);
+    onChange({
+      index,
+      field: 'icon',
+      value: e.target.value,
+    });
   };
 
   const uploadButton = (
@@ -69,59 +89,61 @@ const UploadImageItem = (props) => {
     </div>
   );
 
-  const selectBefore = (
-    <Select defaultValue="https://" className="select-before">
-      <Option value="http://">http://</Option>
-      <Option value="https://">https://</Option>
-    </Select>
-  );
-
   return (
     <div>
       <Row>
-        <Col>
-          <Upload
-            name="file"
-            listType="picture-card"
-            className="uploader"
-            beforeUpload={beforeUpload}
-            showUploadList={false}
-          >
-            {imageUrl ? <img src={imageUrl} alt="file" style={{ width: '100%' }} /> : uploadButton}
-          </Upload>
-        </Col>
-        <div className="input">
+        {showImg && (
           <Col>
-            <Input
-              value={linkUrl}
-              onChange={handleChangeLink}
-              className="link"
-              placeholder="url"
-              addonBefore={selectBefore}
-            />
+            <Upload
+              name="file"
+              listType="picture-card"
+              className="uploader"
+              beforeUpload={beforeUpload}
+              showUploadList={false}
+            >
+              {imageUrl ? (
+                <img src={imageUrl} alt="file" style={{ width: '100%' }} />
+              ) : (
+                uploadButton
+              )}
+            </Upload>
           </Col>
-          {!hideIcon && (
+        )}
+
+        <div className="input">
+          {showLink && (
             <Col>
               <Input
-                value={iconName}
-                onChange={handleChangeIcon}
-                className="icon"
-                placeholder="icon"
+                value={link}
+                onChange={handleChangeLink}
+                className="link"
+                addonBefore="跳转链接"
               />
             </Col>
           )}
+
+          {showIcon && (
+            <Col>
+              <Input value={icon} onChange={handleChangeIcon} className="icon" addonBefore="icon" />
+            </Col>
+          )}
         </div>
-        <Col className="action">
-          {showReduce && (
-            <MinusCircleFilled
-              onClick={onRemove}
-              style={{ color: '#ff4d4f', fontSize: 30, marginLeft: 10, marginRight: 10 }}
-            />
-          )}
-          {showAdd && (
-            <PlusCircleFilled onClick={onAdd} style={{ color: '#096dd9', fontSize: 30 }} />
-          )}
-        </Col>
+        {showAction && (
+          <Col className="action">
+            {showReduce && (
+              <MinusCircleFilled
+                onClick={() => onRemove(index)}
+                style={{ color: '#ff4d4f', fontSize: 30, marginLeft: 10 }}
+              />
+            )}
+            {showAdd && (
+              <PlusCircleFilled
+                onClick={onAdd}
+                style={{ color: '#096dd9', fontSize: 30, marginLeft: 10 }}
+              />
+            )}
+          </Col>
+        )}
       </Row>
     </div>
   );

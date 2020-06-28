@@ -66,6 +66,7 @@
     "omit.js": "^1.0.2",
     "path-to-regexp": "2.4.0",
     "qs": "^6.9.0",
+    "rc-tween-one": "^2.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-fittext": "^1.0.0",

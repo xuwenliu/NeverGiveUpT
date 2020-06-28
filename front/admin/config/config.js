@@ -72,15 +72,21 @@ export default defineConfig({
             },
             {
               name: 'list.tags',
-              icon: 'table',
+              icon: 'tags',
               path: '/tags',
               component: './Tags',
             },
             {
               name: 'list.categories',
-              icon: 'table',
+              icon: 'cluster',
               path: '/categories',
               component: './Categories',
+            },
+            {
+              name: 'list.about',
+              icon: 'heart',
+              path: '/about',
+              component: './About',
             },
             {
               component: './404',
@@ -104,14 +110,7 @@ export default defineConfig({
   // @ts-ignore
   title: false,
   ignoreMomentLocale: true,
-  // proxy: proxy[REACT_APP_ENV || 'dev'],
-  proxy: {
-    '/api': {
-      target: 'http://127.0.0.1:7001',
-      changeOrigin: true,
-      pathRewrite: { '^/api': '/api/v1' },
-    },
-  },
+  proxy: proxy[REACT_APP_ENV || 'dev'],
   manifest: {
     basePath: '/',
   },

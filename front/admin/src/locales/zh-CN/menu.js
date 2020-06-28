@@ -1,6 +1,7 @@
 export default {
   'menu.list.tags': '标签管理',
   'menu.list.categories': '分类管理',
+  'menu.list.about': '关于管理',
 
 
   'menu.welcome': '欢迎',

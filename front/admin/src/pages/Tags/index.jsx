@@ -1,19 +1,12 @@
-import {
-  CheckOutlined,
-  CloseOutlined,
-  PlusOutlined,
-  DeleteOutlined,
-} from '@ant-design/icons';
-import { Button, Divider, Dropdown, Menu, message, Switch, Form, Input, Popconfirm } from 'antd';
 import React, { useState, useRef, useContext, useEffect } from 'react';
+import { Button, Menu, message, Switch, Form, Input, Popconfirm } from 'antd';
+import { CheckOutlined, CloseOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
-import { queryTags, addTags, removeTags, updateTags, updateTagsStatus } from './service';
-import { connect } from 'umi';
-
-import './index.less';
 import moment from 'moment';
+import { queryTags, addTags, removeTags, updateTags, updateTagsStatus } from './service';
+
 const EditableContext = React.createContext();
 
 const handleAdd = async (params) => {
@@ -75,20 +68,11 @@ const handleupdateStatus = async (status, params, actionRef) => {
     message.error('启用/停用失败请重试！');
     return false;
   }
-}
+};
 
 const Tags = (props) => {
   const [createModalVisible, handleModalVisible] = useState(false);
   const actionRef = useRef();
-
-  // useEffect(() => {
-  //   const { dispatch } = props;
-  //   if (dispatch) {
-  //     dispatch({
-  //       type: 'tags/queryList',
-  //     })
-  //   }
-  // }, [])
 
   let columns = [
     {
@@ -102,6 +86,10 @@ const Tags = (props) => {
       dataIndex: 'name',
       editable: true,
       width: '30%',
+      formItemProps: {
+        placeholder: '请输入标签名称',
+        autoComplete: 'off',
+      },
       rules: [
         {
           required: true,
@@ -110,7 +98,7 @@ const Tags = (props) => {
         {
           pattern: /^[\u4E00-\u9FA5A-Za-z0-9_.]{2,20}$/,
           message: '标签格式为: 2-20个_.中文大小写字母',
-        }
+        },
       ],
     },
     {
@@ -148,7 +136,10 @@ const Tags = (props) => {
       dataIndex: 'updateTime',
       hideInSearch: true,
       hideInForm: true,
-      render: (_, record) => record.updateTime === 0 ? '-' : moment(record.updateTime * 1000).format('YYYY-MM-DD HH:mm:ss'),
+      render: (_, record) =>
+        record.updateTime === 0
+          ? '-'
+          : moment(record.updateTime * 1000).format('YYYY-MM-DD HH:mm:ss'),
     },
 
     {
@@ -167,8 +158,8 @@ const Tags = (props) => {
             </a>
           </Popconfirm>
         ) : (
-            <DeleteOutlined />
-          );
+          <DeleteOutlined />
+        );
       },
     },
   ];
@@ -220,10 +211,10 @@ const Tags = (props) => {
     }, [editing]);
 
     const toggleEdit = () => {
-      if(record.status){
+      if (record.status) {
         return message.info('启用状态标签不能修改');
-      }else {
-        if( record.articleNum > 0){
+      } else {
+        if (record.articleNum > 0) {
           return message.info('该标签下有文章不能修改');
         }
       }
@@ -236,10 +227,10 @@ const Tags = (props) => {
     const update = async (e) => {
       try {
         const values = await form.validateFields();
-      if(inputRef.current.oldValue !== values.name){
-        handleUpdate({ ...record, ...values }, actionRef);
-      }
-      toggleEdit();
+        if (inputRef.current.oldValue !== values.name) {
+          handleUpdate({ ...record, ...values }, actionRef);
+        }
+        toggleEdit();
       } catch (error) {
         console.log('修改失败:', error);
       }
@@ -264,16 +255,16 @@ const Tags = (props) => {
           <Input ref={inputRef} onPressEnter={update} onBlur={update} />
         </Form.Item>
       ) : (
-          <div
-            className="editable-cell-value-wrap"
-            style={{
-              paddingRight: 24,
-            }}
-            onClick={toggleEdit}
-          >
-            {children}
-          </div>
-        );
+        <div
+          className="editable-cell-value-wrap"
+          style={{
+            paddingRight: 24,
+          }}
+          onClick={toggleEdit}
+        >
+          {children}
+        </div>
+      );
     }
 
     return <td {...restProps}>{childNode}</td>;
@@ -288,8 +279,6 @@ const Tags = (props) => {
 
   return (
     <PageHeaderWrapper>
-
-
       <ProTable
         actionRef={actionRef}
         rowKey="_id"
@@ -300,18 +289,15 @@ const Tags = (props) => {
         ]}
         request={(params, sorter, filter) => queryTags({ ...params })}
         columns={columns}
-        // dataSource={props.list}
         components={components}
         rowClassName={() => 'editable-row'}
       />
-
-
 
       <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
         <ProTable
           onSubmit={async (value) => {
             const success = await handleAdd(value);
-            console.log('success', success)
+            console.log('success', success);
 
             if (success) {
               handleModalVisible(false);
@@ -331,8 +317,4 @@ const Tags = (props) => {
   );
 };
 
-export default connect(({ tags, loading }) => ({
-  list: tags.list,
-  queryList: loading.effects['tags/list'],
-}))(Tags);
-
+export default Tags;

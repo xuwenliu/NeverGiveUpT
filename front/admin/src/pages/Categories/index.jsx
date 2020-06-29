@@ -5,13 +5,13 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
 import moment from 'moment';
-import { queryTags, addTags, removeTags, updateTags } from './service';
+import { queryCategories, addCategories, removeCategories, updateCategories } from './service';
 
 const EditableContext = React.createContext();
 
 const handleAdd = async (params) => {
   try {
-    const res = await addTags({ ...params });
+    const res = await addCategories({ ...params });
     if (res.code === 0) {
       message.success(res.msg);
       return true;
@@ -24,7 +24,7 @@ const handleAdd = async (params) => {
 
 const handleUpdate = async (params, actionRef) => {
   try {
-    const res = await updateTags({ id: params._id, name: params.name });
+    const res = await updateCategories({ id: params._id, name: params.name });
     if (res.code === 0) {
       message.success(res.msg);
       if (actionRef.current) {
@@ -40,7 +40,7 @@ const handleUpdate = async (params, actionRef) => {
 
 const handleRemove = async (params, actionRef) => {
   try {
-    const res = await removeTags({ id: params._id });
+    const res = await removeCategories({ id: params._id });
     if (res.code === 0) {
       message.success(res.msg);
       if (actionRef.current) {
@@ -60,12 +60,12 @@ const Categories = (props) => {
   const actionRef = useRef();
 
   let columns = [
-    {
-      title: 'ObjectId',
-      dataIndex: '_id',
-      hideInSearch: true,
-      hideInForm: true,
-    },
+    // {
+    //   title: 'ObjectId',
+    //   dataIndex: '_id',
+    //   hideInSearch: true,
+    //   hideInForm: true,
+    // },
     {
       title: '分类名称',
       dataIndex: 'name',
@@ -110,6 +110,7 @@ const Categories = (props) => {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
+      width: 100,
       render: (_, record) => {
         return record.articleNum === 0 && !record.status ? (
           <Popconfirm
@@ -251,7 +252,7 @@ const Categories = (props) => {
             <PlusOutlined /> 添加
           </Button>,
         ]}
-        request={(params, sorter, filter) => queryTags({ ...params })}
+        request={(params, sorter, filter) => queryCategories({ ...params })}
         columns={columns}
         components={components}
         rowClassName={() => 'editable-row'}

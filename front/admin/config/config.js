@@ -89,6 +89,12 @@ export default defineConfig({
               component: './About',
             },
             {
+              name: 'list.user',
+              icon: 'user',
+              path: '/user',
+              component: './User',
+            },
+            {
               component: './404',
             },
           ],

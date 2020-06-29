@@ -75,12 +75,12 @@ const Tags = (props) => {
   const actionRef = useRef();
 
   let columns = [
-    {
-      title: 'ObjectId',
-      dataIndex: '_id',
-      hideInSearch: true,
-      hideInForm: true,
-    },
+    // {
+    //   title: 'ObjectId',
+    //   dataIndex: '_id',
+    //   hideInSearch: true,
+    //   hideInForm: true,
+    // },
     {
       title: '标签名称',
       dataIndex: 'name',
@@ -146,6 +146,7 @@ const Tags = (props) => {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
+      width: 100,
       render: (_, record) => {
         return record.articleNum === 0 && !record.status ? (
           <Popconfirm

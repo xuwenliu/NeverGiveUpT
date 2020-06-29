@@ -3,8 +3,8 @@ import {
   replacePage
 } from '@/utils/utils';
 
-export async function queryCategories(params) {
-  const res = await request('/api/categories', {
+export async function queryUser(params) {
+  const res = await request('/api/user', {
     params: replacePage(params),
   });
   return new Promise((resolve, reject) => {
@@ -29,18 +29,11 @@ export async function queryCategories(params) {
   });
 }
 
-export async function addCategories(params) {
-  return request('/api/categories', {
-    method: 'POST',
-    data: {
-      ...params
-    },
-  });
-}
 
 
-export async function removeCategories(params) {
-  return request('/api/categories', {
+
+export async function removeUser(params) {
+  return request('/api/user', {
     method: 'delete',
     data: {
       ...params,
@@ -48,11 +41,3 @@ export async function removeCategories(params) {
   });
 }
 
-export async function updateCategories(params) {
-  return request('/api/categories', {
-    method: 'put',
-    data: {
-      ...params,
-    },
-  });
-}

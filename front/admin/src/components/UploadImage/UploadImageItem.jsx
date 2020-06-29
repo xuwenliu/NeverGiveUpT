@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Upload, message, Input, Select, Row, Col } from 'antd';
 import {
   LoadingOutlined,
@@ -23,17 +23,20 @@ const UploadImageItem = (props) => {
     onAdd,
     onChange,
 
-    showImg = true,
-    showLink = true,
-    showIcon = false,
-    showAction = true,
+    showImg,
+    showLink,
+    showIcon,
+    showAction,
 
     showReduce = false,
     showAdd = true,
   } = props;
-  console.log('imgUrl', imgUrl)
+
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(imgUrl || '');
+  useEffect(() => {
+    setImageUrl(imgUrl);
+  }, [imgUrl]);
 
   const beforeUpload = async (file) => {
     const isJpgOrPng =
@@ -82,6 +85,10 @@ const UploadImageItem = (props) => {
     });
   };
 
+  const handleRemove = (index) => {
+    onRemove(index);
+  };
+
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -91,9 +98,9 @@ const UploadImageItem = (props) => {
 
   return (
     <div>
-      <Row>
+      <Row style={{ marginBottom: 20 }}>
         {showImg && (
-          <Col>
+          <Col style={{ display: 'flex' }}>
             <Upload
               name="file"
               listType="picture-card"
@@ -102,7 +109,7 @@ const UploadImageItem = (props) => {
               showUploadList={false}
             >
               {imageUrl ? (
-                <img src={imageUrl} alt="file" style={{ width: '100%' }} />
+                <img src={imageUrl} alt="file" style={{ width: '100%', maxHeight: 74 }} />
               ) : (
                 uploadButton
               )}
@@ -123,7 +130,7 @@ const UploadImageItem = (props) => {
           )}
 
           {showIcon && (
-            <Col>
+            <Col style={{ marginTop: 10 }}>
               <Input value={icon} onChange={handleChangeIcon} className="icon" addonBefore="icon" />
             </Col>
           )}
@@ -132,7 +139,7 @@ const UploadImageItem = (props) => {
           <Col className="action">
             {showReduce && (
               <MinusCircleFilled
-                onClick={() => onRemove(index)}
+                onClick={() => handleRemove(index)}
                 style={{ color: '#ff4d4f', fontSize: 30, marginLeft: 10 }}
               />
             )}

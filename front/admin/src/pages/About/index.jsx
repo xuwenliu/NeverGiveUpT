@@ -7,7 +7,7 @@ import './index.less';
 import SaveTime from '@/components/SaveTime';
 import UploadImage from '@/components/UploadImage';
 import { randomNum } from '@/utils/utils';
-import { queryAbout, addAbout } from './service';
+import { queryAbout, addAbout, updateAbout } from './service';
 
 const colors = [
   'magenta',
@@ -28,33 +28,43 @@ const colors = [
 ];
 
 const About = () => {
-  const [imgs, setImsg] = useState(); // 介绍图片
-  const [desc, setDesc] = useState(''); // 详细介绍
-  const [showTip, setShowTip] = useState(false);
-  const [tags, setTags] = useState([]); // 标签云
-  const [inputVisible, setInputVisible] = useState(false);
-  const [inputValue, setInputValue] = useState('');
-  const [showResume, setShowResume] = useState(false); // 是否显示个人简介
+  const [params, setParams] = useState({
+    tags: [],
+    desc: '',
+    showResume: false,
+  });
 
   useEffect(() => {
-    queryAbout().then((res) => {
-      const data = res.data;
-      if (data) {
-        setImsg(data.imgs);
-        setDesc(data.desc);
-        setShowResume(data.showResume);
-        const tags = data.tags.map((item) => {
-          return {
-            name: item,
-            color: colors[randomNum(1, 15)],
-          };
-        });
-        setTags(tags);
-      }
-    });
+    loadData();
   }, []);
 
+  const loadData = async (isRefresh) => {
+    const res = await queryAbout();
+    if (isRefresh) {
+      message.success('刷新成功');
+    }
+    const data = res.data;
+    if (!data) return;
+    const tags = data.tags.map((item) => {
+      return {
+        name: item,
+        color: colors[randomNum(1, 15)],
+      };
+    });
+    setParams({
+      ...data,
+      tags,
+    });
+  };
+  const [showTip, setShowTip] = useState(false);
+  const [inputVisible, setInputVisible] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+
   const validateParams = (postData) => {
+    if (postData.imgs.length === 0) {
+      message.error(`请上传介绍图片`);
+      return false;
+    }
     let flag = false;
     postData.imgs.forEach((item, index) => {
       if (!item.imgUrl) {
@@ -78,34 +88,84 @@ const About = () => {
     }
     return true;
   };
-  const onSave = () => {
-    let postData = {
-      imgs: imgs.map((item) => {
+  const onRefresh = () => {
+    loadData(true);
+  };
+
+  const onSave = async () => {
+    let imgs = [];
+    let tags = [];
+    if (params.imgs) {
+      imgs = params.imgs.map((item) => {
         const obj = {
           imgUrl: item.imgUrl,
           link: item.link,
         };
         return obj;
-      }),
-      desc,
-      tags: tags.map((item) => item.name),
-      showResume,
+      });
+    }
+    if (params.tags) {
+      tags = params.tags.map((item) => item.name);
+    }
+    let postData = {
+      ...params,
+      imgs,
+      tags,
     };
     if (validateParams(postData)) {
-      console.log(postData);
+      if (postData._id) {
+        // 修改
+        const res = await updateAbout(postData);
+        if (res.data) {
+          message.success(res.msg);
+        } else {
+          message.error(res.msg);
+        }
+      } else {
+        //添加
+        const res = await addAbout(postData);
+        if (res.data) {
+          message.success(res.msg);
+        } else {
+          message.error(res.msg);
+        }
+      }
     }
   };
   const onChange = useCallback((imgs) => {
-    setImsg(imgs);
+    setParams((preState) => {
+      return {
+        ...preState,
+        imgs,
+      };
+    });
   });
   const onChangeDesc = (e) => {
-    setDesc(e.target.value.slice(0, 5000));
+    e.persist();
+    setParams((preState) => {
+      return {
+        ...preState,
+        desc: e.target.value.slice(0, 5000),
+      };
+    });
   };
 
   const handleCloseTag = (removedTag) => {
-    setTags((preTags) => {
-      const tags = preTags.filter((tag) => tag !== removedTag);
-      return [...tags];
+    setParams((preState) => {
+      const tags = preState.tags.filter((tag) => tag !== removedTag);
+      return {
+        ...preState,
+        tags,
+      };
+    });
+  };
+
+  const handleShowResume = (showResume) => {
+    setParams((preState) => {
+      return {
+        ...preState,
+        showResume,
+      };
     });
   };
 
@@ -132,8 +192,8 @@ const About = () => {
       return [...map.values()];
     };
 
-    setTags((preTags) => {
-      let newTags = [...preTags];
+    setParams((preState) => {
+      let newTags = [...preState.tags];
       if (inputValue && newTags.length < 20) {
         newTags.push({
           name: inputValue,
@@ -142,7 +202,10 @@ const About = () => {
         // 去重
         newTags = removeRepeat(newTags);
       }
-      return newTags;
+      return {
+        ...preState,
+        tags: newTags,
+      };
     });
     setInputValue('');
     setInputVisible(false);
@@ -167,28 +230,28 @@ const About = () => {
       </span>
     );
   };
-
-  const tagChild = tags.map(forMap);
+  const tagChild = params.tags ? params.tags.map(forMap) : null;
 
   return (
     <div>
       <Card>
-        <SaveTime onSave={onSave} time={1592382607} />
+        <SaveTime onSave={onSave} onRefresh={onRefresh} time={params.updateTime} />
         <div className="field-content">
           <Row>
             <Col span={12}>
               <div className="field-item">
                 <div className="field-title">
                   <Badge status="error" text="介绍图片: " />
+                  <span>(1-3张)</span>
                 </div>
-                <UploadImage imgs={imgs} max={3} onChange={onChange} />
+                <UploadImage imgs={params.imgs} max={3} onChange={onChange} />
               </div>
             </Col>
-            <Col span={12}>
+            <Col offset={2} span={10}>
               <div className="field-item">
                 <div className="field-title">
                   <Badge status="error" text="标签云: " />
-                  <span>(最多添加20个)</span>
+                  <span>(1-20个)</span>
                 </div>
                 <Card>
                   <TweenOneGroup
@@ -235,21 +298,21 @@ const About = () => {
                   <Badge status="error" text="详细介绍: " />
                 </div>
                 <Input.TextArea
-                  value={desc}
+                  value={params.desc}
                   onFocus={() => setShowTip(true)}
                   onBlur={() => setShowTip(false)}
-                  onChange={onChangeDesc}
+                  onChange={(e) => onChangeDesc(e)}
                   allowClear={true}
                   rows={6}
                 />
                 {showTip && (
                   <p className="field-tip">
-                    还可以输入<span className="field-tip-num">{5000 - desc.length}</span>个字
+                    还可以输入<span className="field-tip-num">{5000 - params.desc.length}</span>个字
                   </p>
                 )}
               </div>
             </Col>
-            <Col span={12}>
+            <Col offset={2} span={10}>
               <div className="field-item">
                 <div className="field-title">
                   <Badge status="error" text="个人简历: " />
@@ -257,8 +320,8 @@ const About = () => {
                     className="field-switch"
                     checkedChildren="显示"
                     unCheckedChildren="隐藏"
-                    checked={showResume}
-                    onChange={() => setShowResume(!showResume)}
+                    checked={params.showResume}
+                    onChange={(checked) => handleShowResume(checked)}
                   />
                 </div>
               </div>

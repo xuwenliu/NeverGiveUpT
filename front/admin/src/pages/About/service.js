@@ -15,3 +15,14 @@ export async function addAbout(params) {
     },
   });
 }
+
+export async function updateAbout(params) {
+  return request('/api/about', {
+    method: 'put',
+    data: {
+      ...params,
+    },
+  });
+}
+
+

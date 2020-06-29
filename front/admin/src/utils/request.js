@@ -65,7 +65,8 @@ const request = extend({
 request.interceptors.request.use((url, options) => {
   const method = options.method.toLocaleLowerCase();
   if (method === 'delete' || method === 'put') {
-    url += '/' + options.data.id;
+  const id = options.data.id ? options.data.id : options.data._id;
+    url += '/' + id;
   }
   return {
     url,

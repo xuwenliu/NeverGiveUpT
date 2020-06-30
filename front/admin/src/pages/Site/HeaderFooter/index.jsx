@@ -1,14 +1,67 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Card, Input, Row, Col, Badge, Switch, message, Radio } from 'antd';
+import { Card, Input, Row, Col, Badge, Switch, message, Radio, Button } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import './index.less';
 
 import SaveTime from '@/components/SaveTime';
 import UploadImage from '@/components/UploadImage';
+import MenuItemConfig from './components/MenuItemConfig';
 import {
   queryHeaderFooterConfig,
   addHeaderFooterConfig,
   updateHeaderFooterConfig,
 } from '../service';
+
+const defaultMenu = [
+  {
+    name: '首页',
+    router: 'index',
+    sort: 0,
+    status: true,
+    deletable: false,
+    disabled: true,
+  },
+  {
+    name: '文章',
+    router: 'articles',
+    sort: 1,
+    status: true,
+    deletable: false,
+    disabled: true,
+  },
+  {
+    name: '归档',
+    router: 'archives',
+    sort: 2,
+    status: true,
+    deletable: false,
+    disabled: true,
+  },
+  {
+    name: '分类',
+    router: 'categories',
+    sort: 3,
+    status: true,
+    deletable: false,
+    disabled: true,
+  },
+  {
+    name: '标签',
+    router: 'tags',
+    sort: 4,
+    status: true,
+    deletable: false,
+    disabled: true,
+  },
+  {
+    name: '关于',
+    router: 'about',
+    sort: 5,
+    status: true,
+    deletable: false,
+    disabled: true,
+  },
+];
 
 const HeaderFooter = () => {
   const [type, setType] = useState(2);
@@ -20,7 +73,7 @@ const HeaderFooter = () => {
       openSearch: true,
       login: false,
       register: false,
-      menu: [],
+      menu: defaultMenu,
     },
     footer: {
       copyright: '',
@@ -164,6 +217,28 @@ const HeaderFooter = () => {
     });
   };
 
+  const handleAddMenu = () => {
+    setParams((preState) => {
+      const menu = preState.header.menu;
+      menu.push({
+        name: '',
+        router: '',
+        sort: menu.length,
+        status: false,
+        disabled: false,
+        editable: true,
+        deletable: false,
+      });
+      preState.header = {
+        ...preState.header,
+        menu,
+      };
+      return {
+        ...preState,
+      };
+    });
+  };
+
   return (
     <div>
       <Card>
@@ -253,13 +328,23 @@ const HeaderFooter = () => {
           </Row>
 
           <Row>
-            <Col>
+            <Col offset={2}>
               <div className="field-item">
                 <div className="field-title">
                   <Badge>导航菜单: </Badge>
                   <span>（菜单名称最多4个字符，跳转路由只能输入小写英文，排序数字越大越靠右）</span>
                 </div>
               </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col offset={2}>
+              {params.header.menu.map((item, index) => {
+                return <MenuItemConfig {...item} index={index} key={item.name} />;
+              })}
+              <Button onClick={handleAddMenu} icon={<PlusOutlined />}>
+                新增
+              </Button>
             </Col>
           </Row>
 

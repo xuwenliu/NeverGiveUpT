@@ -3,8 +3,12 @@ export default {
   'menu.list.categories': '分类管理',
   'menu.list.about': '关于管理',
   'menu.list.user': '用户管理',
+  'menu.list.site': '网页配置',
+  'menu.list.site.site-home': '首页配置',
+  'menu.list.site.site-header-footer': 'Header/Footer配置',
+  'menu.list.site.site-right': '右侧配置',
 
-
+  
   'menu.welcome': '欢迎',
   'menu.more-blocks': '更多区块',
   'menu.home': '首页',

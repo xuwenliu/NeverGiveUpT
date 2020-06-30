@@ -315,7 +315,7 @@ const About = () => {
             <Col offset={2} span={10}>
               <div className="field-item">
                 <div className="field-title">
-                  <Badge status="error" text="个人简历: " />
+                  <Badge>个人简历: </Badge>
                   <Switch
                     className="field-switch"
                     checkedChildren="显示"

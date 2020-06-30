@@ -117,24 +117,31 @@ const UploadImageItem = (props) => {
           </Col>
         )}
 
-        <div className="input">
-          {showLink && (
-            <Col>
-              <Input
-                value={link}
-                onChange={handleChangeLink}
-                className="link"
-                addonBefore="跳转链接"
-              />
-            </Col>
-          )}
+        {(showLink || showIcon) && (
+          <div className="input">
+            {showLink && (
+              <Col>
+                <Input
+                  value={link}
+                  onChange={handleChangeLink}
+                  className="link"
+                  addonBefore="跳转链接"
+                />
+              </Col>
+            )}
 
-          {showIcon && (
-            <Col style={{ marginTop: 10 }}>
-              <Input value={icon} onChange={handleChangeIcon} className="icon" addonBefore="icon" />
-            </Col>
-          )}
-        </div>
+            {showIcon && (
+              <Col style={{ marginTop: 10 }}>
+                <Input
+                  value={icon}
+                  onChange={handleChangeIcon}
+                  className="icon"
+                  addonBefore="icon"
+                />
+              </Col>
+            )}
+          </div>
+        )}
         {showAction && (
           <Col className="action">
             {showReduce && (

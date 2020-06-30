@@ -95,6 +95,31 @@ export default defineConfig({
               component: './User',
             },
             {
+              name: 'list.site',
+              icon: 'setting',
+              path: '/site',
+              routes:[
+                {
+                  name: 'site-home',
+                  icon: 'home',
+                  path: '/site/home',
+                  component: './Site/Home',
+                },
+                {
+                  name: 'site-header-footer',
+                  icon: 'columnHeight',
+                  path: '/site/hf',
+                  component: './Site/HeaderFooter',
+                },
+                {
+                  name: 'site-right',
+                  icon: 'picRight',
+                  path: '/site/right',
+                  component: './Site/Right',
+                }
+              ]
+            },
+            {
               component: './404',
             },
           ],

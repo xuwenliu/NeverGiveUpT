@@ -25,12 +25,12 @@ class HomeController extends Controller {
                 default: false,
             },
 
-            articleBgImg: {
-                type: "string",
-            },
-            articleDetailBgImg: {
-                type: "string",
-            },
+            // articleBgImg: {
+            //     type: "string",
+            // },
+            // articleDetailBgImg: {
+            //     type: "string",
+            // },
             archiveBgImg: { // 归档
                 type: "string",
             },
@@ -41,6 +41,9 @@ class HomeController extends Controller {
                 type: "string",
             },
             tagsBgImg: {
+                type: "string",
+            },
+            tagsDetailBgImg:{
                 type: "string",
             },
             aboutBgImg: {

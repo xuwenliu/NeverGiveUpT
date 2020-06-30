@@ -22,12 +22,12 @@ module.exports = (app) => {
             default: false,
         },
 
-        articleBgImg: {
-            type: "string",
-        },
-        articleDetailBgImg: {
-            type: "string",
-        },
+        // articleBgImg: {
+        //     type: "string",
+        // },
+        // articleDetailBgImg: {
+        //     type: "string",
+        // },
         archiveBgImg: { // 归档
             type: "string",
         },
@@ -38,6 +38,9 @@ module.exports = (app) => {
             type: "string",
         },
         tagsBgImg: {
+            type: "string",
+        },
+        tagsDetailBgImg: {
             type: "string",
         },
         aboutBgImg: {

@@ -44,6 +44,18 @@ const UploadImage = (props) => {
       preImgs[index][field] = value;
       return [...preImgs];
     });
+    imgsArr.forEach((item) => {
+      if (!showImg) {
+        delete item.imgUrl;
+      }
+      if (!showLink) {
+        delete item.link;
+      }
+      if (!showIcon) {
+        delete item.icon;
+      }
+      return item;
+    });
     onChange(imgsArr);
   };
 

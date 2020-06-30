@@ -10,7 +10,7 @@ const SaveTime = (props) => {
   const message = time ? timeMessage : '暂无操作';
   return (
     <div className="save-time">
-      <Alert message={message} />
+      <Alert type="success" message={message} />
       <Button
         onClick={onRefresh}
         className="refresh-btn"

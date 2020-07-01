@@ -39,7 +39,7 @@ class HfController extends Controller {
             min: 6,
             max: 10,
             rule: {
-              name: {
+              menuName: {
                 type: "string",
                 min: 2,
                 max: 4,

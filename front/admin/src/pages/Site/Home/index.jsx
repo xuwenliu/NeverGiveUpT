@@ -97,8 +97,9 @@ const Home = () => {
       }
     }
     if (!flag) {
-      return false;
+      return flag;
     }
+
     if (!postData.introduction) {
       message.error('请输入简介');
       return false;
@@ -181,7 +182,7 @@ const Home = () => {
               return (
                 <Col key={item.field} span={4}>
                   <div className="field-item">
-                    <div className="field-title">
+                    <div className="field-titles">
                       <Badge status="error" text={item.name + ':'} />
                     </div>
                     <UploadImage
@@ -196,7 +197,7 @@ const Home = () => {
             })}
             <Col span={10}>
               <div className="field-item">
-                <div className="field-title">
+                <div className="field-titles">
                   <Badge>头像是否旋转:</Badge>
                   <Switch
                     className="field-switch"
@@ -212,7 +213,7 @@ const Home = () => {
           <Row>
             <Col span={12}>
               <div className="field-item">
-                <div className="field-title">
+                <div className="field-titles">
                   <Badge status="error" text="简介: " />
                 </div>
                 <Input.TextArea
@@ -235,7 +236,7 @@ const Home = () => {
           <Row>
             <Col span={10}>
               <div className="field-item">
-                <div className="field-title">
+                <div className="field-titles">
                   <Badge>简介特效:</Badge>
                   <Switch
                     className="field-switch"

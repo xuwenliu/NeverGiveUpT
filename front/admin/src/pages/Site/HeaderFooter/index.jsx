@@ -14,7 +14,7 @@ import {
 
 const defaultMenu = [
   {
-    name: '首页',
+    menuName: '首页',
     router: 'index',
     sort: 0,
     status: true,
@@ -22,7 +22,7 @@ const defaultMenu = [
     disabled: true,
   },
   {
-    name: '文章',
+    menuName: '文章',
     router: 'articles',
     sort: 1,
     status: true,
@@ -30,7 +30,7 @@ const defaultMenu = [
     disabled: true,
   },
   {
-    name: '归档',
+    menuName: '归档',
     router: 'archives',
     sort: 2,
     status: true,
@@ -38,7 +38,7 @@ const defaultMenu = [
     disabled: true,
   },
   {
-    name: '分类',
+    menuName: '分类',
     router: 'categories',
     sort: 3,
     status: true,
@@ -46,7 +46,7 @@ const defaultMenu = [
     disabled: true,
   },
   {
-    name: '标签',
+    menuName: '标签',
     router: 'tags',
     sort: 4,
     status: true,
@@ -54,7 +54,7 @@ const defaultMenu = [
     disabled: true,
   },
   {
-    name: '关于',
+    menuName: '关于',
     router: 'about',
     sort: 5,
     status: true,
@@ -62,11 +62,11 @@ const defaultMenu = [
     disabled: true,
   },
 ];
-
+const defaultMenuName = defaultMenu.map((item) => item.menuName);
 const HeaderFooter = () => {
-  const [type, setType] = useState(2);
   const [params, setParams] = useState({
     header: {
+      type: 2, //默认展示title
       logo: '',
       title: '',
       fixedHeader: true,
@@ -93,34 +93,102 @@ const HeaderFooter = () => {
     let data = res.data;
 
     if (!data) return;
+    console.log(defaultMenuName);
+    data.header.menu.map((item, index) => {
+      console.log(item.menuName);
+      item.disabled = defaultMenuName.includes(item.menuName);
+      item.editable = !item.disabled;
+      return item;
+    });
 
-    // setParams({
-    //   ...data,
-    // });
+    console.log(data.header.menu);
+
+    setParams(() => {
+      if (data.header.logo) {
+        data.header = {
+          ...data.header,
+          logoImgs: [
+            {
+              imgUrl: data.header.logo,
+            },
+          ],
+          type: 1,
+        };
+      }
+      if (data.header.title) {
+        data.header = {
+          ...data.header,
+          type: 2,
+        };
+      }
+
+      return {
+        ...data,
+      };
+    });
   };
 
-  const validateParams = (postData) => {
+  const validateParams = () => {
+    console.log('params', params);
+    if (params.header.type === 1) {
+      params.header.logo = params.header.logoImgs ? params.header.logoImgs[0].imgUrl : '';
+      if (!params.header.logo) {
+        message.error('请上传Logo');
+        return false;
+      }
+    } else {
+      if (!params.header.title) {
+        message.error('请输入标题');
+        return false;
+      }
+    }
+
+    const menu = params.header.menu;
     let flag = false;
-    for (let i in backgroundImages) {
-      if (!backgroundImages[i].imgs) {
-        message.error(`请上传${backgroundImages[i].name}`);
-        flag = false;
-        return;
+    for (let i in menu) {
+      if (!menu[i].menuName) {
+        message.error(`请输入导航菜单名称`);
+        return (flag = false);
+      } else {
+        if (menu[i].menuName.length < 2 || menu[i].menuName.length > 4) {
+          message.error(`导航菜单名称2-4个字符`);
+          return (flag = false);
+        }
+        flag = true;
+      }
+      if (!menu[i].router) {
+        message.error(`请输入导航菜单路由`);
+        return (flag = false);
+      } else {
+        const regexp = /^[a-z]{1,50}$/;
+        if (!regexp.test(menu[i].router)) {
+          message.error(`导航菜单路由2-50个小写英文字母`);
+          return (flag = false);
+        }
+        flag = true;
+      }
+
+      if (menu[i].sort === null) {
+        message.error(`请输入导航菜单排序`);
+        return (flag = false);
       } else {
         flag = true;
       }
     }
     if (!flag) {
+      return flag;
+    }
+
+    if (!params.footer.copyright) {
+      message.error('请输入Copyright');
       return false;
     }
-    if (!postData.introduction) {
-      message.error('请输入简介');
+
+    if (!params.footer.extra) {
+      message.error('请输入额外信息');
       return false;
     }
-    if (postData.introduction.length < 2) {
-      message.error('简介至少输入2个字符');
-      return false;
-    }
+
     return true;
   };
 
@@ -129,51 +197,31 @@ const HeaderFooter = () => {
   };
 
   const onSave = async () => {
-    let postData = {
-      ...params,
-    };
-    console.log(postData);
-    // if (validateParams(postData)) {
-    //   if (postData._id) {
-    //     // 修改
-    //     const res = await updateHeaderFooterConfig(postData);
-    //     if (res.data) {
-    //       message.success(res.msg);
-    //     } else {
-    //       message.error(res.msg);
-    //     }
-    //   } else {
-    //     //添加
-    //     const res = await addHeaderFooterConfig(postData);
-    //     if (res.data) {
-    //       message.success(res.msg);
-    //     } else {
-    //       message.error(res.msg);
-    //     }
-    //   }
-    // }
+    if (validateParams()) {
+      if (params.header.type === 1) {
+        delete params.header.logoImgs;
+      }
+      delete params.header.type;
+      const callFunc = params._id ? updateHeaderFooterConfig : addHeaderFooterConfig;
+      const res = await callFunc(params);
+      if (res.data) {
+        message.success(res.msg);
+      } else {
+        message.error(res.msg);
+      }
+    }
   };
-  const onChange = useCallback((imgs) => {
+  const onUploadImageChange = useCallback((imgs) => {
     setParams((preState) => {
       preState.header = {
         ...preState.header,
-        logo: imgs[0].imgUrl,
+        logoImgs: imgs,
       };
       return {
         ...preState,
       };
     });
   });
-
-  const onChangeIntroduction = (e) => {
-    e.persist();
-    setParams((preState) => {
-      return {
-        ...preState,
-        introduction: e.target.value.slice(0, 100),
-      };
-    });
-  };
 
   const handlChangeToggle = (field, value) => {
     setParams((preState) => {
@@ -188,7 +236,18 @@ const HeaderFooter = () => {
   };
 
   const onRadioChange = (e) => {
-    setType(e.target.value);
+    setParams((preState) => {
+      preState.header.type = e.target.value;
+      if (preState.header.type === 1) {
+        preState.header.title = '';
+      } else {
+        preState.header.logoImgs = null;
+        preState.header.logo = '';
+      }
+      return {
+        ...preState,
+      };
+    });
   };
 
   const handleTitleChange = (e) => {
@@ -218,10 +277,13 @@ const HeaderFooter = () => {
   };
 
   const handleAddMenu = () => {
+    if (params.header.menu.length >= 10) {
+      return;
+    }
     setParams((preState) => {
       const menu = preState.header.menu;
       menu.push({
-        name: '',
+        menuName: '',
         router: '',
         sort: menu.length,
         status: false,
@@ -238,6 +300,23 @@ const HeaderFooter = () => {
       };
     });
   };
+  const onMenuItemConfigRemove = useCallback((index) => {
+    setParams((preState) => {
+      preState.header.menu.splice(index, 1);
+      return {
+        ...preState,
+      };
+    });
+  });
+
+  const onMenuItemConfigChange = useCallback((index, field, value) => {
+    setParams((preState) => {
+      preState.header.menu[index][field] = value;
+      return {
+        ...preState,
+      };
+    });
+  });
 
   return (
     <div>
@@ -301,21 +380,25 @@ const HeaderFooter = () => {
               </div>
             </Col>
             <Col offset={2} span={16}>
-              <Radio.Group style={{ marginBottom: 20 }} onChange={onRadioChange} value={type}>
+              <Radio.Group
+                style={{ marginBottom: 20 }}
+                onChange={onRadioChange}
+                value={params.header.type || 2}
+              >
                 <Radio value={1}>Logo</Radio>
                 <Radio value={2}>标题</Radio>
               </Radio.Group>
-              {type === 1 && (
+              {params.header.type === 1 && (
                 <div className="field-item">
                   <UploadImage
                     imgs={params.header.logoImgs}
                     showLink={false}
                     showAction={false}
-                    onChange={onChange}
+                    onChange={onUploadImageChange}
                   />
                 </div>
               )}
-              {type === 2 && (
+              {params.header.type === 2 && (
                 <div className="field-item">
                   <Input
                     onChange={handleTitleChange}
@@ -340,7 +423,14 @@ const HeaderFooter = () => {
           <Row>
             <Col offset={2}>
               {params.header.menu.map((item, index) => {
-                return <MenuItemConfig {...item} index={index} key={item.name} />;
+                return (
+                  <MenuItemConfig
+                    {...item}
+                    onRemove={() => onMenuItemConfigRemove(index)}
+                    onChange={(field, value) => onMenuItemConfigChange(index, field, value)}
+                    key={item.router + index}
+                  />
+                );
               })}
               <Button onClick={handleAddMenu} icon={<PlusOutlined />}>
                 新增

@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Input, InputNumber, Switch } from 'antd';
 import { CloseCircleTwoTone } from '@ant-design/icons';
 import './index.less';
 
 const MenuItemConfig = (props) => {
+  const { onChange, onRemove } = props;
+
   const [params, setParams] = useState(() => {
     return {
       ...props,
@@ -17,6 +19,7 @@ const MenuItemConfig = (props) => {
         status,
       };
     });
+    onChange('status', status);
   };
   const mouseToggle = (deletable) => {
     const { editable } = params;
@@ -29,6 +32,28 @@ const MenuItemConfig = (props) => {
       });
     }
   };
+
+  const onChangeValue = (e, field) => {
+    if (field !== 'sort') {
+      e.persist();
+      const value = e.target.value.slice(0, 50);
+      setParams((preState) => {
+        return {
+          ...preState,
+          [field]: value,
+        };
+      });
+      onChange(field, value);
+    } else {
+      setParams((preState) => {
+        return {
+          ...preState,
+          [field]: e,
+        };
+      });
+      onChange(field, e);
+    }
+  };
   console.log('params', params);
   return (
     <div
@@ -37,25 +62,28 @@ const MenuItemConfig = (props) => {
       onMouseLeave={() => mouseToggle(false)}
     >
       <Input
-        value={params.name}
+        value={params.menuName}
         disabled={params.disabled}
         style={{ flex: 1 }}
         placeholder="名称"
+        onChange={(e) => onChangeValue(e, 'menuName')}
       />
       <Input
         value={params.router}
         disabled={params.disabled}
         style={{ flex: 1, marginLeft: 10 }}
         placeholder="路由"
+        onChange={(e) => onChangeValue(e, 'router')}
       />
       <InputNumber
         value={params.sort}
         disabled={params.disabled}
         min={-9999}
         max={9999}
-        parser={(value) => value.replace(/[^\d]/, '')}
+        parser={(value) => value.replace(/[^\d-]/, '')}
         style={{ flex: 1, marginLeft: 10, marginRight: 10 }}
         placeholder="排序"
+        onChange={(e) => onChangeValue(e, 'sort')}
       />
       <Switch
         checkedChildren="启用"
@@ -67,7 +95,11 @@ const MenuItemConfig = (props) => {
 
       <div className="item-config-close">
         {params.deletable && (
-          <CloseCircleTwoTone className="item-config-close-btn" twoToneColor="#ff4d4f" />
+          <CloseCircleTwoTone
+            onClick={onRemove}
+            className="item-config-close-btn"
+            twoToneColor="#ff4d4f"
+          />
         )}
       </div>
     </div>

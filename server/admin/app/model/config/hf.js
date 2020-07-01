@@ -2,7 +2,7 @@ module.exports = (app) => {
   const mongoose = app.mongoose;
   const Schema = mongoose.Schema;
   const MenuSchema = new Schema({
-    name: {
+    menuName: {
       type: "string",
       min: 2,
       max: 4,

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, Input, Row, Col, Badge, Switch, message, Radio, Button } from 'antd';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
+
 import { PlusOutlined } from '@ant-design/icons';
 import './index.less';
 
@@ -319,7 +321,7 @@ const HeaderFooter = () => {
   });
 
   return (
-    <div>
+    <PageHeaderWrapper>
       <Card>
         <SaveTime onSave={onSave} onRefresh={onRefresh} time={params.updateTime} />
         <div className="field-content">
@@ -465,7 +467,7 @@ const HeaderFooter = () => {
           </Row>
         </div>
       </Card>
-    </div>
+    </PageHeaderWrapper>
   );
 };
 

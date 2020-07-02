@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Input, InputNumber, Switch } from 'antd';
 import { CloseCircleTwoTone } from '@ant-design/icons';
+
 import './index.less';
 
 const MenuItemConfig = (props) => {

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, Input, Row, Col, Badge, Switch, message } from 'antd';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
+
 import './index.less';
 
 import SaveTime from '@/components/SaveTime';
@@ -173,7 +175,7 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <PageHeaderWrapper>
       <Card>
         <SaveTime onSave={onSave} onRefresh={onRefresh} time={params.updateTime} />
         <div className="field-content">
@@ -251,7 +253,7 @@ const Home = () => {
           </Row>
         </div>
       </Card>
-    </div>
+    </PageHeaderWrapper>
   );
 };
 

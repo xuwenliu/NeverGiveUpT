@@ -122,22 +122,12 @@ const Home = () => {
       ...params,
     };
     if (validateParams(postData)) {
-      if (postData._id) {
-        // 修改
-        const res = await updateHomeConfig(postData);
-        if (res.data) {
-          message.success(res.msg);
-        } else {
-          message.error(res.msg);
-        }
+      const callFunc = postData._id ? updateHomeConfig : addHomeConfig;
+      const res = await callFunc(params);
+      if (res.data) {
+        message.success(res.msg);
       } else {
-        //添加
-        const res = await addHomeConfig(postData);
-        if (res.data) {
-          message.success(res.msg);
-        } else {
-          message.error(res.msg);
-        }
+        message.error(res.msg);
       }
     }
   };

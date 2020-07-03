@@ -23,7 +23,7 @@ class RightIntroductionController extends Controller {
         type: "array",
         itemType: "object",
         rule: {
-          url: {
+          link: {
             type: "string",
           },
           icon: {

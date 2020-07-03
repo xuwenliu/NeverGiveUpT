@@ -3,7 +3,7 @@ module.exports = (app) => {
   const Schema = mongoose.Schema;
 
   const FriendLinkSchema = new Schema({
-    url: {
+    link: {
       type: "string",
     },
     icon: {

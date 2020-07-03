@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Card, Tabs, Row, Col, Badge, Input, Select, Form, message } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 
@@ -8,10 +8,24 @@ const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 20 },
 };
+const showPositionArr = [
+  '首页',
+  '文章',
+  '文章详情',
+  '归档',
+  '分类',
+  '分类详情',
+  '标签',
+  '标签详情',
+  '关于',
+];
 
 import SaveTime from '@/components/SaveTime';
 import UploadImage from '@/components/UploadImage';
 import './index.less';
+
+import { queryTags } from '@/pages/Tags/service';
+import { fetchRight } from '../service';
 
 const Right = () => {
   const [params, setParams] = useState({
@@ -23,13 +37,45 @@ const Right = () => {
     ],
   });
   const [tab, setTab] = useState('tab1');
+  const [tags, setTags] = useState([]);
+
+  const loadTags = async () => {
+    const res = await queryTags();
+    let data = res.data;
+    if (data) {
+      data = data.map((item) => item.name);
+      console.log(data);
+      setTags(data);
+    }
+  };
+
+  const loadData = async (isRefresh) => {
+    const res = await fetchRight.introduction.query();
+    if (isRefresh) {
+      message.success('刷新成功');
+    }
+    let data = res.data;
+
+    if (!data) return;
+    data.imgs = data.friendLink;
+    setParams({
+      ...data,
+    });
+    formTab1.setFieldsValue({
+      ...data,
+    });
+  };
+
+  useEffect(() => {
+    loadTags();
+    loadData();
+  }, []);
 
   const tabsChange = (key) => {
     setTab(key);
   };
 
   const onUploadImageChange = useCallback((imgs) => {
-    console.log(imgs);
     setParams((preState) => {
       return {
         ...preState,
@@ -39,17 +85,10 @@ const Right = () => {
   });
   const [formTab1] = Form.useForm();
 
-  const children = [];
-  for (let i = 10; i < 36; i++) {
-    children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-  }
-
   const validateTab1 = (postData) => {
     let flag = false;
     const friendLink = postData.imgs;
-    console.log(friendLink);
     for (let i in friendLink) {
-      console.log(i);
       if (!friendLink[i].link) {
         message.error(`请上传第${i * 1 + 1}个跳转链接`);
         return (flag = false);
@@ -66,30 +105,45 @@ const Right = () => {
     if (!flag) {
       return flag;
     }
+    return true;
   };
 
   const onSave = async () => {
-    console.log('params', params);
     if (tab === 'tab1') {
-      const values = await formTab1.validateFields();
+      const values = await formTab1.validateFields(); //校验
       if (values) {
+        const getValues = formTab1.getFieldsValue(); // 获取最新文本值
+        params.friendLink = params.imgs;
         const postData = {
           ...params,
-          ...values,
+          ...getValues,
         };
+        console.log('验证前：', postData);
         if (validateTab1(postData)) {
-          console.log(postData);
-          
+          delete postData.imgs;
+          const callFunc = postData._id
+            ? fetchRight.introduction.update
+            : fetchRight.introduction.create;
+          const res = await callFunc(postData);
+          if (res.data) {
+            message.success(res.msg);
+          } else {
+            message.error(res.msg);
+          }
         }
       }
     }
+  };
+
+  const onRefresh = async () => {
+    loadData(true);
   };
 
   return (
     <PageHeaderWrapper>
       <Card>
         <div style={{ marginBottom: 20 }}>
-          <SaveTime onSave={onSave} />
+          <SaveTime time={params.updateTime} onSave={onSave} onRefresh={onRefresh} />
         </div>
 
         <Tabs activeKey={tab} onChange={tabsChange}>
@@ -132,21 +186,29 @@ const Right = () => {
                         style={{ width: '100%' }}
                         mode="multiple"
                       >
-                        {children}
+                        {tags.map((item) => (
+                          <Option value={item} key={item}>
+                            {item}
+                          </Option>
+                        ))}
                       </Select>
                     </Form.Item>
 
                     <Form.Item
                       label="展示位置"
                       name="showPosition"
-                      rules={[{ required: true, message: '展示位置' }]}
+                      rules={[{ required: true, message: '请选择展示位置' }]}
                     >
                       <Select
                         placeholder="请选择展示位置(多选)"
                         style={{ width: '100%' }}
                         mode="multiple"
                       >
-                        {children}
+                        {showPositionArr.map((item) => (
+                          <Option value={item} key={item}>
+                            {item}
+                          </Option>
+                        ))}
                       </Select>
                     </Form.Item>
                   </Form>

@@ -1,5 +1,3 @@
-
-
 import request from '@/utils/request';
 
 export async function queryHomeConfig(data) {
@@ -20,13 +18,12 @@ export async function addHomeConfig(params) {
 
 export async function updateHomeConfig(params) {
   return request('/api/config/home', {
-    method: 'put',
+    method: 'PUT',
     data: {
       ...params,
     },
   });
 }
-
 
 // header footer 配置
 export async function queryHeaderFooterConfig(data) {
@@ -47,11 +44,39 @@ export async function addHeaderFooterConfig(params) {
 
 export async function updateHeaderFooterConfig(params) {
   return request('/api/config/hf', {
-    method: 'put',
+    method: 'PUT',
     data: {
       ...params,
     },
   });
 }
+const introduction = {
+  query: async (params) => {
+    return request('/api/config/right/introduction', {
+      method: 'GET',
+      data: {
+        ...params,
+      },
+    });
+  },
+  create: async (params) => {
+    return request('/api/config/right/introduction', {
+      method: 'POST',
+      data: {
+        ...params,
+      },
+    });
+  },
+  update: async (params) => {
+    return request('/api/config/right/introduction', {
+      method: 'PUT',
+      data: {
+        ...params,
+      },
+    });
+  },
+};
 
-
+export const fetchRight = {
+  introduction,
+};

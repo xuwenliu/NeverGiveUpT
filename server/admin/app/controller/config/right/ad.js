@@ -10,7 +10,7 @@ class RightAdController extends Controller {
         min: 1,
         max: 3,
         rule: {
-          url: {
+          imgUrl: {
             type: "url",
           },
           link: {

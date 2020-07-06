@@ -3,7 +3,7 @@ module.exports = (app) => {
   const Schema = mongoose.Schema;
 
   const ImgsSchema = new Schema({
-    url: {
+    imgUrl: {
       type: "string",
     },
     link: {

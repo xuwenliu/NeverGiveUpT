@@ -77,6 +77,34 @@ const introduction = {
   },
 };
 
+const ad = {
+  query: async (params) => {
+    return request('/api/config/right/ad', {
+      method: 'GET',
+      data: {
+        ...params,
+      },
+    });
+  },
+  create: async (params) => {
+    return request('/api/config/right/ad', {
+      method: 'POST',
+      data: {
+        ...params,
+      },
+    });
+  },
+  update: async (params) => {
+    return request('/api/config/right/ad', {
+      method: 'PUT',
+      data: {
+        ...params,
+      },
+    });
+  },
+};
+
 export const fetchRight = {
   introduction,
+  ad,
 };

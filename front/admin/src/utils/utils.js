@@ -1,5 +1,6 @@
 import { parse } from 'querystring';
 import pathRegexp from 'path-to-regexp';
+import { colors } from '@/const';
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
 const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
@@ -72,4 +73,8 @@ export const replacePage = (params) => {
 
 export const randomNum = (m, n) => {
   return Math.floor(Math.random() * (m - n) + n);
+};
+
+export const randomColor = () => {
+  return colors[randomNum(1, 15)];
 };

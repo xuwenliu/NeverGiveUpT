@@ -5,15 +5,14 @@ class RightRecommendController extends Controller {
     super(ctx);
     this.queryRule = {
       project: {
-        type: "enum",
-        values: [1, 2, 3],
+        type: "string",
+        required: false,
       },
     };
 
     this.createRecommendRule = {
       project: {
-        type: "enum",
-        values: [1, 2, 3],
+        type: "string",
       },
       showPosition: {
         type: "array",
@@ -83,6 +82,16 @@ class RightRecommendController extends Controller {
       id,
       ...data,
     });
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
+
+  async destroy() {
+    const { ctx, service } = this;
+    const data = ctx.params;
+    const res = await service.config.right.recommend.destroy(data.id);
     ctx.helper.success({
       ctx,
       res,

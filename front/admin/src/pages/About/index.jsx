@@ -6,26 +6,8 @@ import './index.less';
 
 import SaveTime from '@/components/SaveTime';
 import UploadImage from '@/components/UploadImage';
-import { randomNum } from '@/utils/utils';
 import { queryAbout, addAbout, updateAbout } from './service';
-
-const colors = [
-  'magenta',
-  'red',
-  'volcano',
-  'orange',
-  'gold',
-  'lime',
-  'green',
-  'cyan',
-  'blue',
-  'geekblue',
-  'purple',
-  '#f50',
-  '#2db7f5',
-  '#87d068',
-  '#108ee9',
-];
+import { randomColor } from '@/utils/utils';
 
 const About = () => {
   const [params, setParams] = useState({
@@ -48,7 +30,7 @@ const About = () => {
     const tags = data.tags.map((item) => {
       return {
         name: item,
-        color: colors[randomNum(1, 15)],
+        color: randomColor(),
       };
     });
     setParams({
@@ -197,7 +179,7 @@ const About = () => {
       if (inputValue && newTags.length < 20) {
         newTags.push({
           name: inputValue,
-          color: colors[randomNum(1, 15)],
+          color: randomColor(),
         });
         // 去重
         newTags = removeRepeat(newTags);
@@ -314,7 +296,7 @@ const About = () => {
             </Col>
             <Col offset={2} span={10}>
               <div className="field-item">
-                <div className="field-title">
+                <div className="field-title" style={{ justifyContent: 'flex-start' }}>
                   <Badge>个人简历: </Badge>
                   <Switch
                     className="field-switch"

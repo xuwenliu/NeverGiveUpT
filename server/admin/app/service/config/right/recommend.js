@@ -76,6 +76,29 @@ class RightRecommendService extends Service {
       };
     }
   }
+
+  async destroy(id) {
+    const {
+      ctx
+    } = this;
+
+    const oldTags = await ctx.model.Config.Right.Recommend.findOne({
+      _id: id,
+    });
+    if (!oldTags) {
+      return {
+        msg: "推荐不存在",
+      };
+    }
+
+    await ctx.model.Config.Right.Recommend.deleteOne({
+      _id: id,
+    });
+    return {
+      msg: "推荐删除成功",
+    };
+  }
+
 }
 
 module.exports = RightRecommendService;

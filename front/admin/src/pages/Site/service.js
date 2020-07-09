@@ -104,7 +104,40 @@ const ad = {
   },
 };
 
+const recommend = {
+  query: async (params) => {
+    return request('/api/config/right/recommend?project=' + params.project, {
+      method: 'GET',
+    });
+  },
+  create: async (params) => {
+    return request('/api/config/right/recommend', {
+      method: 'POST',
+      data: {
+        ...params,
+      },
+    });
+  },
+  update: async (params) => {
+    return request('/api/config/right/recommend', {
+      method: 'PUT',
+      data: {
+        ...params,
+      },
+    });
+  },
+  remove: async (params) => {
+    return request('/api/config/right/recommend', {
+      method: 'DELETE',
+      data: {
+        ...params,
+      },
+    });
+  },
+};
+
 export const fetchRight = {
   introduction,
   ad,
+  recommend,
 };

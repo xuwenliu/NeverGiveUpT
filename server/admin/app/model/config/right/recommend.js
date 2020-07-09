@@ -5,9 +5,7 @@ module.exports = (app) => {
   const RightRecommendSchema = new Schema(
     {
       project: {
-        type: "number",
-        min: 1,
-        max: 3,
+        type: "string",
       },
       showPosition: {
         type: [String],

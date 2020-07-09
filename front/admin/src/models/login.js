@@ -1,52 +1,29 @@
-import {
-  stringify
-} from 'querystring';
-import {
-  history
-} from 'umi';
-import {
-  fakeAccountLogin
-} from '@/services/login';
-import {
-  setAuthority
-} from '@/utils/authority';
-import {
-  getPageQuery
-} from '@/utils/utils';
+import { stringify } from 'querystring';
+import { history } from 'umi';
+import { fakeAccountLogin } from '@/services/login';
+import { getPageQuery } from '@/utils/utils';
 
 const Model = {
   namespace: 'login',
-  state: {
-    status: undefined,
-  },
+  state: {},
   effects: {
-    * login({
-      payload
-    }, {
-      call,
-      put
-    }) {
+    *login({ payload }, { call, put }) {
       const res = yield call(fakeAccountLogin, payload);
-      console.log(res)
-      yield put({
-        type: 'changeLoginStatus',
-        payload: res,
-      }); // Login successfully
-
       if (res.code === 0) {
-        localStorage.setItem("token", res.data.token);
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('userName', res.data.userName);
         history.replace('/tags');
       }
     },
 
     logout() {
-      const {
-        redirect
-      } = getPageQuery(); // Note: There may be security issues, please note
+      const { redirect } = getPageQuery(); // Note: There may be security issues, please note
 
-      if (window.location.pathname !== '/user/login' && !redirect) {
+      if (window.location.pathname !== '/admin/login' && !redirect) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userName');
         history.replace({
-          pathname: '/user/login',
+          pathname: '/admin/login',
           search: stringify({
             redirect: window.location.href,
           }),
@@ -54,17 +31,6 @@ const Model = {
       }
     },
   },
-  reducers: {
-    changeLoginStatus(state, {
-      payload
-    }) {
-      setAuthority(payload.currentAuthority);
-      return {
-        ...state,
-        status: payload.status,
-        type: payload.type
-      };
-    },
-  },
+  reducers: {},
 };
 export default Model;

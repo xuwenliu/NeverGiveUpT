@@ -42,7 +42,6 @@ export default defineConfig({
         {
           path: '/',
           component: '../layouts/BasicLayout',
-          authority: ['admin', 'user'],
           routes: [
             {
               path: '/',
@@ -53,22 +52,6 @@ export default defineConfig({
               name: 'welcome',
               icon: 'smile',
               component: './Welcome',
-            },
-            {
-              path: '/admin',
-              name: 'admin',
-              icon: 'crown',
-              component: './Admin',
-              authority: ['admin'],
-              routes: [
-                {
-                  path: '/admin/sub-page',
-                  name: 'sub-page',
-                  icon: 'smile',
-                  component: './Welcome',
-                  authority: ['admin'],
-                },
-              ],
             },
             {
               name: 'list.tags',

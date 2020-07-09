@@ -39,6 +39,7 @@ class AdminService extends Service {
     return {
       data: {
         token,
+        userName: oldUser.userName,
       },
       msg: "登录成功",
     };

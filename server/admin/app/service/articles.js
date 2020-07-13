@@ -12,7 +12,7 @@ class ArticlesService extends Service {
     params = ctx.helper.filterEmptyField(params);
 
     let mustCon = {};
-    if (params.categories) {
+    if (params.categories && params.categories !== "全部") {
       mustCon.categories = params.categories;
     }
     if (params.tags) {
@@ -209,7 +209,8 @@ class ArticlesService extends Service {
       if (oldArr.length === 0) return;
       const arr = oldArr.map((item) => item.sort).sort((a, b) => a - b);
       const currentMin = arr[0];
-      params.sort = currentMin - 1;
+      params.sort =
+        currentMin - 1 < -9999 || currentMin - 1 > 9999 ? 0 : currentMin - 1;
     }
 
     const updateData = {

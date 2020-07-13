@@ -1,5 +1,7 @@
 export default {
   'menu.list.tags': '标签管理',
+  'menu.list.articles': '文章管理',
+  'menu.list.articles-edit': '文章详情',
   'menu.list.categories': '分类管理',
   'menu.list.about': '关于管理',
   'menu.list.user': '用户管理',

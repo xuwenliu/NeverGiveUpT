@@ -54,6 +54,19 @@ export default defineConfig({
               component: './Welcome',
             },
             {
+              name: 'list.articles',
+              icon: 'container',
+              path: '/articles',
+              component: './Articles',
+            },
+            {
+              name: 'list.articles-edit',
+              icon: 'edit',
+              path: '/articles/:type/:id',
+              component: './Articles/Edit',
+              hideInMenu: true,
+            },
+            {
               name: 'list.tags',
               icon: 'tags',
               path: '/tags',
@@ -81,7 +94,7 @@ export default defineConfig({
               name: 'list.site',
               icon: 'setting',
               path: '/site',
-              routes:[
+              routes: [
                 {
                   name: 'site-home',
                   icon: 'home',
@@ -99,8 +112,8 @@ export default defineConfig({
                   icon: 'picRight',
                   path: '/site/right',
                   component: './Site/Right',
-                }
-              ]
+                },
+              ],
             },
             {
               component: './404',

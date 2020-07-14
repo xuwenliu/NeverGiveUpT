@@ -24,6 +24,9 @@ module.exports = (app) => {
         type: "array",
         itemType: "string",
       },
+      content: {
+        type: "string",
+      },
       views: {
         type: "number",
         default: 0,
@@ -39,6 +42,23 @@ module.exports = (app) => {
       collect: {
         type: "number",
         default: 0,
+      },
+      isComment: {
+        type: "boolean",
+        default: true,
+      },
+      isLike: {
+        type: "boolean",
+        default: true,
+      },
+      isCollect: {
+        type: "boolean",
+        default: false,
+      },
+      // 是否开启打赏
+      isReward: {
+        type: "boolean",
+        default: false,
       },
       status: {
         type: "number",

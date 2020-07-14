@@ -12,7 +12,7 @@ class ArticlesService extends Service {
     params = ctx.helper.filterEmptyField(params);
 
     let mustCon = {};
-    if (params.categories && params.categories !== "全部") {
+    if (params.categories) {
       mustCon.categories = params.categories;
     }
     if (params.tags) {
@@ -54,6 +54,21 @@ class ArticlesService extends Service {
         list: data,
       },
       msg: "文章列表获取成功",
+    };
+  }
+  async edit(id) {
+    const { ctx } = this;
+    const oldArticles = await ctx.model.Articles.findOne({
+      _id: id,
+    });
+    if (!oldArticles) {
+      return {
+        msg: "文章不存在",
+      };
+    }
+    return {
+      msg: "文章详情获取成功",
+      data: oldArticles,
     };
   }
 
@@ -107,17 +122,7 @@ class ArticlesService extends Service {
       _id: params.id,
     });
 
-    if (oldIdArticles) {
-      // 这里查询是因为可以修改不同id的数据为相同的title，需要通过title判断是否已经存在相同的title
-      const oldNameArticles = await ctx.model.Articles.findOne({
-        title: params.title,
-      });
-      if (oldNameArticles) {
-        return {
-          msg: "文章已存在，请重新修改",
-        };
-      }
-    } else {
+    if (!oldIdArticles) {
       return {
         msg: "文章不存在",
       };

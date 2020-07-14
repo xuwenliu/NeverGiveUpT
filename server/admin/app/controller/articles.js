@@ -184,6 +184,16 @@ class ArticlesController extends Controller {
     });
   }
 
+  async edit() {
+    const { ctx, service } = this;
+    const data = ctx.params;
+    const res = await service.articles.edit(data.id);
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
+
   async create() {
     const { ctx, service } = this;
     const data = ctx.request.body;

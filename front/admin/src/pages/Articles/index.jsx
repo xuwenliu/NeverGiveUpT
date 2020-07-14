@@ -37,8 +37,6 @@ import {
 import { queryCategories } from '@/pages/Categories/service';
 import { queryTags } from '@/pages/Tags/service';
 import moment from 'moment';
-const { Option } = Select;
-
 import './index.less';
 
 const Articles = () => {
@@ -174,7 +172,6 @@ const Articles = () => {
       title: '封面',
       dataIndex: 'cover',
       hideInSearch: true,
-      hideInForm: true,
       width: 100,
       render: (_, record) => {
         return <Avatar shape="square" src={record.cover} />;
@@ -184,7 +181,6 @@ const Articles = () => {
       title: '简介',
       dataIndex: 'introduction',
       hideInSearch: true,
-      hideInForm: true,
       width: 100,
       render: (_, record) => {
         return (
@@ -217,15 +213,6 @@ const Articles = () => {
       valueEnum: {
         ...tags,
       },
-      renderFormItem: (_, { type, defaultRender, value, onChange, ...rest }, form) => {
-        if (type === 'form') {
-          return null;
-        }
-        if (value) {
-          value = value.join(',');
-        }
-        return defaultRender(_);
-      },
       render: (_, record) => {
         if (record.tags.length > 0) {
           let result = [];
@@ -251,7 +238,6 @@ const Articles = () => {
       dataIndex: 'views',
       width: 200,
       hideInSearch: true,
-      hideInForm: true,
       render: (_, record) => {
         return `${record.views}/${record.comment}/${record.like}/${record.collect}`;
       },
@@ -259,9 +245,19 @@ const Articles = () => {
     {
       title: '文章状态',
       dataIndex: 'status',
-      hideInSearch: true,
-      hideInForm: true,
       width: 100,
+      initialValue: '0',
+      valueEnum: {
+        0: {
+          text: '全部',
+        },
+        1: {
+          text: '启用',
+        },
+        2: {
+          text: '停用',
+        },
+      },
       render: (_, record) => {
         return (
           <Switch
@@ -276,9 +272,19 @@ const Articles = () => {
     {
       title: '发布状态',
       dataIndex: 'publishStatus',
-      hideInSearch: true,
-      hideInForm: true,
       width: 100,
+      initialValue: '0',
+      valueEnum: {
+        0: {
+          text: '全部',
+        },
+        1: {
+          text: '已发布',
+        },
+        2: {
+          text: '未发布',
+        },
+      },
       render: (_, record) => {
         const text = record.publishStatus === 1 ? '已发布' : '未发布';
         return <Badge status={record.publishStatus === 1 ? 'success' : 'error'} text={text} />;
@@ -288,7 +294,6 @@ const Articles = () => {
       title: '权重',
       dataIndex: 'sort',
       hideInSearch: true,
-      hideInForm: true,
       width: 100,
       editable: true,
     },
@@ -296,17 +301,15 @@ const Articles = () => {
     {
       title: '创建时间',
       dataIndex: 'createTime',
-      hideInSearch: true,
-      hideInForm: true,
       width: 200,
+      valueType: 'dateTimeRange',
       render: (_, record) => moment(record.createTime * 1000).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       title: '修改时间',
       dataIndex: 'updateTime',
-      hideInSearch: true,
-      hideInForm: true,
       width: 200,
+      valueType: 'dateTimeRange',
       render: (_, record) =>
         record.updateTime === 0
           ? '-'

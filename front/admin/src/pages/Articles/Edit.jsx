@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   Card,
   Form,
@@ -20,6 +20,8 @@ import './Edit.less';
 import { queryCategories } from '@/pages/Categories/service';
 import { queryTags } from '@/pages/Tags/service';
 import { addArticles, updateArticles, queryArticlesEdit } from './service';
+import { upload } from '@/components/UploadImage/service';
+
 import { history } from 'umi';
 
 const layout = {
@@ -41,6 +43,7 @@ const ArticlesEdit = (props) => {
     disabled: false,
   });
   const [form] = Form.useForm();
+  const editorRef = useRef();
 
   const loadTagsOrCategories = async (func) => {
     const res = await func();
@@ -118,6 +121,14 @@ const ArticlesEdit = (props) => {
     }
   };
 
+  const addImg = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await upload(formData);
+    if (res) {
+      editorRef.current.$img2Url(file.name, res[0].url);
+    }
+  };
   return (
     <Card>
       <SaveTime time={params.updateTime} onRefresh={onRefresh} onBack={() => history.goBack()} />
@@ -235,10 +246,12 @@ const ArticlesEdit = (props) => {
 
         <Form.Item label="" name="content" rules={[{ required: true, message: '请撰写文章内容' }]}>
           <Editor
+            ref={editorRef}
             disabled={params.disabled}
             placeholder="请撰写文章"
             height="auto"
             value={params.content}
+            addImg={(file) => addImg(file)}
           />
         </Form.Item>
 

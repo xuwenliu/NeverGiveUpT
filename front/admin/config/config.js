@@ -67,16 +67,16 @@ export default defineConfig({
               hideInMenu: true,
             },
             {
-              name: 'list.tags',
-              icon: 'tags',
-              path: '/tags',
-              component: './Tags',
-            },
-            {
               name: 'list.categories',
               icon: 'cluster',
               path: '/categories',
               component: './Categories',
+            },
+            {
+              name: 'list.tags',
+              icon: 'tags',
+              path: '/tags',
+              component: './Tags',
             },
             {
               name: 'list.about',
@@ -90,6 +90,14 @@ export default defineConfig({
               path: '/user',
               component: './User',
             },
+
+            {
+              name: 'list.comment',
+              icon: 'comment',
+              path: '/comment',
+              component: './Comment',
+            },
+
             {
               name: 'list.site',
               icon: 'setting',

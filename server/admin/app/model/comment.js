@@ -30,16 +30,17 @@ module.exports = (app) => {
         required: false,
         max: 200,
       },
-      createTime: {
+      commentTime: { // 评论时间
         type: "number",
         default: 0,
       },
-      updateTime: {
+      auditTime: { // 审核时间
         type: "number",
         default: 0,
       },
       auditStatus: {
         type: "string", // 0=全部 1=通过 2=驳回 3=未审核
+        default: "3",
       },
     },
     {

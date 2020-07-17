@@ -19,13 +19,10 @@ class CommentController extends Controller {
       nickName: {
         type: "string",
         required: false,
-        max: 20,
       },
       articleTitle: {
         type: "string",
         required: false,
-        min: 2,
-        max: 200,
       },
       auditStatus: {
         type: "string", // 0=全部 1=通过 2=驳回 3=未审核
@@ -37,7 +34,7 @@ class CommentController extends Controller {
       auditStatus: {
         type: "number", // 1=通过 2=驳回 3=未审核
       },
-    }
+    };
   }
 
   async index() {

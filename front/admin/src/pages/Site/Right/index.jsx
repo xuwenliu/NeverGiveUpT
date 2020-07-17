@@ -79,7 +79,7 @@ const Right = () => {
     ],
   });
 
-  const [tab, setTab] = useState('tab3');
+  const [tab, setTab] = useState('tab1');
   const [tags, setTags] = useState([]);
 
   const [project, setProject] = useState('');

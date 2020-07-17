@@ -6,7 +6,7 @@ import SelectLang from '@/components/SelectLang';
 import logo from '../assets/logo.svg';
 import styles from './UserLayout.less';
 
-const UserLayout = props => {
+const UserLayout = (props) => {
   const {
     route = {
       routes: [],
@@ -50,7 +50,15 @@ const UserLayout = props => {
           </div> */}
           {children}
         </div>
-        <DefaultFooter />
+        <DefaultFooter
+          copyright={`${new Date().getFullYear()} NeverGiveUpT`}
+          links={[
+            {
+              key: 'desc',
+              title: '本站由React + Umi + ant-design-pro提供技术支持',
+            },
+          ]}
+        />
       </div>
     </HelmetProvider>
   );

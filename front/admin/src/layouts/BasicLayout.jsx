@@ -5,7 +5,10 @@
  */
 import ProLayout, { DefaultFooter } from '@ant-design/pro-layout';
 import React, { useEffect } from 'react';
+import { Avatar } from 'antd';
 import { Link, useIntl, connect } from 'umi';
+import avatar from '@/assets/mine.jpeg';
+
 // import { Result, Button } from 'antd';
 // import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
@@ -28,13 +31,13 @@ import logo from '../assets/logo.svg';
 /**
  * use Authorized check all menu item
  */
-const menuDataRender = menuList =>
-  menuList.map(item => {
+const menuDataRender = (menuList) =>
+  menuList.map((item) => {
     const localItem = {
       ...item,
       children: item.children ? menuDataRender(item.children) : undefined,
     };
-    return localItem 
+    return localItem;
     // Authorized.check(item.authority, localItem, null);
   });
 
@@ -50,7 +53,7 @@ const defaultFooterDom = (
   />
 );
 
-const BasicLayout = props => {
+const BasicLayout = (props) => {
   const {
     dispatch,
     children,
@@ -67,7 +70,7 @@ const BasicLayout = props => {
    * init variables
    */
 
-  const handleMenuCollapse = payload => {
+  const handleMenuCollapse = (payload) => {
     if (dispatch) {
       dispatch({
         type: 'global/changeLayoutCollapsed',
@@ -86,8 +89,15 @@ const BasicLayout = props => {
       formatMessage={formatMessage}
       menuHeaderRender={(logoDom, titleDom) => (
         <Link to="/">
-          {logoDom}
-          {titleDom}
+          <Avatar size="large" src={avatar} />
+          <span
+            style={{
+              fontSize: 18,
+              marginLeft: 10,
+            }}
+          >
+            博客后台管理系统
+          </span>
         </Link>
       )}
       onCollapse={handleMenuCollapse}
@@ -122,7 +132,7 @@ const BasicLayout = props => {
       {...settings}
     >
       {/* <Authorized authority={authorized.authority} noMatch={noMatch}> */}
-        {children}
+      {children}
       {/* </Authorized> */}
     </ProLayout>
   );

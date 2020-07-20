@@ -1,7 +1,7 @@
 const proSettings = {
   navTheme: 'dark',
   // 拂晓蓝
-  primaryColor: '#1890ff',
+  primaryColor: '#722ed1',
   layout: 'sidemenu',
   contentWidth: 'Fluid',
   fixedHeader: false,
@@ -10,7 +10,7 @@ const proSettings = {
   menu: {
     locale: true,
   },
-  title: 'Ant Design Pro',
+  title: '博客后台管理系统',
   pwa: false,
   iconfontUrl: '',
 };

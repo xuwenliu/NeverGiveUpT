@@ -1,5 +1,5 @@
-import { Tooltip, Tag } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+// import { SettingDrawer } from '@ant-design/pro-layout';
+// import proSettings from '../../../config/defaultSettings';
 import React from 'react';
 import { connect } from 'umi';
 import Avatar from './AvatarDropdown';
@@ -12,7 +12,7 @@ const ENVTagColor = {
   pre: '#87d068',
 };
 
-const GlobalHeaderRight = props => {
+const GlobalHeaderRight = (props) => {
   const { theme, layout } = props;
   let className = styles.right;
 
@@ -24,6 +24,7 @@ const GlobalHeaderRight = props => {
     <div className={className}>
       <Avatar />
       <SelectLang className={styles.action} />
+      {/* <SettingDrawer settings={proSettings} /> */}
     </div>
   );
 };

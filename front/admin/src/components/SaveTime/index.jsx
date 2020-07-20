@@ -9,7 +9,7 @@ const SaveTime = (props) => {
   const timeMessage = '最后保存时间:' + moment(time * 1000).format('YYYY-MM-DD HH:mm:ss');
   const message = time ? timeMessage : '暂无操作';
   return (
-    <Affix offsetTop={10} style={{ position: 'relative', width: '100%', zIndex: 9999 }}>
+    <Affix offsetTop={10} style={{ position: 'relative', width: '100%', zIndex: 10 }}>
       <div className="save-time">
         <Alert type="success" message={message} />
         {onRefresh && (

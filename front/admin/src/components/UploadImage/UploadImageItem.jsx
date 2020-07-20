@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Upload, message, Input, Select, Row, Col } from 'antd';
+import { Upload, message, Input, Modal, Row, Col, Button, Form } from 'antd';
 import {
   LoadingOutlined,
   PlusOutlined,
@@ -9,8 +9,6 @@ import {
 import { upload } from './service';
 
 import './UploadImageItem.less';
-
-const Option = Select.Option;
 
 const UploadImageItem = (props) => {
   const {
@@ -34,6 +32,8 @@ const UploadImageItem = (props) => {
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(imgUrl || '');
+  const [visible, setVisible] = useState(false);
+  const [form] = Form.useForm();
   useEffect(() => {
     setImageUrl(imgUrl);
   }, [imgUrl]);
@@ -96,11 +96,29 @@ const UploadImageItem = (props) => {
     </div>
   );
 
+  const handleCancel = () => {
+    setVisible(false);
+    form.resetFields();
+  };
+
+  const handleOk = async () => {
+    const values = await form.validateFields(); //校验
+    if (values) {
+      const getValues = form.getFieldsValue(); // 获取最新文本值
+      onChange({
+        index,
+        field: 'imgUrl',
+        value: getValues.imgUrl,
+      });
+      handleCancel();
+    }
+  };
+
   return (
     <div>
       <Row style={{ marginBottom: 20 }}>
         {showImg && (
-          <Col style={{ display: 'flex' }}>
+          <Col style={{ display: 'flex', flexDirection: 'column' }}>
             <Upload
               name="file"
               listType="picture-card"
@@ -114,6 +132,9 @@ const UploadImageItem = (props) => {
                 uploadButton
               )}
             </Upload>
+            <Button onClick={() => setVisible(true)} type="default" style={{ width: '93%' }}>
+              输入链接
+            </Button>
           </Col>
         )}
 
@@ -159,6 +180,25 @@ const UploadImageItem = (props) => {
           </Col>
         )}
       </Row>
+      <Modal onCancel={handleCancel} onOk={handleOk} visible={visible} title="文件链接">
+        <Form form={form}>
+          <Form.Item
+            name="imgUrl"
+            rules={[
+              {
+                required: true,
+                message: '请输入链接',
+              },
+              {
+                type: 'url',
+                message: '链接格式错误',
+              },
+            ]}
+          >
+            <Input placeholder="请输入链接" />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

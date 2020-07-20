@@ -61,6 +61,7 @@ const BasicLayout = (props) => {
     location = {
       pathname: '/',
     },
+    collapsed,
   } = props;
   /**
    * constructor
@@ -83,6 +84,7 @@ const BasicLayout = (props) => {
   //   authority: undefined,
   // };
   const { formatMessage } = useIntl();
+  console.log(collapsed);
   return (
     <ProLayout
       logo={logo}
@@ -90,14 +92,16 @@ const BasicLayout = (props) => {
       menuHeaderRender={(logoDom, titleDom) => (
         <Link to="/">
           <Avatar size="large" src={avatar} />
-          <span
-            style={{
-              fontSize: 18,
-              marginLeft: 10,
-            }}
-          >
-            博客后台管理系统
-          </span>
+          {!collapsed && (
+            <span
+              style={{
+                fontSize: 18,
+                marginLeft: 10,
+              }}
+            >
+              博客后台管理系统
+            </span>
+          )}
         </Link>
       )}
       onCollapse={handleMenuCollapse}

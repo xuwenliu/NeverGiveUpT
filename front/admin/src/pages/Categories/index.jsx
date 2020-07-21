@@ -1,102 +1,127 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
-import { Button, Menu, message, Switch, Form, Input, Popconfirm } from 'antd';
-import { CheckOutlined, CloseOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Button, message, Form, Input, Popconfirm } from 'antd';
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
 import moment from 'moment';
 import { queryCategories, addCategories, removeCategories, updateCategories } from './service';
+import { FormattedMessage, useIntl } from 'umi';
 
 const EditableContext = React.createContext();
 
-const handleAdd = async (params) => {
-  try {
-    const res = await addCategories({ ...params });
-    if (res.code === 0) {
-      message.success(res.msg);
-      return true;
-    }
-  } catch (error) {
-    message.error('添加失败请重试！');
-    return false;
-  }
-};
-
-const handleUpdate = async (params, actionRef) => {
-  try {
-    const res = await updateCategories({ id: params._id, name: params.name });
-    if (res.code === 0) {
-      message.success(res.msg);
-      if (actionRef.current) {
-        actionRef.current.reload();
-      }
-      return true;
-    }
-  } catch (error) {
-    message.error('修改失败请重试！');
-    return false;
-  }
-};
-
-const handleRemove = async (params, actionRef) => {
-  try {
-    const res = await removeCategories({ id: params._id });
-    if (res.code === 0) {
-      message.success(res.msg);
-      if (actionRef.current) {
-        actionRef.current.reload();
-      }
-      return true;
-    }
-  } catch (error) {
-    message.error('删除失败请重试！');
-    return false;
-  }
-};
-
-
-const Categories = (props) => {
+const Categories = () => {
   const [createModalVisible, handleModalVisible] = useState(false);
   const actionRef = useRef();
+  const intl = useIntl();
+
+  const handleAdd = async (params) => {
+    try {
+      const res = await addCategories({ ...params });
+      if (res.code === 0) {
+        message.success(res.msg);
+        return true;
+      }
+    } catch (error) {
+      message.error(
+        intl.formatMessage({
+          id: 'categories.create_error_tip',
+        }),
+      );
+      return false;
+    }
+  };
+
+  const handleUpdate = async (params, actionRef) => {
+    try {
+      const res = await updateCategories({ id: params._id, name: params.name });
+      if (res.code === 0) {
+        message.success(res.msg);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
+        return true;
+      }
+    } catch (error) {
+      message.error(
+        intl.formatMessage({
+          id: 'categories.update_error_tip',
+        }),
+      );
+      return false;
+    }
+  };
+
+  const handleRemove = async (params, actionRef) => {
+    try {
+      const res = await removeCategories({ id: params._id });
+      if (res.code === 0) {
+        message.success(res.msg);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
+        return true;
+      }
+    } catch (error) {
+      message.error(
+        intl.formatMessage({
+          id: 'categories.remove_error_tip',
+        }),
+      );
+      return false;
+    }
+  };
 
   let columns = [
-    // {
-    //   title: 'ObjectId',
-    //   dataIndex: '_id',
-    //   hideInSearch: true,
-    //   hideInForm: true,
-    // },
     {
-      title: '分类名称',
+      title: intl.formatMessage({
+        id: 'categories.name',
+      }),
       dataIndex: 'name',
       editable: true,
       width: '30%',
+      formItemProps: {
+        placeholder: intl.formatMessage({
+          id: 'articles.p_name',
+        }),
+        autoComplete: 'off',
+      },
       rules: [
         {
           required: true,
-          message: '分类名称为必填项',
+          message: intl.formatMessage({
+            id: 'categories.name_required',
+          }),
         },
         {
           pattern: /^[\u4E00-\u9FA5A-Za-z0-9_.]{2,20}$/,
-          message: '分类格式为: 2-20个_.中文大小写字母',
+          message: intl.formatMessage({
+            id: 'categories.name_pattern',
+          }),
         },
       ],
     },
     {
-      title: '文章数量',
+      title: intl.formatMessage({
+        id: 'common.articlesNum',
+      }),
       dataIndex: 'articleNum',
       hideInSearch: true,
       hideInForm: true,
     },
     {
-      title: '创建时间',
+      title: intl.formatMessage({
+        id: 'common.createTime',
+      }),
       dataIndex: 'createTime',
       hideInSearch: true,
       hideInForm: true,
       render: (_, record) => moment(record.createTime * 1000).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
-      title: '修改时间',
+      title: intl.formatMessage({
+        id: 'common.updateTime',
+      }),
       dataIndex: 'updateTime',
       hideInSearch: true,
       hideInForm: true,
@@ -107,7 +132,9 @@ const Categories = (props) => {
     },
 
     {
-      title: '操作',
+      title: intl.formatMessage({
+        id: 'common.action',
+      }),
       dataIndex: 'option',
       valueType: 'option',
       width: 100,
@@ -115,7 +142,14 @@ const Categories = (props) => {
         return record.articleNum === 0 && !record.status ? (
           <Popconfirm
             placement="topLeft"
-            title={`你确定删除分类【${record.name}】吗？`}
+            title={intl.formatMessage(
+              {
+                id: 'categories.remove_tip',
+              },
+              {
+                name: record.name,
+              },
+            )}
             onConfirm={() => handleRemove(record, actionRef)}
           >
             <a>
@@ -177,10 +211,18 @@ const Categories = (props) => {
 
     const toggleEdit = () => {
       if (record.status) {
-        return message.info('启用状态分类不能修改');
+        return message.info(
+          intl.formatMessage({
+            id: 'categories.not_update',
+          }),
+        );
       } else {
         if (record.articleNum > 0) {
-          return message.info('该分类下有文章不能修改');
+          return message.info(
+            intl.formatMessage({
+              id: 'categories.not_update_have_article',
+            }),
+          );
         }
       }
       setEditing(!editing);
@@ -196,9 +238,7 @@ const Categories = (props) => {
           handleUpdate({ ...record, ...values }, actionRef);
         }
         toggleEdit();
-      } catch (error) {
-        console.log('修改失败:', error);
-      }
+      } catch (error) {}
     };
 
     let childNode = children;
@@ -213,7 +253,14 @@ const Categories = (props) => {
           rules={[
             {
               required: true,
-              message: `${title}必填`,
+              message: intl.formatMessage(
+                {
+                  id: 'categories.p_input',
+                },
+                {
+                  name: title,
+                },
+              ),
             },
           ]}
         >
@@ -249,7 +296,7 @@ const Categories = (props) => {
         rowKey="_id"
         toolBarRender={(action, { selectedRows }) => [
           <Button type="primary" onClick={() => handleModalVisible(true)}>
-            <PlusOutlined /> 添加
+            <PlusOutlined /> <FormattedMessage id="categories.add" />
           </Button>,
         ]}
         request={(params, sorter, filter) => queryCategories({ ...params })}
@@ -262,11 +309,8 @@ const Categories = (props) => {
         <ProTable
           onSubmit={async (value) => {
             const success = await handleAdd(value);
-            console.log('success', success);
-
             if (success) {
               handleModalVisible(false);
-
               if (actionRef.current) {
                 actionRef.current.reload();
               }

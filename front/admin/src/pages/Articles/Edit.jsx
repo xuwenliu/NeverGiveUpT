@@ -22,7 +22,7 @@ import { queryTags } from '@/pages/Tags/service';
 import { addArticles, updateArticles, queryArticlesEdit } from './service';
 import { upload } from '@/components/UploadImage/service';
 
-import { history } from 'umi';
+import { history, FormattedMessage, useIntl } from 'umi';
 
 const layout = {
   labelCol: { span: 2 },
@@ -44,6 +44,7 @@ const ArticlesEdit = (props) => {
   });
   const [form] = Form.useForm();
   const editorRef = useRef();
+  const intl = useIntl();
 
   const loadTagsOrCategories = async (func) => {
     const res = await func();
@@ -59,7 +60,6 @@ const ArticlesEdit = (props) => {
 
   const loadArticlesInfo = async (type, id, isRefresh) => {
     const res = await queryArticlesEdit({ id });
-    console.log(res.data);
     if (res.data) {
       const data = res.data;
       setParams({
@@ -74,7 +74,11 @@ const ArticlesEdit = (props) => {
       });
       form.setFieldsValue({ ...data });
       if (isRefresh) {
-        message.success('刷新成功');
+        message.success(
+          intl.formatMessage({
+            id: 'common.refresh_success',
+          }),
+        );
       }
     } else {
       message.error(res.msg);
@@ -114,7 +118,15 @@ const ArticlesEdit = (props) => {
       const res = await callFunc(postData);
       if (res.code === 0) {
         history.goBack();
-        message.success(publishStatus === 1 ? '文章发布成功' : '文章保存草稿成功');
+        message.success(
+          publishStatus === 1
+            ? intl.formatMessage({
+                id: 'common.publish_success',
+              })
+            : intl.formatMessage({
+                id: 'common.save_draft_success',
+              }),
+        );
       } else {
         message.error(res.msg);
       }
@@ -149,35 +161,79 @@ const ArticlesEdit = (props) => {
       >
         <Form.Item
           {...layout}
-          label="文章标题"
+          label={intl.formatMessage({
+            id: 'articles.title',
+          })}
           name="title"
           rules={[
-            { required: true, message: '请输入文章标题' },
-            { pattern: /.{2,200}/, message: '标题2-200个字符' },
+            {
+              required: true,
+              message: intl.formatMessage({
+                id: 'articles.p_title',
+              }),
+            },
+            {
+              pattern: /.{2,200}/,
+              message: intl.formatMessage({
+                id: 'articles.p_title_pattern',
+              }),
+            },
           ]}
         >
-          <Input disabled={params.disabled} placeholder="请输入2-200个字符" />
+          <Input
+            disabled={params.disabled}
+            placeholder={intl.formatMessage({
+              id: 'articles.p_title_pattern',
+            })}
+          />
         </Form.Item>
 
         <Form.Item
           {...layout}
-          label="文章简介"
+          label={intl.formatMessage({
+            id: 'articles.introduction',
+          })}
           name="introduction"
           rules={[
-            { required: true, message: '请输入文章简介' },
-            { pattern: /.{10,500}/, message: '简介10-500个字符' },
+            {
+              required: true,
+              message: intl.formatMessage({
+                id: 'articles.p_introduction',
+              }),
+            },
+            {
+              pattern: /.{10,500}/,
+              message: intl.formatMessage({
+                id: 'articles.p_introduction_pattern',
+              }),
+            },
           ]}
         >
-          <Input.TextArea disabled={params.disabled} placeholder="请输入10-500个字符" rows={5} />
+          <Input.TextArea
+            disabled={params.disabled}
+            placeholder={intl.formatMessage({
+              id: 'articles.p_introduction_pattern',
+            })}
+            rows={5}
+          />
         </Form.Item>
 
         <Row>
           <Col span={12}>
             <Form.Item
               {...selectLayout}
-              label="文章封面"
+              label={intl.formatMessage({
+                id: 'articles.cover',
+              })}
               name="cover"
-              rules={[{ required: true, message: '请上传文章封面' }]}
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage({
+                    id: 'articles.p_cover',
+                  }),
+                },
+              ]}
               normalize={(value, prevValue, prevValues) => {
                 return value && value[0] ? value[0].imgUrl : '';
               }}
@@ -187,11 +243,25 @@ const ArticlesEdit = (props) => {
 
             <Form.Item
               {...selectLayout}
-              label="选个分类"
+              label={intl.formatMessage({
+                id: 'articles.categories',
+              })}
               name="categories"
-              rules={[{ required: true, message: '请选个分类' }]}
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage({
+                    id: 'articles.p_categories',
+                  }),
+                },
+              ]}
             >
-              <Select disabled={params.disabled} placeholder="请给文章选个分类">
+              <Select
+                disabled={params.disabled}
+                placeholder={intl.formatMessage({
+                  id: 'articles.p_categories',
+                })}
+              >
                 {categories.map((item) => (
                   <Option key={item} value={item}>
                     {item}
@@ -202,11 +272,26 @@ const ArticlesEdit = (props) => {
 
             <Form.Item
               {...selectLayout}
-              label="贴个标签"
+              label={intl.formatMessage({
+                id: 'articles.tags',
+              })}
               name="tags"
-              rules={[{ required: true, message: '请贴个标签' }]}
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage({
+                    id: 'articles.p_tags',
+                  }),
+                },
+              ]}
             >
-              <Select disabled={params.disabled} placeholder="请给文章贴个标签" mode="tags">
+              <Select
+                disabled={params.disabled}
+                placeholder={intl.formatMessage({
+                  id: 'articles.p_tags',
+                })}
+                mode="tags"
+              >
                 {tags.map((item) => (
                   <Option key={item} value={item}>
                     {item}
@@ -217,38 +302,122 @@ const ArticlesEdit = (props) => {
           </Col>
 
           <Col span={4}>
-            <Form.Item label="评论" name="isComment" valuePropName="checked">
-              <Switch disabled={params.disabled} checkedChildren="开启" unCheckedChildren="关闭" />
+            <Form.Item
+              label={intl.formatMessage({
+                id: 'common.comment',
+              })}
+              name="isComment"
+              valuePropName="checked"
+            >
+              <Switch
+                disabled={params.disabled}
+                checkedChildren={intl.formatMessage({
+                  id: 'common.open',
+                })}
+                unCheckedChildren={intl.formatMessage({
+                  id: 'common.close',
+                })}
+              />
             </Form.Item>
-            <Form.Item label="点赞" name="isLike" valuePropName="checked">
-              <Switch disabled={params.disabled} checkedChildren="开启" unCheckedChildren="关闭" />
+            <Form.Item
+              label={intl.formatMessage({
+                id: 'common.like',
+              })}
+              name="isLike"
+              valuePropName="checked"
+            >
+              <Switch
+                disabled={params.disabled}
+                checkedChildren={intl.formatMessage({
+                  id: 'common.open',
+                })}
+                unCheckedChildren={intl.formatMessage({
+                  id: 'common.close',
+                })}
+              />
             </Form.Item>
-            <Form.Item label="收藏" name="isCollect" valuePropName="checked">
-              <Switch disabled={params.disabled} checkedChildren="开启" unCheckedChildren="关闭" />
+            <Form.Item
+              label={intl.formatMessage({
+                id: 'common.collect',
+              })}
+              name="isCollect"
+              valuePropName="checked"
+            >
+              <Switch
+                disabled={params.disabled}
+                checkedChildren={intl.formatMessage({
+                  id: 'common.open',
+                })}
+                unCheckedChildren={intl.formatMessage({
+                  id: 'common.close',
+                })}
+              />
             </Form.Item>
-            <Form.Item label="打赏" name="isReward" valuePropName="checked">
-              <Switch disabled={params.disabled} checkedChildren="开启" unCheckedChildren="关闭" />
+            <Form.Item
+              label={intl.formatMessage({
+                id: 'common.reward',
+              })}
+              name="isReward"
+              valuePropName="checked"
+            >
+              <Switch
+                disabled={params.disabled}
+                checkedChildren={intl.formatMessage({
+                  id: 'common.open',
+                })}
+                unCheckedChildren={intl.formatMessage({
+                  id: 'common.close',
+                })}
+              />
             </Form.Item>
           </Col>
 
           <Col span={4}>
-            <Form.Item label="查看数量" name="views">
+            <Form.Item
+              label={intl.formatMessage({
+                id: 'common.viewsNum',
+              })}
+              name="views"
+            >
               <InputNumber disabled={params.disabled} />
             </Form.Item>
-            <Form.Item label="点赞数量" name="like">
+            <Form.Item
+              label={intl.formatMessage({
+                id: 'common.likeNum',
+              })}
+              name="like"
+            >
               <InputNumber disabled={params.disabled} />
             </Form.Item>
-            <Form.Item label="收藏数量" name="collect">
+            <Form.Item
+              label={intl.formatMessage({
+                id: 'common.rewardNum',
+              })}
+              name="collect"
+            >
               <InputNumber disabled={params.disabled} />
             </Form.Item>
           </Col>
         </Row>
 
-        <Form.Item label="" name="content" rules={[{ required: true, message: '请撰写文章内容' }]}>
+        <Form.Item
+          label=""
+          name="content"
+          rules={[
+            {
+              required: true,
+              message: intl.formatMessage({
+                id: 'articles.p_content',
+              }),
+            },
+          ]}
+        >
           <Editor
             ref={editorRef}
             disabled={params.disabled}
-            placeholder="请撰写文章"
+            placeholder={intl.formatMessage({
+              id: 'articles.p_content',
+            })}
             height="auto"
             value={params.content}
             addImg={(file) => addImg(file)}
@@ -259,13 +428,13 @@ const ArticlesEdit = (props) => {
           <div className="submit-btn">
             <Form.Item>
               <Button onClick={() => onFinish(2)} className="btn">
-                保存草稿
+                <FormattedMessage id="articles.save_draft" />
               </Button>
             </Form.Item>
 
             <Form.Item>
               <Button onClick={() => onFinish(1)} className="btn publish">
-                发布文章
+                <FormattedMessage id="articles.publish" />
               </Button>
             </Form.Item>
           </div>

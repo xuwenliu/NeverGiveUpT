@@ -1,12 +1,16 @@
 import React from 'react';
 import { Modal } from 'antd';
+import { useIntl } from 'umi';
 
-const CreateForm = props => {
+const CreateForm = (props) => {
+  const intl = useIntl();
   const { modalVisible, onCancel } = props;
   return (
     <Modal
       destroyOnClose
-      title="新建规则"
+      title={intl.formatMessage({
+        id: 'categories.add',
+      })}
       visible={modalVisible}
       onCancel={() => onCancel()}
       footer={null}

@@ -1,0 +1,18 @@
+export default {
+  'articles.title': '标题',
+  'articles.p_title': '请输入文章标题',
+  'articles.p_choose_categories': '请选择分类',
+  'articles.p_choose_tags': '请选择标签',
+  'articles.articlesStatus': '文章状态',
+  'articles.publishStatus': '发布状态',
+  'articles.sort': '排序',
+  'articles.createArticle': '新建文章',
+  'articles.enable_error_tip': '启用/停用文章失败请重试！',
+  'articles.publish_error_tip': '发布/取消发布文章失败请重试！',
+  'articles.remove_error_tip': '删除文章失败请重试！',
+  'articles.update_sort_error_tip': '修改权重失败请重试！',
+  'articles.publish_tip': '你确定发布【{name}】吗？',
+  'articles.publish_cancel_tip': '你确定取消发布【{name}】吗？',
+  'articles.remove_tip': '你确定删除文章【{name}】吗？',
+  'articles.p_input': '请输入{name}',
+};

@@ -1,7 +1,6 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import {
   Button,
-  Menu,
   message,
   Switch,
   Form,
@@ -11,7 +10,6 @@ import {
   Tooltip,
   Badge,
   Tag,
-  Select,
 } from 'antd';
 import {
   CloudDownloadOutlined,
@@ -25,7 +23,7 @@ import {
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
 
-import { history } from 'umi';
+import { history, FormattedMessage, useIntl } from 'umi';
 import { randomColor } from '@/utils/utils';
 import {
   queryArticles,
@@ -43,14 +41,24 @@ const Articles = () => {
   const actionRef = useRef();
   const EditableContext = React.createContext();
   const [categories, setCategories] = useState({});
-  const [tags, setTags] = useState(['全部']);
+  const intl = useIntl();
+  const [tags, setTags] = useState([
+    intl.formatMessage({
+      id: 'common.all',
+    }),
+  ]);
 
   const loadTagsOrCategories = async (func) => {
     const res = await func();
     if (res.data) {
       let data = res.data.map((item) => item.name);
       if (func === queryCategories) {
-        data = ['全部', ...data];
+        data = [
+          intl.formatMessage({
+            id: 'common.all',
+          }),
+          ...data,
+        ];
       }
       const obj = {};
       data.forEach((item) => {
@@ -91,7 +99,11 @@ const Articles = () => {
         return true;
       }
     } catch (error) {
-      message.error('启用/停用文章失败请重试！');
+      message.error(
+        intl.formatMessage({
+          id: 'articles.enable_error_tip',
+        }),
+      );
       return false;
     }
   };
@@ -110,7 +122,11 @@ const Articles = () => {
         return true;
       }
     } catch (error) {
-      message.error('发布/取消发布文章失败请重试！');
+      message.error(
+        intl.formatMessage({
+          id: 'articles.publish_error_tip',
+        }),
+      );
       return false;
     }
   };
@@ -128,7 +144,11 @@ const Articles = () => {
         return true;
       }
     } catch (error) {
-      message.error('删除文章失败请重试！');
+      message.error(
+        intl.formatMessage({
+          id: 'articles.remove_error_tip',
+        }),
+      );
       return false;
     }
   };
@@ -145,17 +165,36 @@ const Articles = () => {
         return true;
       }
     } catch (error) {
-      message.error('修改失败请重试！');
+      message.error(
+        intl.formatMessage({
+          id: 'articles.update_sort_error_tip',
+        }),
+      );
       return false;
     }
   };
 
+  const someTitle = () => {
+    return (
+      <>
+        <FormattedMessage id="common.view" /> /
+        <FormattedMessage id="common.comment" /> /
+        <FormattedMessage id="common.like" /> /
+        <FormattedMessage id="common.collect" />
+      </>
+    );
+  };
+
   let columns = [
     {
-      title: '标题',
+      title: intl.formatMessage({
+        id: 'articles.title',
+      }),
       dataIndex: 'title',
       formItemProps: {
-        placeholder: '请输入文章标题',
+        placeholder: intl.formatMessage({
+          id: 'articles.p_title',
+        }),
         autoComplete: 'off',
       },
       width: 100,
@@ -169,7 +208,9 @@ const Articles = () => {
       },
     },
     {
-      title: '封面',
+      title: intl.formatMessage({
+        id: 'common.cover',
+      }),
       dataIndex: 'cover',
       hideInSearch: true,
       width: 100,
@@ -178,7 +219,9 @@ const Articles = () => {
       },
     },
     {
-      title: '简介',
+      title: intl.formatMessage({
+        id: 'common.introduction',
+      }),
       dataIndex: 'introduction',
       hideInSearch: true,
       width: 100,
@@ -191,23 +234,33 @@ const Articles = () => {
       },
     },
     {
-      title: '分类',
+      title: intl.formatMessage({
+        id: 'common.categories',
+      }),
       dataIndex: 'categories',
       width: 100,
       valueEnum: {
         ...categories,
       },
-      initialValue: '全部',
+      initialValue: intl.formatMessage({
+        id: 'common.all',
+      }),
       formItemProps: {
-        placeholder: '请选择分类',
+        placeholder: intl.formatMessage({
+          id: 'articles.p_choose_categories',
+        }),
       },
     },
     {
-      title: '标签',
+      title: intl.formatMessage({
+        id: 'common.tags',
+      }),
       dataIndex: 'tags',
       width: 200,
       formItemProps: {
-        placeholder: '请选择标签',
+        placeholder: intl.formatMessage({
+          id: 'articles.p_choose_tags',
+        }),
         mode: 'tags',
       },
       valueEnum: {
@@ -234,7 +287,7 @@ const Articles = () => {
       },
     },
     {
-      title: '查看/评论/点赞/收藏',
+      title: someTitle(),
       dataIndex: 'views',
       width: 200,
       hideInSearch: true,
@@ -243,26 +296,38 @@ const Articles = () => {
       },
     },
     {
-      title: '文章状态',
+      title: intl.formatMessage({
+        id: 'articles.articlesStatus',
+      }),
       dataIndex: 'status',
       width: 100,
       initialValue: '0',
       valueEnum: {
         0: {
-          text: '全部',
+          text: intl.formatMessage({
+            id: 'common.all',
+          }),
         },
         1: {
-          text: '启用',
+          text: intl.formatMessage({
+            id: 'common.enable',
+          }),
         },
         2: {
-          text: '停用',
+          text: intl.formatMessage({
+            id: 'common.disable',
+          }),
         },
       },
       render: (_, record) => {
         return (
           <Switch
-            checkedChildren="启用"
-            unCheckedChildren="停用"
+            checkedChildren={intl.formatMessage({
+              id: 'common.enable',
+            })}
+            unCheckedChildren={intl.formatMessage({
+              id: 'common.disable',
+            })}
             checked={record.status === 1}
             onChange={(checked) => handleUpdateStatus(checked, record, actionRef)}
           />
@@ -270,28 +335,45 @@ const Articles = () => {
       },
     },
     {
-      title: '发布状态',
+      title: intl.formatMessage({
+        id: 'articles.publishStatus',
+      }),
       dataIndex: 'publishStatus',
       width: 100,
       initialValue: '0',
       valueEnum: {
         0: {
-          text: '全部',
+          text: intl.formatMessage({
+            id: 'common.all',
+          }),
         },
         1: {
-          text: '已发布',
+          text: intl.formatMessage({
+            id: 'common.published',
+          }),
         },
         2: {
-          text: '未发布',
+          text: intl.formatMessage({
+            id: 'common.unpublished',
+          }),
         },
       },
       render: (_, record) => {
-        const text = record.publishStatus === 1 ? '已发布' : '未发布';
+        const text =
+          record.publishStatus === 1
+            ? intl.formatMessage({
+                id: 'common.published',
+              })
+            : intl.formatMessage({
+                id: 'common.unpublished',
+              });
         return <Badge status={record.publishStatus === 1 ? 'success' : 'error'} text={text} />;
       },
     },
     {
-      title: '权重',
+      title: intl.formatMessage({
+        id: 'articles.sort',
+      }),
       dataIndex: 'sort',
       hideInSearch: true,
       width: 100,
@@ -299,14 +381,18 @@ const Articles = () => {
     },
 
     {
-      title: '创建时间',
+      title: intl.formatMessage({
+        id: 'common.createTime',
+      }),
       dataIndex: 'createTime',
       width: 200,
       valueType: 'dateTimeRange',
       render: (_, record) => moment(record.createTime * 1000).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
-      title: '修改时间',
+      title: intl.formatMessage({
+        id: 'common.updateTime',
+      }),
       dataIndex: 'updateTime',
       width: 200,
       valueType: 'dateTimeRange',
@@ -317,7 +403,9 @@ const Articles = () => {
     },
 
     {
-      title: '操作',
+      title: intl.formatMessage({
+        id: 'common.action',
+      }),
       dataIndex: 'option',
       valueType: 'option',
       width: 200,
@@ -328,9 +416,25 @@ const Articles = () => {
             {/* 发布和下线 */}
             <Popconfirm
               placement="topLeft"
-              title={`你确定${record.publishStatus === 1 ? '取消发布' : '发布'}【${
-                record.title
-              }】吗？`}
+              title={
+                record.publishStatus === 1
+                  ? intl.formatMessage(
+                      {
+                        id: 'articles.publish_cancel_tip',
+                      },
+                      {
+                        name: record.title,
+                      },
+                    )
+                  : intl.formatMessage(
+                      {
+                        id: 'articles.publish_tip',
+                      },
+                      {
+                        name: record.title,
+                      },
+                    )
+              }
               onConfirm={() => handlePublish(record, actionRef)}
             >
               <a style={{ marginRight: 10 }}>
@@ -361,7 +465,14 @@ const Articles = () => {
             {record.publishStatus === 2 && (
               <Popconfirm
                 placement="topLeft"
-                title={`你确定删除文章【${record.title}】吗？`}
+                title={intl.formatMessage(
+                  {
+                    id: 'articles.remove_tip',
+                  },
+                  {
+                    name: record.title,
+                  },
+                )}
                 onConfirm={() => handleRemove(record, actionRef)}
               >
                 <a>
@@ -435,9 +546,7 @@ const Articles = () => {
           handleUpdateSort({ ...record, ...values }, actionRef);
         }
         toggleEdit();
-      } catch (error) {
-        console.log('修改失败:', error);
-      }
+      } catch (error) {}
     };
 
     let childNode = children;
@@ -452,7 +561,14 @@ const Articles = () => {
           rules={[
             {
               required: true,
-              message: `${title}必填`,
+              message: intl.formatMessage(
+                {
+                  id: 'articles.p_input',
+                },
+                {
+                  name: title,
+                },
+              ),
             },
           ]}
         >
@@ -493,7 +609,7 @@ const Articles = () => {
         rowKey="_id"
         toolBarRender={(action, { selectedRows }) => [
           <Button type="primary" onClick={() => goEdit(1)}>
-            <PlusOutlined /> 新建文章
+            <PlusOutlined /> <FormattedMessage id="articles.createArticle" />
           </Button>,
         ]}
         request={(params, sorter, filter) => queryArticles({ ...params })}

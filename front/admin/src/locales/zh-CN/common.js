@@ -25,7 +25,10 @@ export default {
   'common.unpublished': '未发布',
   'common.open': '开启',
   'common.close': '关闭',
+  'common.show': '显示',
+  'common.hide': '隐藏',
 
   'common.articlesNum': '文章数量',
   'common.refresh_success': '刷新成功！',
+  'common.num': '还可以输入{name}个字',
 };

@@ -3,6 +3,7 @@ import { Card, Input, Row, Col, Badge, Tag, Switch, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { TweenOneGroup } from 'rc-tween-one';
 import './index.less';
+import { FormattedMessage, useIntl } from 'umi';
 
 import SaveTime from '@/components/SaveTime';
 import UploadImage from '@/components/UploadImage';
@@ -10,6 +11,7 @@ import { queryAbout, addAbout, updateAbout } from './service';
 import { randomColor } from '@/utils/utils';
 
 const About = () => {
+  const intl = useIntl();
   const [params, setParams] = useState({
     tags: [],
     desc: '',
@@ -23,7 +25,11 @@ const About = () => {
   const loadData = async (isRefresh) => {
     const res = await queryAbout();
     if (isRefresh) {
-      message.success('刷新成功');
+      message.success(
+        intl.formatMessage({
+          id: 'common.refresh_success',
+        }),
+      );
     }
     const data = res.data;
     if (!data) return;
@@ -44,13 +50,26 @@ const About = () => {
 
   const validateParams = (postData) => {
     if (postData.imgs.length === 0) {
-      message.error(`请上传介绍图片`);
+      message.error(
+        intl.formatMessage({
+          id: 'about.p_upload_image',
+        }),
+      );
       return false;
     }
     let flag = false;
     postData.imgs.forEach((item, index) => {
       if (!item.imgUrl) {
-        message.error(`请上传第${index + 1}张介绍图片`);
+        message.error(
+          intl.formatMessage(
+            {
+              id: 'about.p_upload_image_n',
+            },
+            {
+              name: index + 1,
+            },
+          ),
+        );
         flag = false;
       } else {
         flag = true;
@@ -61,11 +80,19 @@ const About = () => {
     }
 
     if (!postData.desc) {
-      message.error('请输入详细介绍');
+      message.error(
+        intl.formatMessage({
+          id: 'about.p_input_desc',
+        }),
+      );
       return false;
     }
     if (postData.tags.length === 0) {
-      message.error('请至少添加1个标签');
+      message.error(
+        intl.formatMessage({
+          id: 'about.p_input_1_tag',
+        }),
+      );
       return false;
     }
     return true;
@@ -95,22 +122,12 @@ const About = () => {
       tags,
     };
     if (validateParams(postData)) {
-      if (postData._id) {
-        // 修改
-        const res = await updateAbout(postData);
-        if (res.data) {
-          message.success(res.msg);
-        } else {
-          message.error(res.msg);
-        }
+      const func = postData._id ? updateAbout : addAbout;
+      const res = await func(postData);
+      if (res.data) {
+        message.success(res.msg);
       } else {
-        //添加
-        const res = await addAbout(postData);
-        if (res.data) {
-          message.success(res.msg);
-        } else {
-          message.error(res.msg);
-        }
+        message.error(res.msg);
       }
     }
   };
@@ -223,8 +240,10 @@ const About = () => {
             <Col span={12}>
               <div className="field-item">
                 <div className="field-title">
-                  <Badge status="error" text="介绍图片: " />
-                  <span>(1-3张)</span>
+                  <Badge status="error" text={<FormattedMessage id="about.img" />} />
+                  <span>
+                    <FormattedMessage id="about.img_num" />
+                  </span>
                 </div>
                 <UploadImage imgs={params.imgs} max={3} onChange={onChange} />
               </div>
@@ -232,8 +251,10 @@ const About = () => {
             <Col offset={2} span={10}>
               <div className="field-item">
                 <div className="field-title">
-                  <Badge status="error" text="标签云: " />
-                  <span>(1-20个)</span>
+                  <Badge status="error" text={<FormattedMessage id="about.tags" />} />
+                  <span>
+                    <FormattedMessage id="about.tags_num" />
+                  </span>
                 </div>
                 <Card>
                   <TweenOneGroup
@@ -265,7 +286,7 @@ const About = () => {
                     {!inputVisible && (
                       <Tag onClick={showInput} className="site-tag-plus">
                         <PlusOutlined />
-                        添加
+                        <FormattedMessage id="about.add" />
                       </Tag>
                     )}
                   </TweenOneGroup>
@@ -277,7 +298,7 @@ const About = () => {
             <Col span={12}>
               <div className="field-item">
                 <div className="field-title">
-                  <Badge status="error" text="详细介绍: " />
+                  <Badge status="error" text={<FormattedMessage id="about.desc" />} />
                 </div>
                 <Input.TextArea
                   value={params.desc}
@@ -289,7 +310,14 @@ const About = () => {
                 />
                 {showTip && (
                   <p className="field-tip">
-                    还可以输入<span className="field-tip-num">{5000 - params.desc.length}</span>个字
+                    {intl.formatMessage(
+                      {
+                        id: 'common.num',
+                      },
+                      {
+                        name: <span className="field-tip-num">{5000 - params.desc.length}</span>,
+                      },
+                    )}
                   </p>
                 )}
               </div>
@@ -297,11 +325,13 @@ const About = () => {
             <Col offset={2} span={10}>
               <div className="field-item">
                 <div className="field-title" style={{ justifyContent: 'flex-start' }}>
-                  <Badge>个人简历: </Badge>
+                  <Badge>
+                    <FormattedMessage id="about.showResume" />
+                  </Badge>
                   <Switch
                     className="field-switch"
-                    checkedChildren="显示"
-                    unCheckedChildren="隐藏"
+                    checkedChildren={<FormattedMessage id="common.show" />}
+                    unCheckedChildren={<FormattedMessage id="common.hide" />}
                     checked={params.showResume}
                     onChange={(checked) => handleShowResume(checked)}
                   />

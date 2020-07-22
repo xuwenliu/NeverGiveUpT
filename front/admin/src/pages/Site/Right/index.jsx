@@ -20,19 +20,13 @@ import {
 } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { PlusOutlined, EditOutlined, DeleteOutlined, LinkOutlined } from '@ant-design/icons';
+import { FormattedMessage, useIntl } from 'umi';
 
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
 
 import { showPositions, projects, showPositionsColorObj } from '@/const';
 
-const searchProjects = [
-  {
-    key: '',
-    value: '全部',
-  },
-  ...projects,
-];
 const { TabPane } = Tabs;
 const { Option } = Select;
 const layout = {
@@ -51,6 +45,18 @@ import { queryTags } from '@/pages/Tags/service';
 import { fetchRight } from '../service';
 
 const Right = () => {
+  const intl = useIntl();
+
+  const searchProjects = [
+    {
+      key: '',
+      value: intl.formatMessage({
+        id: 'common.all',
+      }),
+    },
+    ...projects,
+  ];
+
   const [params, setParams] = useState({
     imgs: [
       {
@@ -102,7 +108,11 @@ const Right = () => {
       case 'tab1':
         const res = await fetchRight.introduction.query();
         if (isRefresh) {
-          message.success('刷新成功');
+          message.success(
+            intl.formatMessage({
+              id: 'common.refresh_success',
+            }),
+          );
         }
         let data = res.data;
 
@@ -118,7 +128,11 @@ const Right = () => {
       case 'tab2':
         const res2 = await fetchRight.ad.query();
         if (isRefresh) {
-          message.success('刷新成功');
+          message.success(
+            intl.formatMessage({
+              id: 'common.refresh_success',
+            }),
+          );
         }
         const data2 = res2.data;
         if (!data2) return;
@@ -135,13 +149,16 @@ const Right = () => {
           project,
         });
         if (isRefresh) {
-          message.success('刷新成功');
+          message.success(
+            intl.formatMessage({
+              id: 'common.refresh_success',
+            }),
+          );
         }
         const data3 = res3.data;
         if (!data3) return;
         data3.map((item) => (item.key = item._id));
         setDataSource(data3);
-
         break;
     }
   };
@@ -185,13 +202,31 @@ const Right = () => {
     const friendLink = postData.imgs;
     for (let i in friendLink) {
       if (!friendLink[i].link) {
-        message.error(`请上传第${i * 1 + 1}个跳转链接`);
+        message.error(
+          intl.formatMessage(
+            {
+              id: 'site.right.p_n_jump_link',
+            },
+            {
+              name: i * 1 + 1,
+            },
+          ),
+        );
         return (flag = false);
       } else {
         flag = true;
       }
       if (!friendLink[i].icon) {
-        message.error(`请上传第${i * 1 + 1}个icon`);
+        message.error(
+          intl.formatMessage(
+            {
+              id: 'site.right.p_n_icon',
+            },
+            {
+              name: i * 1 + 1,
+            },
+          ),
+        );
         return (flag = false);
       } else {
         flag = true;
@@ -208,13 +243,31 @@ const Right = () => {
     const imgs = postData.imgs;
     for (let i in imgs) {
       if (!imgs[i].imgUrl) {
-        message.error(`请上传第${i * 1 + 1}个图片`);
+        message.error(
+          intl.formatMessage(
+            {
+              id: 'site.right.p_n_image',
+            },
+            {
+              name: i * 1 + 1,
+            },
+          ),
+        );
         return (flag = false);
       } else {
         flag = true;
       }
       if (!imgs[i].link) {
-        message.error(`请上传第${i * 1 + 1}个跳转链接`);
+        message.error(
+          intl.formatMessage(
+            {
+              id: 'site.right.p_n_jump_link',
+            },
+            {
+              name: i * 1 + 1,
+            },
+          ),
+        );
         return (flag = false);
       } else {
         flag = true;
@@ -231,13 +284,21 @@ const Right = () => {
     const imgs = postData.imgs;
     for (let i in imgs) {
       if (!imgs[i].imgUrl) {
-        message.error(`请上传封面图片`);
+        message.error(
+          intl.formatMessage({
+            id: 'site.right.p_cover',
+          }),
+        );
         return (flag = false);
       } else {
         flag = true;
       }
       if (!imgs[i].link) {
-        message.error(`请输入跳转链接`);
+        message.error(
+          intl.formatMessage({
+            id: 'site.right.p_jump_link',
+          }),
+        );
         return (flag = false);
       } else {
         flag = true;
@@ -307,7 +368,9 @@ const Right = () => {
 
   const columns = [
     {
-      title: '类别',
+      title: intl.formatMessage({
+        id: 'site.right.type',
+      }),
       dataIndex: 'project',
       key: 'project',
       render: (_, record) => {
@@ -323,7 +386,9 @@ const Right = () => {
       },
     },
     {
-      title: '名称',
+      title: intl.formatMessage({
+        id: 'site.name',
+      }),
       dataIndex: 'name',
       key: 'name',
       render: (_, record) => {
@@ -338,7 +403,9 @@ const Right = () => {
       },
     },
     {
-      title: '封面',
+      title: intl.formatMessage({
+        id: 'common.cover',
+      }),
       dataIndex: 'cover',
       key: 'cover',
       render: (_, record) => {
@@ -346,7 +413,9 @@ const Right = () => {
       },
     },
     {
-      title: '链接',
+      title: intl.formatMessage({
+        id: 'site.right.link',
+      }),
       dataIndex: 'link',
       key: 'link',
       render: (_, record) => {
@@ -365,11 +434,19 @@ const Right = () => {
       dataIndex: 'isVip',
       key: 'isVip',
       render: (_, record) => {
-        return record.isVip ? '是' : '否';
+        return record.isVip
+          ? intl.formatMessage({
+              id: 'common.yes',
+            })
+          : intl.formatMessage({
+              id: 'common.no',
+            });
       },
     },
     {
-      title: '展示位置',
+      title: intl.formatMessage({
+        id: 'site.right.showPosition',
+      }),
       dataIndex: 'showPosition',
       key: 'showPosition',
       width: 200,
@@ -394,7 +471,9 @@ const Right = () => {
       },
     },
     {
-      title: '创建时间',
+      title: intl.formatMessage({
+        id: 'common.createTime',
+      }),
       dataIndex: 'createTime',
       render: (_, record) =>
         record.createTime === 0
@@ -402,7 +481,9 @@ const Right = () => {
           : moment(record.createTime * 1000).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
-      title: '修改时间',
+      title: intl.formatMessage({
+        id: 'common.updateTime',
+      }),
       dataIndex: 'updateTime',
       render: (_, record) =>
         record.updateTime === 0
@@ -410,7 +491,9 @@ const Right = () => {
           : moment(record.updateTime * 1000).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
-      title: '操作',
+      title: intl.formatMessage({
+        id: 'common.action',
+      }),
       dataIndex: 'option',
       width: 100,
       render: (_, record) => {
@@ -418,7 +501,15 @@ const Right = () => {
           <>
             <Popconfirm
               placement="topLeft"
-              title={`你确定删除推荐${projects[record.project - 1].value}【${record.name}】吗？`}
+              title={intl.formatMessage(
+                {
+                  id: 'site.right.remove_tip',
+                },
+                {
+                  value: projects[record.project - 1].value,
+                  name: record.name,
+                },
+              )}
               onConfirm={() => handleRemove(record)}
             >
               <DeleteOutlined style={{ color: '#ff4d4f' }} />
@@ -438,7 +529,11 @@ const Right = () => {
 
   const copyLink = (msg) => {
     copy(msg);
-    message.success('复制成功');
+    message.success(
+      intl.formatMessage({
+        id: 'common.copy_success',
+      }),
+    );
   };
 
   const handleRemove = async (params) => {
@@ -449,7 +544,11 @@ const Right = () => {
         loadData();
       }
     } catch (error) {
-      message.error('删除失败请重试！');
+      message.error(
+        intl.formatMessage({
+          id: 'site.right.remove_error_tip',
+        }),
+      );
     }
   };
   const handleUpdate = (params) => {
@@ -513,42 +612,146 @@ const Right = () => {
         )}
 
         <Tabs activeKey={tab} onChange={tabsChange}>
-          <TabPane tab="个人简介" key="tab1">
+          <TabPane
+            tab={intl.formatMessage({
+              id: 'site.right.introduction',
+            })}
+            key="tab1"
+          >
             <div className="field-content">
               <Row>
                 <Col span={10}>
                   <Form form={formTab1} {...layout} name="params">
                     <Form.Item
-                      label="昵称"
+                      label={intl.formatMessage({
+                        id: 'site.right.nickName',
+                      })}
                       name="nickName"
                       rules={[
-                        { required: true, message: '请输入2-20个字符' },
-                        { min: 2, message: '最小2个字符' },
-                        { max: 20, message: '最大20个字符' },
+                        {
+                          required: true,
+                          message: intl.formatMessage(
+                            {
+                              id: 'common.p_pattern',
+                            },
+                            {
+                              min: 2,
+                              max: 20,
+                            },
+                          ),
+                        },
+                        {
+                          min: 2,
+                          message: intl.formatMessage(
+                            {
+                              id: 'common.p_min',
+                            },
+                            {
+                              min: 2,
+                            },
+                          ),
+                        },
+                        {
+                          max: 20,
+                          message: intl.formatMessage(
+                            {
+                              id: 'common.p_max',
+                            },
+                            {
+                              max: 20,
+                            },
+                          ),
+                        },
                       ]}
                     >
-                      <Input autoComplete="off" placeholder="请输入2-20个字符" />
+                      <Input
+                        autoComplete="off"
+                        placeholder={intl.formatMessage(
+                          {
+                            id: 'common.p_pattern',
+                          },
+                          {
+                            min: 2,
+                            max: 20,
+                          },
+                        )}
+                      />
                     </Form.Item>
 
                     <Form.Item
-                      label="简介"
+                      label={intl.formatMessage({
+                        id: 'common.introduction',
+                      })}
                       name="desc"
                       rules={[
-                        { required: true, message: '请输入2-100个字符' },
-                        { min: 2, message: '最小2个字符' },
-                        { max: 100, message: '最大100个字符' },
+                        {
+                          required: true,
+                          message: intl.formatMessage(
+                            {
+                              id: 'common.p_pattern',
+                            },
+                            {
+                              min: 2,
+                              max: 100,
+                            },
+                          ),
+                        },
+                        {
+                          min: 2,
+                          message: intl.formatMessage(
+                            {
+                              id: 'common.p_min',
+                            },
+                            {
+                              min: 2,
+                            },
+                          ),
+                        },
+                        {
+                          max: 100,
+                          message: intl.formatMessage(
+                            {
+                              id: 'common.p_max',
+                            },
+                            {
+                              max: 100,
+                            },
+                          ),
+                        },
                       ]}
                     >
-                      <Input autoComplete="off" placeholder="请输入2-100个字符" />
+                      <Input
+                        autoComplete="off"
+                        placeholder={intl.formatMessage(
+                          {
+                            id: 'common.p_pattern',
+                          },
+                          {
+                            min: 2,
+                            max: 100,
+                          },
+                        )}
+                      />
                     </Form.Item>
 
                     <Form.Item
-                      label="标签"
+                      label={intl.formatMessage({
+                        id: 'common.tags',
+                      })}
                       name="tags"
-                      rules={[{ required: true, message: '请选择标签' }]}
+                      rules={[
+                        {
+                          required: true,
+                          message: intl.formatMessage({
+                            id: 'site.right.p_choose_tags',
+                          }),
+                        },
+                      ]}
                     >
                       <Select
-                        placeholder="请选择标签(多选)"
+                        placeholder={intl.formatMessage({
+                          id: 'site.right.p_choose_tags_multiple',
+                        })}
                         style={{ width: '100%' }}
                         mode="multiple"
                       >
@@ -561,12 +764,23 @@ const Right = () => {
                     </Form.Item>
 
                     <Form.Item
-                      label="展示位置"
+                      label={intl.formatMessage({
+                        id: 'site.right.showPosition',
+                      })}
                       name="showPosition"
-                      rules={[{ required: true, message: '请选择展示位置' }]}
+                      rules={[
+                        {
+                          required: true,
+                          message: intl.formatMessage({
+                            id: 'site.right.p_choose_showPosition',
+                          }),
+                        },
+                      ]}
                     >
                       <Select
-                        placeholder="请选择展示位置(多选)"
+                        placeholder={intl.formatMessage({
+                          id: 'site.right.p_choose_showPosition_multiple',
+                        })}
                         style={{ width: '100%' }}
                         mode="multiple"
                       >
@@ -582,8 +796,15 @@ const Right = () => {
                 <Col offset={2} span={12}>
                   <div className="field-item">
                     <div className="fields-title">
-                      <Badge status="error" text="友情链接: " />
-                      <span>(1-4个)</span>
+                      <Badge
+                        status="error"
+                        text={intl.formatMessage({
+                          id: 'site.right.friendLink',
+                        })}
+                      />
+                      <span>
+                        <FormattedMessage id="site.right.friendLink_num" />
+                      </span>
                     </div>
                     <UploadImage
                       showImg={false}
@@ -598,13 +819,25 @@ const Right = () => {
             </div>
           </TabPane>
 
-          <TabPane tab="广告设置" key="tab2">
+          <TabPane
+            tab={intl.formatMessage({
+              id: 'site.right.ad_setting',
+            })}
+            key="tab2"
+          >
             <Row>
               <Col span={10}>
                 <div className="field-item">
                   <div className="fields-title" style={{ marginBottom: 10 }}>
-                    <Badge status="error" text="广告图片: " />
-                    <span>(1-3个)</span>
+                    <Badge
+                      status="error"
+                      text={intl.formatMessage({
+                        id: 'site.right.ad_image',
+                      })}
+                    />
+                    <span>
+                      <FormattedMessage id="site.right.ad_image_num" />
+                    </span>
                   </div>
                   <UploadImage imgs={params2.imgs} max={3} onChange={onUploadImageChange2} />
                 </div>
@@ -612,12 +845,23 @@ const Right = () => {
               <Col offset={2} span={12}>
                 <Form form={formTab2} {...layout} name="params2">
                   <Form.Item
-                    label="展示位置"
+                    label={intl.formatMessage({
+                      id: 'site.right.showPosition',
+                    })}
                     name="showPosition"
-                    rules={[{ required: true, message: '请选择展示位置' }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: intl.formatMessage({
+                          id: 'site.right.p_choose_showPosition',
+                        }),
+                      },
+                    ]}
                   >
                     <Select
-                      placeholder="请选择展示位置(多选)"
+                      placeholder={intl.formatMessage({
+                        id: 'site.right.p_choose_showPosition_multiple',
+                      })}
                       style={{ width: '100%' }}
                       mode="multiple"
                     >
@@ -633,11 +877,18 @@ const Right = () => {
             </Row>
           </TabPane>
 
-          <TabPane tab="推荐设置" key="tab3">
+          <TabPane
+            tab={intl.formatMessage({
+              id: 'site.right.recommend_setting',
+            })}
+            key="tab3"
+          >
             <Row>
               <Col span={6}>
                 <div className="search">
-                  <Badge>推荐项目:</Badge>
+                  <Badge>
+                    <FormattedMessage id="site.right.recommend_project" />:
+                  </Badge>
                   <Select
                     onChange={(project) => setProject(project)}
                     value={project}
@@ -653,14 +904,22 @@ const Right = () => {
               </Col>
               <Col offset={16}>
                 <Button type="primary" onClick={() => setShowModal(true)}>
-                  <PlusOutlined /> 添加
+                  <PlusOutlined /> <FormattedMessage id="common.add" />
                 </Button>
               </Col>
             </Row>
             <Table dataSource={dataSource} columns={columns} pagination={false} />
 
             <Modal
-              title={paramsEdit._id ? '修改推荐' : '添加推荐'}
+              title={
+                paramsEdit._id
+                  ? intl.formatMessage({
+                      id: 'site.right.recommend_update',
+                    })
+                  : intl.formatMessage({
+                      id: 'site.right.recommend_add',
+                    })
+              }
               visible={showModal}
               onOk={handleOk}
               confirmLoading={confirmLoading}
@@ -668,11 +927,25 @@ const Right = () => {
             >
               <Form form={formTabEdit} {...layoutEdit} name="paramsEdit">
                 <Form.Item
-                  label="推荐项目"
+                  label={intl.formatMessage({
+                    id: 'site.right.recommend_project',
+                  })}
                   name="project"
-                  rules={[{ required: true, message: '请选择推荐项目' }]}
+                  rules={[
+                    {
+                      required: true,
+                      message: intl.formatMessage({
+                        id: 'site.right.p_recommend_project',
+                      }),
+                    },
+                  ]}
                 >
-                  <Select placeholder="请选择推荐项目" style={{ width: '100%' }}>
+                  <Select
+                    placeholder={intl.formatMessage({
+                      id: 'site.right.p_recommend_project',
+                    })}
+                    style={{ width: '100%' }}
+                  >
                     {projects.map((item) => (
                       <Option value={item.key} key={item.key}>
                         {item.value}
@@ -681,23 +954,78 @@ const Right = () => {
                   </Select>
                 </Form.Item>
                 <Form.Item
-                  label="名称"
+                  label={intl.formatMessage({
+                    id: 'site.name',
+                  })}
                   name="name"
                   rules={[
-                    { required: true, message: '请输入2-50个字符' },
-                    { min: 2, message: '最小2个字符' },
-                    { max: 50, message: '最大50个字符' },
+                    {
+                      required: true,
+                      message: intl.formatMessage(
+                        {
+                          id: 'common.p_pattern',
+                        },
+                        {
+                          min: 2,
+                          max: 50,
+                        },
+                      ),
+                    },
+                    {
+                      min: 2,
+                      message: intl.formatMessage(
+                        {
+                          id: 'common.p_min',
+                        },
+                        {
+                          min: 2,
+                        },
+                      ),
+                    },
+                    {
+                      max: 50,
+                      message: intl.formatMessage(
+                        {
+                          id: 'common.p_max',
+                        },
+                        {
+                          max: 50,
+                        },
+                      ),
+                    },
                   ]}
                 >
-                  <Input autoComplete="off" placeholder="请输入2-50个字符" />
+                  <Input
+                    autoComplete="off"
+                    placeholder={intl.formatMessage(
+                      {
+                        id: 'common.p_pattern',
+                      },
+                      {
+                        min: 2,
+                        max: 50,
+                      },
+                    )}
+                  />
                 </Form.Item>
                 <Form.Item
-                  label="展示位置"
+                  label={intl.formatMessage({
+                    id: 'site.right.showPosition',
+                  })}
                   name="showPosition"
-                  rules={[{ required: true, message: '请选择展示位置' }]}
+                  rules={[
+                    {
+                      required: true,
+                      message: intl.formatMessage({
+                        id: 'site.right.p_choose_showPosition',
+                      }),
+                    },
+                  ]}
                 >
                   <Select
-                    placeholder="请选择展示位置(多选)"
+                    placeholder={intl.formatMessage({
+                      id: 'site.right.p_choose_showPosition_multiple',
+                    })}
                     style={{ width: '100%' }}
                     mode="multiple"
                   >
@@ -710,27 +1038,90 @@ const Right = () => {
                 </Form.Item>
 
                 <Form.Item
-                  label="平台"
+                  label={intl.formatMessage({
+                    id: 'site.right.platform',
+                  })}
                   name="platform"
                   rules={[
-                    { required: true, message: '请输入2-20个字符' },
-                    { min: 2, message: '最小2个字符' },
-                    { max: 20, message: '最大20个字符' },
+                    {
+                      required: true,
+                      message: intl.formatMessage(
+                        {
+                          id: 'common.p_pattern',
+                        },
+                        {
+                          min: 2,
+                          max: 20,
+                        },
+                      ),
+                    },
+                    {
+                      min: 2,
+                      message: intl.formatMessage(
+                        {
+                          id: 'common.p_min',
+                        },
+                        {
+                          min: 2,
+                        },
+                      ),
+                    },
+                    {
+                      max: 20,
+                      message: intl.formatMessage(
+                        {
+                          id: 'common.p_max',
+                        },
+                        {
+                          max: 20,
+                        },
+                      ),
+                    },
                   ]}
                 >
-                  <Input autoComplete="off" placeholder="请输入2-20个字符，例如【爱奇艺】" />
+                  <Input
+                    autoComplete="off"
+                    placeholder={intl.formatMessage(
+                      {
+                        id: 'common.p_pattern',
+                      },
+                      {
+                        min: 2,
+                        max: 20,
+                      },
+                    )}
+                  />
                 </Form.Item>
 
-                <Form.Item label="是否需要VIP" name="isVip" initialValue={false}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    id: 'site.right.isVip',
+                  })}
+                  name="isVip"
+                  initialValue={false}
+                >
                   <Radio.Group>
-                    <Radio value={true}>是</Radio>
-                    <Radio value={false}>否</Radio>
+                    <Radio value={true}>
+                      <FormattedMessage id="common.yes" />
+                    </Radio>
+                    <Radio value={false}>
+                      <FormattedMessage id="common.no" />
+                    </Radio>
                   </Radio.Group>
                 </Form.Item>
                 <Form.Item
-                  label="封面/链接"
+                  label={intl.formatMessage({
+                    id: 'site.right.cover_link',
+                  })}
                   name="imgs"
-                  rules={[{ required: true, message: '请上传封面和链接' }]}
+                  rules={[
+                    {
+                      required: true,
+                      message: intl.formatMessage({
+                        id: 'site.right.p_cover_link',
+                      }),
+                    },
+                  ]}
                 >
                   <UploadImage imgs={paramsEdit.imgs} showAction={false} />
                 </Form.Item>

@@ -3,12 +3,14 @@ import { message, Popconfirm, Tooltip, Badge, Button, Modal, Radio } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
+import { FormattedMessage, useIntl } from 'umi';
 
 import { queryComment, updateCommentStatus, removeComment } from './service';
 import moment from 'moment';
 
 const Comment = () => {
   const actionRef = useRef();
+  const intl = useIntl();
   const [params, setParams] = useState({
     visible: false,
     auditStatus: '',
@@ -32,7 +34,11 @@ const Comment = () => {
         return true;
       }
     } catch (error) {
-      message.error('审核失败请重试！');
+      message.error(
+        intl.formatMessage({
+          id: 'comment.audit_error_tip',
+        }),
+      );
       return false;
     }
   };
@@ -50,7 +56,11 @@ const Comment = () => {
         return true;
       }
     } catch (error) {
-      message.error('删除评论失败请重试！');
+      message.error(
+        intl.formatMessage({
+          id: 'comment.remove_error_tip',
+        }),
+      );
       return false;
     }
   };
@@ -68,11 +78,15 @@ const Comment = () => {
 
   let columns = [
     {
-      title: '文章标题',
+      title: intl.formatMessage({
+        id: 'articles.title',
+      }),
       dataIndex: 'articleTitle',
       fixed: 'left',
       formItemProps: {
-        placeholder: '请输入文章标题',
+        placeholder: intl.formatMessage({
+          id: 'articles.p_title',
+        }),
         autoComplete: 'off',
       },
       render: (_, record) => {
@@ -84,7 +98,9 @@ const Comment = () => {
       },
     },
     {
-      title: '昵称',
+      title: intl.formatMessage({
+        id: 'comment.nickName',
+      }),
       dataIndex: 'nickName',
       hideInSearch: true,
       render: (_, record) => {
@@ -96,7 +112,9 @@ const Comment = () => {
       },
     },
     {
-      title: '当前回复内容',
+      title: intl.formatMessage({
+        id: 'comment.currentReplayContent',
+      }),
       dataIndex: 'currentReplayContent',
       hideInSearch: true,
       render: (_, record) => {
@@ -108,13 +126,17 @@ const Comment = () => {
       },
     },
     {
-      title: '目标回复ID',
+      title: intl.formatMessage({
+        id: 'comment.targetReplayId',
+      }),
       dataIndex: 'targetReplayId',
       hideInSearch: true,
       width: 250,
     },
     {
-      title: '目标回复内容',
+      title: intl.formatMessage({
+        id: 'comment.targetReplayContent',
+      }),
       dataIndex: 'targetReplayContent',
       hideInSearch: true,
       render: (_, record) => {
@@ -127,29 +149,63 @@ const Comment = () => {
     },
 
     {
-      title: '审核状态',
+      title: intl.formatMessage({
+        id: 'comment.auditStatus',
+      }),
       dataIndex: 'auditStatus',
       initialValue: '0',
       valueEnum: {
         0: {
-          text: '全部',
+          text: intl.formatMessage({
+            id: 'common.all',
+          }),
         },
         1: {
-          text: '通过',
+          text: intl.formatMessage({
+            id: 'common.pass',
+          }),
         },
         2: {
-          text: '驳回',
+          text: intl.formatMessage({
+            id: 'common.reject',
+          }),
         },
         3: {
-          text: '未审核',
+          text: intl.formatMessage({
+            id: 'common.unchecked',
+          }),
         },
       },
       render: (_, record) => {
         record.auditStatus *= 1;
         const map = new Map([
-          [1, ['success', '通过']],
-          [2, ['error', '驳回']],
-          [3, ['default', '未审核']],
+          [
+            1,
+            [
+              'success',
+              intl.formatMessage({
+                id: 'common.pass',
+              }),
+            ],
+          ],
+          [
+            2,
+            [
+              'error',
+              intl.formatMessage({
+                id: 'common.reject',
+              }),
+            ],
+          ],
+          [
+            3,
+            [
+              'default',
+              intl.formatMessage({
+                id: 'common.unchecked',
+              }),
+            ],
+          ],
         ]);
         return (
           <Badge status={map.get(record.auditStatus)[0]} text={map.get(record.auditStatus)[1]} />
@@ -158,7 +214,9 @@ const Comment = () => {
     },
 
     {
-      title: '评论时间',
+      title: intl.formatMessage({
+        id: 'comment.commentTime',
+      }),
       dataIndex: 'commentTime',
       width: 200,
       hideInSearch: true,
@@ -166,7 +224,9 @@ const Comment = () => {
     },
 
     {
-      title: '审核时间',
+      title: intl.formatMessage({
+        id: 'comment.auditTime',
+      }),
       dataIndex: 'auditTime',
       width: 200,
       hideInSearch: true,
@@ -177,7 +237,9 @@ const Comment = () => {
     },
 
     {
-      title: '操作',
+      title: intl.formatMessage({
+        id: 'common.action',
+      }),
       dataIndex: 'option',
       valueType: 'option',
       width: 150,
@@ -188,7 +250,14 @@ const Comment = () => {
             {/* 删除 */}
             <Popconfirm
               placement="topLeft"
-              title={`你确定删除文章【${record.articleTitle}】的评论吗？`}
+              title={intl.formatMessage(
+                {
+                  id: 'comment.p_remove_tip',
+                },
+                {
+                  name: record.articleTitle,
+                },
+              )}
               onConfirm={() => handleRemove(record, actionRef)}
             >
               <a>
@@ -201,7 +270,7 @@ const Comment = () => {
               type="primary"
               size="small"
             >
-              审核
+              <FormattedMessage id="comment.audit" />
             </Button>
           </>
         );
@@ -223,7 +292,9 @@ const Comment = () => {
         scroll={{ x: 1800 }}
       />
       <Modal
-        title="审核"
+        title={intl.formatMessage({
+          id: 'comment.audit',
+        })}
         visible={params.visible}
         onOk={() => handleUpdateStatus(actionRef)}
         onCancel={() =>
@@ -246,8 +317,12 @@ const Comment = () => {
             })
           }
         >
-          <Radio value={1}>通过</Radio>
-          <Radio value={2}>驳回</Radio>
+          <Radio value={1}>
+            <FormattedMessage id="common.pass" />
+          </Radio>
+          <Radio value={2}>
+            <FormattedMessage id="common.reject" />
+          </Radio>
         </Radio.Group>
       </Modal>
     </PageHeaderWrapper>

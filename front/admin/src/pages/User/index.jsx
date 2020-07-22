@@ -3,45 +3,52 @@ import { Tooltip, message, Popconfirm, Avatar } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
+import { useIntl } from 'umi';
+
 import moment from 'moment';
 import { queryUser, removeUser } from './service';
 
-const handleRemove = async (params, actionRef) => {
-  try {
-    const res = await removeUser({ id: params._id });
-    if (res.code === 0) {
-      message.success(res.msg);
-      if (actionRef.current) {
-        actionRef.current.reload();
-      }
-      return true;
-    }
-  } catch (error) {
-    message.error('删除失败请重试！');
-    return false;
-  }
-};
-
-const User = (props) => {
+const User = () => {
   const actionRef = useRef();
+  const intl = useIntl();
+
+  const handleRemove = async (params, actionRef) => {
+    try {
+      const res = await removeUser({ id: params._id });
+      if (res.code === 0) {
+        message.success(res.msg);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
+        return true;
+      }
+    } catch (error) {
+      message.error(
+        intl.formatMessage({
+          id: 'user.update_error_tip',
+        }),
+      );
+      return false;
+    }
+  };
 
   let columns = [
-    // {
-    //   title: 'ObjectId',
-    //   dataIndex: '_id',
-    //   hideInSearch: true,
-    //   hideInForm: true,
-    // },
     {
-      title: '昵称',
+      title: intl.formatMessage({
+        id: 'user.nickName',
+      }),
       dataIndex: 'nickName',
       formItemProps: {
-        placeholder: '请输入昵称',
+        placeholder: intl.formatMessage({
+          id: 'user.p_nickName',
+        }),
         autoComplete: 'off',
       },
     },
     {
-      title: '头像',
+      title: intl.formatMessage({
+        id: 'common.avatar',
+      }),
       dataIndex: 'avatar',
       hideInSearch: true,
       hideInForm: true,
@@ -50,13 +57,17 @@ const User = (props) => {
       },
     },
     {
-      title: '邮箱',
+      title: intl.formatMessage({
+        id: 'user.email',
+      }),
       dataIndex: 'email',
       hideInSearch: true,
       hideInForm: true,
     },
     {
-      title: '简介',
+      title: intl.formatMessage({
+        id: 'common.introduction',
+      }),
       dataIndex: 'introduction',
       hideInSearch: true,
       hideInForm: true,
@@ -72,7 +83,9 @@ const User = (props) => {
       },
     },
     {
-      title: '登录时间',
+      title: intl.formatMessage({
+        id: 'common.loginTime',
+      }),
       dataIndex: 'loginTime',
       hideInSearch: true,
       hideInForm: true,
@@ -82,7 +95,9 @@ const User = (props) => {
           : moment(record.loginTime * 1000).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
-      title: '注册时间',
+      title: intl.formatMessage({
+        id: 'common.registerTime',
+      }),
       dataIndex: 'registerTime',
       hideInSearch: true,
       hideInForm: true,
@@ -93,7 +108,9 @@ const User = (props) => {
     },
 
     {
-      title: '操作',
+      title: intl.formatMessage({
+        id: 'common.action',
+      }),
       dataIndex: 'option',
       valueType: 'option',
       width: 100,
@@ -102,7 +119,14 @@ const User = (props) => {
           <Popconfirm
             actionRef={actionRef}
             placement="topLeft"
-            title={`你确定删除用户【${record.nickName}】吗？`}
+            title={intl.formatMessage(
+              {
+                id: 'user.remove_tip',
+              },
+              {
+                name: record.nickName,
+              },
+            )}
             onConfirm={() => handleRemove(record, actionRef)}
           >
             <a>

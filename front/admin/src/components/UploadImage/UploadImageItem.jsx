@@ -6,11 +6,15 @@ import {
   MinusCircleFilled,
   PlusCircleFilled,
 } from '@ant-design/icons';
+import { FormattedMessage, useIntl } from 'umi';
+
 import { upload } from './service';
 
 import './UploadImageItem.less';
 
 const UploadImageItem = (props) => {
+  const intl = useIntl();
+
   const {
     imgUrl,
     link,
@@ -45,12 +49,20 @@ const UploadImageItem = (props) => {
       file.type === 'image/png' ||
       file.type === 'image/gif';
     if (!isJpgOrPng) {
-      message.error('请上传jpg、jpeg、png、gif格式图片');
+      message.error(
+        intl.formatMessage({
+          id: 'component.uploadImage.image_format',
+        }),
+      );
       return;
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      message.error('图片不能超过2MB');
+      message.error(
+        intl.formatMessage({
+          id: 'component.uploadImage.image_size',
+        }),
+      );
       return;
     }
     setLoading(true);
@@ -92,7 +104,9 @@ const UploadImageItem = (props) => {
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div className="ant-upload-text">选择图片</div>
+      <div className="ant-upload-text">
+        <FormattedMessage id="component.uploadImage.choose_image" />
+      </div>
     </div>
   );
 
@@ -133,7 +147,7 @@ const UploadImageItem = (props) => {
               )}
             </Upload>
             <Button onClick={() => setVisible(true)} type="default" style={{ width: '93%' }}>
-              输入链接
+              <FormattedMessage id="component.uploadImage.input_link" />
             </Button>
           </Col>
         )}
@@ -146,7 +160,9 @@ const UploadImageItem = (props) => {
                   value={link}
                   onChange={handleChangeLink}
                   className="link"
-                  addonBefore="跳转链接"
+                  addonBefore={intl.formatMessage({
+                    id: 'component.uploadImage.link',
+                  })}
                 />
               </Col>
             )}
@@ -180,22 +196,37 @@ const UploadImageItem = (props) => {
           </Col>
         )}
       </Row>
-      <Modal onCancel={handleCancel} onOk={handleOk} visible={visible} title="文件链接">
+      <Modal
+        onCancel={handleCancel}
+        onOk={handleOk}
+        visible={visible}
+        title={intl.formatMessage({
+          id: 'component.uploadImage.file_link',
+        })}
+      >
         <Form form={form}>
           <Form.Item
             name="imgUrl"
             rules={[
               {
                 required: true,
-                message: '请输入链接',
+                message: intl.formatMessage({
+                  id: 'component.uploadImage.p_file_link',
+                }),
               },
               {
                 type: 'url',
-                message: '链接格式错误',
+                message: intl.formatMessage({
+                  id: 'component.uploadImage.file_link_error_tip',
+                }),
               },
             ]}
           >
-            <Input placeholder="请输入链接" />
+            <Input
+              placeholder={intl.formatMessage({
+                id: 'component.uploadImage.p_file_link',
+              })}
+            />
           </Form.Item>
         </Form>
       </Modal>

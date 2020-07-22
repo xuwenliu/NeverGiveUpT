@@ -1,4 +1,5 @@
 export default {
+  'menu.login': '登录',
   'menu.list.articles': '文章管理',
   'menu.list.articles-edit': '文章详情',
   'menu.list.categories': '分类管理',

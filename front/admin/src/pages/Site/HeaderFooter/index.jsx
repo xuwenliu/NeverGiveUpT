@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, Input, Row, Col, Badge, Switch, message, Radio, Button } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { FormattedMessage, useIntl } from 'umi';
 
 import { PlusOutlined } from '@ant-design/icons';
 import './index.less';
@@ -14,58 +15,73 @@ import {
   updateHeaderFooterConfig,
 } from '../service';
 
-const defaultMenu = [
-  {
-    menuName: '首页',
-    router: 'index',
-    sort: 0,
-    status: true,
-    deletable: false,
-    disabled: true,
-  },
-  {
-    menuName: '文章',
-    router: 'articles',
-    sort: 1,
-    status: true,
-    deletable: false,
-    disabled: true,
-  },
-  {
-    menuName: '归档',
-    router: 'archives',
-    sort: 2,
-    status: true,
-    deletable: false,
-    disabled: true,
-  },
-  {
-    menuName: '分类',
-    router: 'categories',
-    sort: 3,
-    status: true,
-    deletable: false,
-    disabled: true,
-  },
-  {
-    menuName: '标签',
-    router: 'tags',
-    sort: 4,
-    status: true,
-    deletable: false,
-    disabled: true,
-  },
-  {
-    menuName: '关于',
-    router: 'about',
-    sort: 5,
-    status: true,
-    deletable: false,
-    disabled: true,
-  },
-];
-const defaultMenuName = defaultMenu.map((item) => item.menuName);
 const HeaderFooter = () => {
+  const intl = useIntl();
+
+  const defaultMenu = [
+    {
+      menuName: intl.formatMessage({
+        id: 'common.index',
+      }),
+      router: 'index',
+      sort: 0,
+      status: true,
+      deletable: false,
+      disabled: true,
+    },
+    {
+      menuName: intl.formatMessage({
+        id: 'common.articles',
+      }),
+      router: 'articles',
+      sort: 1,
+      status: true,
+      deletable: false,
+      disabled: true,
+    },
+    {
+      menuName: intl.formatMessage({
+        id: 'common.archives',
+      }),
+      router: 'archives',
+      sort: 2,
+      status: true,
+      deletable: false,
+      disabled: true,
+    },
+    {
+      menuName: intl.formatMessage({
+        id: 'common.categories',
+      }),
+      router: 'categories',
+      sort: 3,
+      status: true,
+      deletable: false,
+      disabled: true,
+    },
+    {
+      menuName: intl.formatMessage({
+        id: 'common.tags',
+      }),
+      router: 'tags',
+      sort: 4,
+      status: true,
+      deletable: false,
+      disabled: true,
+    },
+    {
+      menuName: intl.formatMessage({
+        id: 'common.about',
+      }),
+      router: 'about',
+      sort: 5,
+      status: true,
+      deletable: false,
+      disabled: true,
+    },
+  ];
+  const defaultMenuName = defaultMenu.map((item) => item.menuName);
+
   const [params, setParams] = useState({
     header: {
       type: 2, //默认展示title
@@ -90,7 +106,11 @@ const HeaderFooter = () => {
   const loadData = async (isRefresh) => {
     const res = await queryHeaderFooterConfig();
     if (isRefresh) {
-      message.success('刷新成功');
+      message.success(
+        intl.formatMessage({
+          id: 'common.refresh_success',
+        }),
+      );
     }
     let data = res.data;
 
@@ -102,8 +122,6 @@ const HeaderFooter = () => {
       item.editable = !item.disabled;
       return item;
     });
-
-    console.log(data.header.menu);
 
     setParams(() => {
       if (data.header.logo) {
@@ -135,12 +153,20 @@ const HeaderFooter = () => {
     if (params.header.type === 1) {
       params.header.logo = params.header.logoImgs ? params.header.logoImgs[0].imgUrl : '';
       if (!params.header.logo) {
-        message.error('请上传Logo');
+        message.error(
+          intl.formatMessage({
+            id: 'site.p_logo',
+          }),
+        );
         return false;
       }
     } else {
       if (!params.header.title) {
-        message.error('请输入标题');
+        message.error(
+          intl.formatMessage({
+            id: 'site.p_title',
+          }),
+        );
         return false;
       }
     }
@@ -149,29 +175,49 @@ const HeaderFooter = () => {
     let flag = false;
     for (let i in menu) {
       if (!menu[i].menuName) {
-        message.error(`请输入导航菜单名称`);
+        message.error(
+          intl.formatMessage({
+            id: 'site.p_menuName',
+          }),
+        );
         return (flag = false);
       } else {
         if (menu[i].menuName.length < 2 || menu[i].menuName.length > 4) {
-          message.error(`导航菜单名称2-4个字符`);
+          message.error(
+            intl.formatMessage({
+              id: 'site.p_menuName_pattern',
+            }),
+          );
           return (flag = false);
         }
         flag = true;
       }
       if (!menu[i].router) {
-        message.error(`请输入导航菜单路由`);
+        message.error(
+          intl.formatMessage({
+            id: 'site.p_router',
+          }),
+        );
         return (flag = false);
       } else {
         const regexp = /^[a-z]{1,50}$/;
         if (!regexp.test(menu[i].router)) {
-          message.error(`导航菜单路由2-50个小写英文字母`);
+          message.error(
+            intl.formatMessage({
+              id: 'site.p_router_pattern',
+            }),
+          );
           return (flag = false);
         }
         flag = true;
       }
 
       if (menu[i].sort === null) {
-        message.error(`请输入导航菜单排序`);
+        message.error(
+          intl.formatMessage({
+            id: 'site.p_sort',
+          }),
+        );
         return (flag = false);
       } else {
         flag = true;
@@ -182,12 +228,20 @@ const HeaderFooter = () => {
     }
 
     if (!params.footer.copyright) {
-      message.error('请输入Copyright');
+      message.error(
+        intl.formatMessage({
+          id: 'site.p_copyright',
+        }),
+      );
       return false;
     }
 
     if (!params.footer.extra) {
-      message.error('请输入额外信息');
+      message.error(
+        intl.formatMessage({
+          id: 'site.p_extra',
+        }),
+      );
       return false;
     }
 
@@ -329,7 +383,9 @@ const HeaderFooter = () => {
             <Col span={3}>
               <div className="field-item">
                 <div className="field-title">
-                  <Badge>Header配置: </Badge>
+                  <Badge>
+                    <FormattedMessage id="site.headerConfig" />
+                  </Badge>
                 </div>
               </div>
             </Col>
@@ -338,10 +394,16 @@ const HeaderFooter = () => {
             <Col offset={2} span={4}>
               <div className="field-item">
                 <div className="field-title">
-                  <Badge>是否固定Header:</Badge>
+                  <Badge>
+                    <FormattedMessage id="site.fixedHeader" />
+                  </Badge>
                   <Switch
-                    checkedChildren="是"
-                    unCheckedChildren="否"
+                    checkedChildren={intl.formatMessage({
+                      id: 'common.yes',
+                    })}
+                    unCheckedChildren={intl.formatMessage({
+                      id: 'common.no',
+                    })}
                     checked={params.header.fixedHeader}
                     onChange={(checked) => handlChangeToggle('fixedHeader', checked)}
                   />
@@ -349,10 +411,16 @@ const HeaderFooter = () => {
               </div>
               <div className="field-item">
                 <div className="field-title">
-                  <Badge>是否开启全局搜索:</Badge>
+                  <Badge>
+                    <FormattedMessage id="site.openSearch" />
+                  </Badge>
                   <Switch
-                    checkedChildren="是"
-                    unCheckedChildren="否"
+                    checkedChildren={intl.formatMessage({
+                      id: 'common.yes',
+                    })}
+                    unCheckedChildren={intl.formatMessage({
+                      id: 'common.no',
+                    })}
                     checked={params.header.openSearch}
                     onChange={(checked) => handlChangeToggle('openSearch', checked)}
                   />
@@ -360,10 +428,16 @@ const HeaderFooter = () => {
               </div>
               <div className="field-item">
                 <div className="field-title">
-                  <Badge>是否开启登录:</Badge>
+                  <Badge>
+                    <FormattedMessage id="site.login" />
+                  </Badge>
                   <Switch
-                    checkedChildren="是"
-                    unCheckedChildren="否"
+                    checkedChildren={intl.formatMessage({
+                      id: 'common.yes',
+                    })}
+                    unCheckedChildren={intl.formatMessage({
+                      id: 'common.no',
+                    })}
                     checked={params.header.login}
                     onChange={(checked) => handlChangeToggle('login', checked)}
                   />
@@ -371,10 +445,16 @@ const HeaderFooter = () => {
               </div>
               <div className="field-item">
                 <div className="field-title">
-                  <Badge>是否开启注册:</Badge>
+                  <Badge>
+                    <FormattedMessage id="site.register" />
+                  </Badge>
                   <Switch
-                    checkedChildren="是"
-                    unCheckedChildren="否"
+                    checkedChildren={intl.formatMessage({
+                      id: 'common.yes',
+                    })}
+                    unCheckedChildren={intl.formatMessage({
+                      id: 'common.no',
+                    })}
                     checked={params.header.register}
                     onChange={(checked) => handlChangeToggle('register', checked)}
                   />
@@ -388,7 +468,9 @@ const HeaderFooter = () => {
                 value={params.header.type || 2}
               >
                 <Radio value={1}>Logo</Radio>
-                <Radio value={2}>标题</Radio>
+                <Radio value={2}>
+                  <FormattedMessage id="site.title" />
+                </Radio>
               </Radio.Group>
               {params.header.type === 1 && (
                 <div className="field-item">
@@ -405,7 +487,9 @@ const HeaderFooter = () => {
                   <Input
                     onChange={handleTitleChange}
                     value={params.header.title}
-                    placeholder="请输入0-20个字符"
+                    placeholder={intl.formatMessage({
+                      id: 'site.p_title_pattern',
+                    })}
                   />
                 </div>
               )}
@@ -416,8 +500,12 @@ const HeaderFooter = () => {
             <Col offset={2}>
               <div className="field-item">
                 <div className="field-title">
-                  <Badge>导航菜单: </Badge>
-                  <span>（菜单名称最多4个字符，跳转路由只能输入小写英文，排序数字越大越靠右）</span>
+                  <Badge>
+                    <FormattedMessage id="site.menu" />
+                  </Badge>
+                  <span>
+                    <FormattedMessage id="site.menu_pattern_tip" />
+                  </span>
                 </div>
               </div>
             </Col>
@@ -435,7 +523,7 @@ const HeaderFooter = () => {
                 );
               })}
               <Button onClick={handleAddMenu} icon={<PlusOutlined />}>
-                新增
+                <FormattedMessage id="common.add" />
               </Button>
             </Col>
           </Row>
@@ -444,7 +532,9 @@ const HeaderFooter = () => {
             <Col span={3}>
               <div className="field-item">
                 <div className="field-title">
-                  <Badge>Footer配置: </Badge>
+                  <Badge>
+                    <FormattedMessage id="site.footerConfig" />
+                  </Badge>
                 </div>
               </div>
             </Col>
@@ -461,7 +551,9 @@ const HeaderFooter = () => {
                 value={params.footer.extra}
                 onChange={(e) => handlChangeFooter(e, 'extra')}
                 style={{ marginTop: 20 }}
-                addonBefore="额外信息"
+                addonBefore={intl.formatMessage({
+                  id: 'site.extra',
+                })}
               />
             </Col>
           </Row>

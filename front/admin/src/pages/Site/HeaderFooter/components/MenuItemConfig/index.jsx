@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { Input, InputNumber, Switch } from 'antd';
 import { CloseCircleTwoTone } from '@ant-design/icons';
+import { useIntl } from 'umi';
 
 import './index.less';
 
 const MenuItemConfig = (props) => {
   const { onChange, onRemove } = props;
+  const intl = useIntl();
 
   const [params, setParams] = useState(() => {
     return {
@@ -66,14 +68,18 @@ const MenuItemConfig = (props) => {
         value={params.menuName}
         disabled={params.disabled}
         style={{ flex: 1 }}
-        placeholder="名称"
+        placeholder={intl.formatMessage({
+          id: 'site.name',
+        })}
         onChange={(e) => onChangeValue(e, 'menuName')}
       />
       <Input
         value={params.router}
         disabled={params.disabled}
         style={{ flex: 1, marginLeft: 10 }}
-        placeholder="路由"
+        placeholder={intl.formatMessage({
+          id: 'site.router',
+        })}
         onChange={(e) => onChangeValue(e, 'router')}
       />
       <InputNumber
@@ -83,12 +89,18 @@ const MenuItemConfig = (props) => {
         max={9999}
         parser={(value) => value.replace(/[^\d-]/, '')}
         style={{ flex: 1, marginLeft: 10, marginRight: 10 }}
-        placeholder="排序"
+        placeholder={intl.formatMessage({
+          id: 'common.sort',
+        })}
         onChange={(e) => onChangeValue(e, 'sort')}
       />
       <Switch
-        checkedChildren="启用"
-        unCheckedChildren="停用"
+        checkedChildren={intl.formatMessage({
+          id: 'common.enable',
+        })}
+        unCheckedChildren={intl.formatMessage({
+          id: 'common.disable',
+        })}
         checked={params.status}
         disabled={params.disabled}
         onChange={(checked) => handlChangeToggle(checked)}

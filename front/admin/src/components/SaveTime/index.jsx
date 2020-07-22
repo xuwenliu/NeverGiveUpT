@@ -3,11 +3,21 @@ import { Alert, Button, Affix } from 'antd';
 import { SaveOutlined, RedoOutlined, DoubleLeftOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import './index.less';
+import { FormattedMessage, useIntl } from 'umi';
 
 const SaveTime = (props) => {
+  const intl = useIntl();
+
   const { time, onSave, onRefresh, onBack } = props;
-  const timeMessage = '最后保存时间:' + moment(time * 1000).format('YYYY-MM-DD HH:mm:ss');
-  const message = time ? timeMessage : '暂无操作';
+  const timeMessage =
+    intl.formatMessage({
+      id: 'component.saveTime.saveTime',
+    }) + moment(time * 1000).format('YYYY-MM-DD HH:mm:ss');
+  const message = time
+    ? timeMessage
+    : intl.formatMessage({
+        id: 'component.saveTime.noAction',
+      });
   return (
     <Affix offsetTop={10} style={{ position: 'relative', width: '100%', zIndex: 10 }}>
       <div className="save-time">
@@ -20,7 +30,7 @@ const SaveTime = (props) => {
             type="primary"
             icon={<RedoOutlined />}
           >
-            刷新
+            <FormattedMessage id="component.saveTime.refresh" />
           </Button>
         )}
         {onSave && (
@@ -31,7 +41,7 @@ const SaveTime = (props) => {
             type="primary"
             icon={<SaveOutlined />}
           >
-            保存
+            <FormattedMessage id="component.saveTime.save" />
           </Button>
         )}
 
@@ -44,7 +54,7 @@ const SaveTime = (props) => {
             danger
             icon={<DoubleLeftOutlined />}
           >
-            返回
+            <FormattedMessage id="component.saveTime.return" />
           </Button>
         )}
       </div>

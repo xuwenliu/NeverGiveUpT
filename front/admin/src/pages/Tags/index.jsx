@@ -6,109 +6,132 @@ import ProTable from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
 import moment from 'moment';
 import { queryTags, addTags, removeTags, updateTags, updateTagsStatus } from './service';
+import { FormattedMessage, useIntl } from 'umi';
 
 const EditableContext = React.createContext();
-
-const handleAdd = async (params) => {
-  try {
-    const res = await addTags({ ...params });
-    if (res.code === 0) {
-      message.success(res.msg);
-      return true;
-    }
-  } catch (error) {
-    message.error('添加失败请重试！');
-    return false;
-  }
-};
-
-const handleUpdate = async (params, actionRef) => {
-  try {
-    const res = await updateTags({ id: params._id, name: params.name });
-    if (res.code === 0) {
-      message.success(res.msg);
-      if (actionRef.current) {
-        actionRef.current.reload();
-      }
-      return true;
-    }
-  } catch (error) {
-    message.error('修改失败请重试！');
-    return false;
-  }
-};
-
-const handleRemove = async (params, actionRef) => {
-  try {
-    const res = await removeTags({ id: params._id });
-    if (res.code === 0) {
-      message.success(res.msg);
-      if (actionRef.current) {
-        actionRef.current.reload();
-      }
-      return true;
-    }
-  } catch (error) {
-    message.error('删除失败请重试！');
-    return false;
-  }
-};
-
-const handleupdateStatus = async (status, params, actionRef) => {
-  try {
-    const res = await updateTagsStatus({ id: params._id, status });
-    if (res.code === 0) {
-      message.success(res.msg);
-      if (actionRef.current) {
-        actionRef.current.reload();
-      }
-      return true;
-    }
-  } catch (error) {
-    message.error('启用/停用失败请重试！');
-    return false;
-  }
-};
 
 const Tags = (props) => {
   const [createModalVisible, handleModalVisible] = useState(false);
   const actionRef = useRef();
+  const intl = useIntl();
+  const handleAdd = async (params) => {
+    try {
+      const res = await addTags({ ...params });
+      if (res.code === 0) {
+        message.success(res.msg);
+        return true;
+      }
+    } catch (error) {
+      message.error(
+        intl.formatMessage({
+          id: 'tags.create_error_tip',
+        }),
+      );
+      return false;
+    }
+  };
+
+  const handleUpdate = async (params, actionRef) => {
+    try {
+      const res = await updateTags({ id: params._id, name: params.name });
+      if (res.code === 0) {
+        message.success(res.msg);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
+        return true;
+      }
+    } catch (error) {
+      message.error(
+        intl.formatMessage({
+          id: 'tags.update_error_tip',
+        }),
+      );
+      return false;
+    }
+  };
+
+  const handleRemove = async (params, actionRef) => {
+    try {
+      const res = await removeTags({ id: params._id });
+      if (res.code === 0) {
+        message.success(res.msg);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
+        return true;
+      }
+    } catch (error) {
+      message.error(
+        intl.formatMessage({
+          id: 'tags.remove_error_tip',
+        }),
+      );
+      return false;
+    }
+  };
+
+  const handleupdateStatus = async (status, params, actionRef) => {
+    try {
+      const res = await updateTagsStatus({ id: params._id, status });
+      if (res.code === 0) {
+        message.success(res.msg);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
+        return true;
+      }
+    } catch (error) {
+      message.error(
+        intl.formatMessage({
+          id: 'tags.enable_error_tip',
+        }),
+      );
+      return false;
+    }
+  };
 
   let columns = [
-    // {
-    //   title: 'ObjectId',
-    //   dataIndex: '_id',
-    //   hideInSearch: true,
-    //   hideInForm: true,
-    // },
     {
-      title: '标签名称',
+      title: intl.formatMessage({
+        id: 'tags.name',
+      }),
       dataIndex: 'name',
       editable: true,
       width: '30%',
       formItemProps: {
-        placeholder: '请输入标签名称',
+        placeholder: intl.formatMessage({
+          id: 'tags.p_name',
+        }),
         autoComplete: 'off',
       },
       rules: [
         {
           required: true,
-          message: '标签名称为必填项',
+          message: intl.formatMessage({
+            id: 'tags.p_name',
+          }),
         },
         {
           pattern: /^[\u4E00-\u9FA5A-Za-z0-9_.]{2,20}$/,
-          message: '标签格式为: 2-20个_.中文大小写字母',
+          message: intl.formatMessage({
+            id: 'tags.name_pattern',
+          }),
         },
       ],
     },
     {
-      title: '文章数量',
+      title: intl.formatMessage({
+        id: 'common.articleNum',
+      }),
       dataIndex: 'articleNum',
       hideInSearch: true,
       hideInForm: true,
     },
     {
-      title: '状态',
+      title: intl.formatMessage({
+        id: 'common.status',
+      }),
       dataIndex: 'status',
       hideInSearch: true,
       hideInForm: true,
@@ -125,14 +148,18 @@ const Tags = (props) => {
       },
     },
     {
-      title: '创建时间',
+      title: intl.formatMessage({
+        id: 'common.createTime',
+      }),
       dataIndex: 'createTime',
       hideInSearch: true,
       hideInForm: true,
       render: (_, record) => moment(record.createTime * 1000).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
-      title: '修改时间',
+      title: intl.formatMessage({
+        id: 'common.updateTime',
+      }),
       dataIndex: 'updateTime',
       hideInSearch: true,
       hideInForm: true,
@@ -143,7 +170,9 @@ const Tags = (props) => {
     },
 
     {
-      title: '操作',
+      title: intl.formatMessage({
+        id: 'common.action',
+      }),
       dataIndex: 'option',
       valueType: 'option',
       width: 100,
@@ -151,7 +180,14 @@ const Tags = (props) => {
         return record.articleNum === 0 && !record.status ? (
           <Popconfirm
             placement="topLeft"
-            title={`你确定删除标签【${record.name}】吗？`}
+            title={intl.formatMessage(
+              {
+                id: 'tags.remove_tip',
+              },
+              {
+                name: record.name,
+              },
+            )}
             onConfirm={() => handleRemove(record, actionRef)}
           >
             <a>
@@ -213,10 +249,18 @@ const Tags = (props) => {
 
     const toggleEdit = () => {
       if (record.status) {
-        return message.info('启用状态标签不能修改');
+        return message.info(
+          intl.formatMessage({
+            id: 'tags.not_update',
+          }),
+        );
       } else {
         if (record.articleNum > 0) {
-          return message.info('该标签下有文章不能修改');
+          return message.info(
+            intl.formatMessage({
+              id: 'tags.not_update_have_article',
+            }),
+          );
         }
       }
       setEditing(!editing);
@@ -232,9 +276,7 @@ const Tags = (props) => {
           handleUpdate({ ...record, ...values }, actionRef);
         }
         toggleEdit();
-      } catch (error) {
-        console.log('修改失败:', error);
-      }
+      } catch (error) {}
     };
 
     let childNode = children;
@@ -249,7 +291,14 @@ const Tags = (props) => {
           rules={[
             {
               required: true,
-              message: `${title}必填`,
+              message: intl.formatMessage(
+                {
+                  id: 'common.p_input',
+                },
+                {
+                  name: title,
+                },
+              ),
             },
           ]}
         >
@@ -285,7 +334,7 @@ const Tags = (props) => {
         rowKey="_id"
         toolBarRender={(action, { selectedRows }) => [
           <Button type="primary" onClick={() => handleModalVisible(true)}>
-            <PlusOutlined /> 添加
+            <PlusOutlined /> <FormattedMessage id="tags.add" />
           </Button>,
         ]}
         request={(params, sorter, filter) => queryTags({ ...params })}
@@ -298,11 +347,8 @@ const Tags = (props) => {
         <ProTable
           onSubmit={async (value) => {
             const success = await handleAdd(value);
-            console.log('success', success);
-
             if (success) {
               handleModalVisible(false);
-
               if (actionRef.current) {
                 actionRef.current.reload();
               }

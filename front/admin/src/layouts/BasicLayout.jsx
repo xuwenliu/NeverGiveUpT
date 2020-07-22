@@ -4,29 +4,13 @@
  * https://github.com/ant-design/ant-design-pro-layout
  */
 import ProLayout, { DefaultFooter } from '@ant-design/pro-layout';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Avatar } from 'antd';
-import { Link, useIntl, connect } from 'umi';
+import { Link, useIntl, connect, FormattedMessage } from 'umi';
 import avatar from '@/assets/mine.jpeg';
 
-// import { Result, Button } from 'antd';
-// import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
-// import { getAuthorityFromRouter } from '@/utils/utils';
 import logo from '../assets/logo.svg';
-
-// const noMatch = (
-//   <Result
-//     status={403}
-//     title="403"
-//     subTitle="Sorry, you are not authorized to access this page."
-//     extra={
-//       <Button type="primary">
-//         <Link to="/user/login">Go Login</Link>
-//       </Button>
-//     }
-//   />
-// );
 
 /**
  * use Authorized check all menu item
@@ -38,7 +22,6 @@ const menuDataRender = (menuList) =>
       children: item.children ? menuDataRender(item.children) : undefined,
     };
     return localItem;
-    // Authorized.check(item.authority, localItem, null);
   });
 
 const defaultFooterDom = (
@@ -47,22 +30,14 @@ const defaultFooterDom = (
     links={[
       {
         key: 'desc',
-        title: '本站由React + Umi + ant-design-pro提供技术支持',
+        title: <FormattedMessage id="component.layout.footer" />,
       },
     ]}
   />
 );
 
 const BasicLayout = (props) => {
-  const {
-    dispatch,
-    children,
-    settings,
-    location = {
-      pathname: '/',
-    },
-    collapsed,
-  } = props;
+  const { dispatch, children, settings, collapsed } = props;
   /**
    * constructor
    */
@@ -80,11 +55,7 @@ const BasicLayout = (props) => {
     }
   }; // get children authority
 
-  // const authorized = getAuthorityFromRouter(props.route.routes, location.pathname || '/') || {
-  //   authority: undefined,
-  // };
   const { formatMessage } = useIntl();
-  console.log(collapsed);
   return (
     <ProLayout
       logo={logo}
@@ -99,7 +70,7 @@ const BasicLayout = (props) => {
                 marginLeft: 10,
               }}
             >
-              博客后台管理系统
+              <FormattedMessage id="common.blog.manager" />
             </span>
           )}
         </Link>
@@ -135,9 +106,7 @@ const BasicLayout = (props) => {
       {...props}
       {...settings}
     >
-      {/* <Authorized authority={authorized.authority} noMatch={noMatch}> */}
       {children}
-      {/* </Authorized> */}
     </ProLayout>
   );
 };

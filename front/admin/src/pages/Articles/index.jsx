@@ -563,7 +563,7 @@ const Articles = () => {
               required: true,
               message: intl.formatMessage(
                 {
-                  id: 'articles.p_input',
+                  id: 'common.p_input',
                 },
                 {
                   name: title,

@@ -12,7 +12,7 @@ const Model = {
       if (res.code === 0) {
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('userName', res.data.userName);
-        history.replace('/tags');
+        history.replace('/articles');
       }
     },
 

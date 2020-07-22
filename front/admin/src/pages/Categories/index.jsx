@@ -82,7 +82,7 @@ const Categories = () => {
       width: '30%',
       formItemProps: {
         placeholder: intl.formatMessage({
-          id: 'articles.p_name',
+          id: 'categories.p_name',
         }),
         autoComplete: 'off',
       },
@@ -255,7 +255,7 @@ const Categories = () => {
               required: true,
               message: intl.formatMessage(
                 {
-                  id: 'categories.p_input',
+                  id: 'common.p_input',
                 },
                 {
                   name: title,

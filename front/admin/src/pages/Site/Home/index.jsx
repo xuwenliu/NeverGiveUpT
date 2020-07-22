@@ -1,57 +1,66 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, Input, Row, Col, Badge, Switch, message } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-
+import { FormattedMessage, useIntl } from 'umi';
 import './index.less';
 
 import SaveTime from '@/components/SaveTime';
 import UploadImage from '@/components/UploadImage';
 import { queryHomeConfig, addHomeConfig, updateHomeConfig } from '../service';
 
-const initBackgroundImages = [
-  {
-    field: 'homeBgImg',
-    name: '首页背景图片',
-  },
-  // {
-  //   field: 'articleBgImg',
-  //   name: '文章背景图片',
-  // },
-  // {
-  //   field: 'articleDetailBgImg',
-  //   name: '文章详情背景图片',
-  // },
-  {
-    field: 'archiveBgImg',
-    name: '归档背景图片',
-  },
-  {
-    field: 'categoriesBgImg',
-    name: '分类背景图片',
-  },
-  {
-    field: 'categoriesDetailBgImg',
-    name: '分类详情背景图片',
-  },
-  {
-    field: 'tagsBgImg',
-    name: '标签背景图片',
-  },
-  {
-    field: 'tagsDetailBgImg',
-    name: '标签详情背景图片',
-  },
-  {
-    field: 'aboutBgImg',
-    name: '关于背景图片',
-  },
-  {
-    field: 'avatar',
-    name: '头像',
-  },
-];
-
 const Home = () => {
+  const intl = useIntl();
+
+  const initBackgroundImages = [
+    {
+      field: 'homeBgImg',
+      name: intl.formatMessage({
+        id: 'site.homeBgImg',
+      }),
+    },
+    {
+      field: 'archiveBgImg',
+      name: intl.formatMessage({
+        id: 'site.archiveBgImg',
+      }),
+    },
+    {
+      field: 'categoriesBgImg',
+      name: intl.formatMessage({
+        id: 'site.categoriesBgImg',
+      }),
+    },
+    {
+      field: 'categoriesDetailBgImg',
+      name: intl.formatMessage({
+        id: 'site.categoriesDetailBgImg',
+      }),
+    },
+    {
+      field: 'tagsBgImg',
+      name: intl.formatMessage({
+        id: 'site.tagsBgImg',
+      }),
+    },
+    {
+      field: 'tagsDetailBgImg',
+      name: intl.formatMessage({
+        id: 'site.tagsDetailBgImg',
+      }),
+    },
+    {
+      field: 'aboutBgImg',
+      name: intl.formatMessage({
+        id: 'site.aboutBgImg',
+      }),
+    },
+    {
+      field: 'avatar',
+      name: intl.formatMessage({
+        id: 'common.avatar',
+      }),
+    },
+  ];
   const [backgroundImages, setBackgroundImages] = useState(initBackgroundImages);
   const [params, setParams] = useState({
     avatarRotate: false,
@@ -66,7 +75,11 @@ const Home = () => {
   const loadData = async (isRefresh) => {
     const res = await queryHomeConfig();
     if (isRefresh) {
-      message.success('刷新成功');
+      message.success(
+        intl.formatMessage({
+          id: 'common.refresh_success',
+        }),
+      );
     }
     let data = res.data;
 
@@ -91,7 +104,16 @@ const Home = () => {
     let flag = false;
     for (let i in backgroundImages) {
       if (!backgroundImages[i].imgs) {
-        message.error(`请上传${backgroundImages[i].name}`);
+        message.error(
+          intl.formatMessage(
+            {
+              id: 'site.p_upload',
+            },
+            {
+              name: 'backgroundImages[i].name',
+            },
+          ),
+        );
         flag = false;
         return;
       } else {
@@ -103,11 +125,19 @@ const Home = () => {
     }
 
     if (!postData.introduction) {
-      message.error('请输入简介');
+      message.error(
+        intl.formatMessage({
+          id: 'site.p_introduction',
+        }),
+      );
       return false;
     }
     if (postData.introduction.length < 2) {
-      message.error('简介至少输入2个字符');
+      message.error(
+        intl.formatMessage({
+          id: 'site.p_introduction_pattern',
+        }),
+      );
       return false;
     }
     return true;
@@ -190,11 +220,17 @@ const Home = () => {
             <Col span={10}>
               <div className="field-item">
                 <div className="field-titles">
-                  <Badge>头像是否旋转:</Badge>
+                  <Badge>
+                    <FormattedMessage id="site.avatarRotate" />
+                  </Badge>
                   <Switch
                     className="field-switch"
-                    checkedChildren="是"
-                    unCheckedChildren="否"
+                    checkedChildren={intl.formatMessage({
+                      id: 'common.yes',
+                    })}
+                    unCheckedChildren={intl.formatMessage({
+                      id: 'common.no',
+                    })}
                     checked={params.avatarRotate}
                     onChange={(checked) => handlChangeToggle('avatarRotate', checked)}
                   />
@@ -206,7 +242,12 @@ const Home = () => {
             <Col span={12}>
               <div className="field-item">
                 <div className="field-titles">
-                  <Badge status="error" text="简介: " />
+                  <Badge
+                    status="error"
+                    text={intl.formatMessage({
+                      id: 'site.introduction',
+                    })}
+                  />
                 </div>
                 <Input.TextArea
                   value={params.introduction}
@@ -218,8 +259,16 @@ const Home = () => {
                 />
                 {showTip && (
                   <p className="field-tip">
-                    还可以输入
-                    <span className="field-tip-num">{100 - params.introduction.length}</span>个字
+                    {intl.formatMessage(
+                      {
+                        id: 'common.num',
+                      },
+                      {
+                        name: (
+                          <span className="field-tip-num">{100 - params.introduction.length}</span>
+                        ),
+                      },
+                    )}
                   </p>
                 )}
               </div>
@@ -229,11 +278,17 @@ const Home = () => {
             <Col span={10}>
               <div className="field-item">
                 <div className="field-titles">
-                  <Badge>简介特效:</Badge>
+                  <Badge>
+                    <FormattedMessage id="site.effects" />
+                  </Badge>
                   <Switch
                     className="field-switch"
-                    checkedChildren="开启"
-                    unCheckedChildren="关闭"
+                    checkedChildren={intl.formatMessage({
+                      id: 'common.open',
+                    })}
+                    unCheckedChildren={intl.formatMessage({
+                      id: 'common.close',
+                    })}
                     checked={params.effects}
                     onChange={(checked) => handlChangeToggle('effects', checked)}
                   />

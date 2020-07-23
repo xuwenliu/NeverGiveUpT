@@ -18,6 +18,6 @@ export default {
   'component.uploadImage.p_file_link': '请输入文件链接',
   'component.uploadImage.file_link_error_tip': '链接格式错误',
 
-  'component.layout.footer': '本站由React + Umi + ant-design-pro提供技术支持',
+  'component.layout.footer': '本站由React + Umi + Ant-design-pro提供技术支持',
   
 };

@@ -1,4 +1,5 @@
 export default {
+  'menu.login': 'Login',
   'menu.list.articles': 'Articles',
   'menu.list.articles-edit': 'Articles Details',
   'menu.list.categories': 'Categories',
@@ -11,6 +12,7 @@ export default {
   'menu.list.site.site-header-footer': 'Header/Footer Config',
   'menu.list.site.site-right': 'Right Config',
   'menu.welcome': 'Welcome',
+  'menu.home': 'Home',
   'menu.exception.403': '403',
   'menu.exception.404': '404',
   'menu.exception.500': '500',

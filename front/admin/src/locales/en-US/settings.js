@@ -7,7 +7,7 @@ export default {
   'app.settings.basic.change-avatar': 'Change avatar',
   'app.settings.basic.email': 'Email',
   'app.settings.basic.email-message': 'Please input your email!',
-  'app.settings.basic.nickname': 'Nickname',
+  'app.settings.basic.nickname': 'Nick name',
   'app.settings.basic.nickname-message': 'Please input your Nickname!',
   'app.settings.basic.profile': 'Personal profile',
   'app.settings.basic.profile-message': 'Please input your personal profile!',

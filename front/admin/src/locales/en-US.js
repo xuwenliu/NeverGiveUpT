@@ -4,19 +4,31 @@ import menu from './en-US/menu';
 import pwa from './en-US/pwa';
 import settingDrawer from './en-US/settingDrawer';
 import settings from './en-US/settings';
+import articles from './en-US/articles';
+import about from './en-US/about';
+import categories from './en-US/categories';
+import comment from './en-US/comment';
+import login from './en-US/login';
+import site from './en-US/site';
+import tags from './en-US/tags';
+import user from './en-US/user';
+import common from './en-US/common';
 
 export default {
   'navBar.lang': 'Languages',
-  'layout.user.link.help': 'Help',
-  'layout.user.link.privacy': 'Privacy',
-  'layout.user.link.terms': 'Terms',
-  'app.preview.down.block': 'Download this page to your local project',
-  'app.welcome.link.fetch-blocks': 'Get all block',
-  'app.welcome.link.block-list': 'Quickly build standard, pages based on `block` development',
   ...globalHeader,
   ...menu,
   ...settingDrawer,
   ...settings,
   ...pwa,
   ...component,
+  ...articles,
+  ...about,
+  ...categories,
+  ...comment,
+  ...login,
+  ...site,
+  ...tags,
+  ...user,
+  ...common,
 };

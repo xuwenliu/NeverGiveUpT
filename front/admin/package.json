@@ -53,7 +53,7 @@
     "@ant-design/icons": "^4.0.0",
     "@ant-design/pro-layout": "^5.0.16",
     "@ant-design/pro-table": "2.3.4",
-    "@antv/data-set": "^0.11.0",
+    "@antv/data-set": "^0.11.4",
     "@types/lodash.debounce": "^4.0.6",
     "antd": "4.3.3",
     "bizcharts": "^3.5.3-beta.0",
@@ -75,7 +75,8 @@
     "react-helmet-async": "^1.0.4",
     "umi": "^3.1.2",
     "umi-request": "^1.0.8",
-    "use-merge-value": "^1.0.1"
+    "use-merge-value": "^1.0.1",
+    "viser-react": "^2.4.8"
   },
   "devDependencies": {
     "@ant-design/pro-cli": "^1.0.18",

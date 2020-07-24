@@ -78,3 +78,16 @@ export const randomNum = (m, n) => {
 export const randomColor = () => {
   return colors[randomNum(1, 15)];
 };
+
+export const days7 = (() => {
+  let month = new Date().getMonth() + 1;
+  if (month < 10) {
+    month = '0' + month;
+  }
+  const today = new Date().getDate();
+  const days = [];
+  for (let i = today - 6; i <= today; i++) {
+    days.push(`${month}/${i}`);
+  }
+  return days;
+})();

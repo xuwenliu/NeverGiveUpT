@@ -1,5 +1,5 @@
 export default {
-  'common.blog.manager': '部落格後臺管理系統',
+  'common.blog.manager': '部落格管理系統',
   'common.index': '首頁',
   'common.articles': '文章',
   'common.tags': '標籤',

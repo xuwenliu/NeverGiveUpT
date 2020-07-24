@@ -122,7 +122,7 @@ const Tags = (props) => {
     },
     {
       title: intl.formatMessage({
-        id: 'common.articleNum',
+        id: 'common.articlesNum',
       }),
       dataIndex: 'articleNum',
       hideInSearch: true,

@@ -5,11 +5,30 @@ Vue.config.productionTip = false;
 import router from "./router";
 
 import "muse-ui/lib/styles/base.less";
-import { Button, Select, AppBar, Icon, Menu, List, BottomSheet } from "muse-ui";
+import {
+  Button,
+  Select,
+  AppBar,
+  Icon,
+  Menu,
+  List,
+  BottomSheet,
+  TextField,
+  Dialog,
+  Progress,
+  Card,
+  Avatar,
+  Carousel,
+} from "muse-ui";
 import "muse-ui/lib/styles/theme.less";
+import "muse-ui-progress/dist/muse-ui-progress.css";
+import NProgress from "muse-ui-progress";
+import Helpers from "muse-ui/lib/Helpers";
+
 // import theme from "muse-ui/lib/theme";
 // theme.use("dark");
-
+Vue.use(NProgress);
+Vue.use(Helpers);
 Vue.use(Button);
 Vue.use(Select);
 Vue.use(AppBar);
@@ -17,6 +36,12 @@ Vue.use(Icon);
 Vue.use(Menu);
 Vue.use(List);
 Vue.use(BottomSheet);
+Vue.use(TextField);
+Vue.use(Dialog);
+Vue.use(Progress);
+Vue.use(Card);
+Vue.use(Avatar);
+Vue.use(Carousel);
 
 const isPC = (() => {
   var userAgentInfo = navigator.userAgent;

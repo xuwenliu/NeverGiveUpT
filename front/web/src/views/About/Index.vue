@@ -4,13 +4,18 @@
     :style="{background:`url(${info.aboutBgImg}) center center no-repeat`,backgroundSize:'cover'}"
   >
     <div class="content">
-      <mu-card style="width: 100%; max-width: 375px; margin: 0 auto;">
+      <mu-card :style="{width: isPC? '100%':'80%'}" style="max-width: 375px; margin: 0 auto;">
         <mu-card-header>
-          <mu-avatar slot="avatar">
-            <img :src="info.avatar" />
-          </mu-avatar>
+          <mu-paper class="avatar-box" circle :z-depth="5">
+            <img class="avatar" :src="info.avatar" />
+          </mu-paper>
+          <mu-button color="success">
+            个人简历
+            <mu-icon right value="arrow_forward"></mu-icon>
+          </mu-button>
         </mu-card-header>
-        <mu-carousel hide-indicators style="height:300px">
+
+        <mu-carousel v-if="isPC" hide-indicators style="height:250px">
           <mu-carousel-item v-for="item in info.imgs" :key="item._id">
             <img :src="item.imgUrl" />
           </mu-carousel-item>
@@ -21,13 +26,15 @@
   </div>
 </template>
 <script>
+import about from "@/assets/img/about.jpg";
+
 export default {
   name: "about",
   data() {
     return {
       info: {
         avatar: "https://xuwenliu.github.io/img/avatar.jpg",
-        aboutBgImg: "https://xuwenliu.github.io/img/about.jpg",
+        aboutBgImg: about,
         tags: ["Vue", "React"],
         showResume: true,
         desc:
@@ -67,5 +74,28 @@ export default {
   right: 0;
   bottom: 0;
   padding-top: 64px;
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    /deep/ .mu-card-header {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .avatar-box {
+      width: 100px;
+      height: 100px;
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+      .avatar {
+        width: 100%;
+        border-radius: 50%;
+      }
+    }
+  }
 }
 </style>

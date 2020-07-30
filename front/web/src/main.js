@@ -19,6 +19,7 @@ import {
   Card,
   Avatar,
   Carousel,
+  Paper
 } from "muse-ui";
 import "muse-ui/lib/styles/theme.less";
 import "muse-ui-progress/dist/muse-ui-progress.css";
@@ -42,6 +43,7 @@ Vue.use(Progress);
 Vue.use(Card);
 Vue.use(Avatar);
 Vue.use(Carousel);
+Vue.use(Paper);
 
 const isPC = (() => {
   var userAgentInfo = navigator.userAgent;

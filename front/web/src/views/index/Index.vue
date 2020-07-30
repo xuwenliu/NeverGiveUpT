@@ -12,13 +12,15 @@
 <script>
 let timer = 0;
 let i = 0;
+import wap_index from "@/assets/img/wap_index.jpg";
+import index from "@/assets/img/index.jpg";
 
 export default {
   name: "index",
   data() {
     return {
       info: {
-        homeBgImg: "https://xuwenliu.github.io/img/index.jpg",
+        homeBgImg: this.isPC ? index : wap_index,
         avatar: "https://xuwenliu.github.io/img/avatar.jpg",
         avatarRotate: true,
         introductionTarget: "There is a kind of call to eat together.",
@@ -35,7 +37,6 @@ export default {
       this.info.introduction = this.info.introductionTarget;
     }
     this.$progress.done();
-
   },
   methods: {
     typing() {

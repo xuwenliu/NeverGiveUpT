@@ -46,7 +46,14 @@
 export default {
   name: "App",
   components: {},
-  mounted() {},
+  mounted() {
+    let currentName = location.hash.replace("#/", "");
+    this.menu.forEach((item, index) => {
+      if (currentName === item.router) {
+        this.lightIndex = index;
+      }
+    });
+  },
   data() {
     return {
       isPC: this.isPC,

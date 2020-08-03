@@ -23,5 +23,11 @@ export default new Router({
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/About/Index.vue"),
     },
+    {
+      path: "/tags",
+      name: "tags",
+      component: () =>
+        import(/* webpackChunkName: "tags" */ "./views/Tags/Index.vue"),
+    },
   ],
 });

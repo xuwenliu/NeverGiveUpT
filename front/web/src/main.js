@@ -20,7 +20,8 @@ import {
   Avatar,
   Carousel,
   Paper,
-  Chip
+  Chip,
+  Grid,
 } from "muse-ui";
 import "muse-ui/lib/styles/theme.less";
 import "muse-ui-progress/dist/muse-ui-progress.css";
@@ -46,6 +47,7 @@ Vue.use(Avatar);
 Vue.use(Carousel);
 Vue.use(Paper);
 Vue.use(Chip);
+Vue.use(Grid);
 
 const isPC = (() => {
   var userAgentInfo = navigator.userAgent;

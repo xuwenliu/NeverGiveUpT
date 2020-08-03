@@ -29,5 +29,21 @@ export default new Router({
       component: () =>
         import(/* webpackChunkName: "tags" */ "./views/Tags/Index.vue"),
     },
+    {
+      path: "/categories",
+      name: "categories",
+      component: () =>
+        import(
+          /* webpackChunkName: "categories" */ "./views/Categories/Index.vue"
+        ),
+    },
+    {
+      path: "/categories/details",
+      name: "categoriesDetails",
+      component: () =>
+        import(
+          /* webpackChunkName: "categories" */ "./views/Categories/Details.vue"
+        ),
+    },
   ],
 });

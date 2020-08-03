@@ -48,7 +48,11 @@ export default {
   components: {},
   mounted() {
     let currentName = location.hash.replace("#/", "");
+    console.log(currentName);
     this.menu.forEach((item, index) => {
+      if (currentName === "categories/details") {
+        currentName = "categories";
+      }
       if (currentName === item.router) {
         this.lightIndex = index;
       }

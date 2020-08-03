@@ -22,6 +22,11 @@ import {
   Paper,
   Chip,
   Grid,
+  ExpansionPanel,
+  Pagination,
+  Divider,
+  LoadMore,
+  SubHeader
 } from "muse-ui";
 import "muse-ui/lib/styles/theme.less";
 import "muse-ui-progress/dist/muse-ui-progress.css";
@@ -48,6 +53,11 @@ Vue.use(Carousel);
 Vue.use(Paper);
 Vue.use(Chip);
 Vue.use(Grid);
+Vue.use(ExpansionPanel);
+Vue.use(Pagination);
+Vue.use(Divider);
+Vue.use(LoadMore);
+Vue.use(SubHeader);
 
 const isPC = (() => {
   var userAgentInfo = navigator.userAgent;

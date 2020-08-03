@@ -23,3 +23,12 @@ export const randomNum = (m, n) => {
 export const randomColor = () => {
   return colors[randomNum(1, 15)];
 };
+
+//rgb颜色随机
+export const rgb = () => {
+  var r = Math.floor(Math.random() * 256);
+  var g = Math.floor(Math.random() * 256);
+  var b = Math.floor(Math.random() * 256);
+  var rgb = "rgb(" + r + "," + g + "," + b + ")";
+  return rgb;
+};

@@ -50,8 +50,11 @@ export default {
     let currentName = location.hash.replace("#/", "");
     console.log(currentName);
     this.menu.forEach((item, index) => {
-      if (currentName === "categories/details") {
+      if (currentName.indexOf("categories/details") > -1) {
         currentName = "categories";
+      }
+      if (currentName.indexOf("tags/details") > -1) {
+        currentName = "tags";
       }
       if (currentName === item.router) {
         this.lightIndex = index;
@@ -151,7 +154,7 @@ export default {
 }
 .header {
   position: fixed;
-  z-index: 1;
+  z-index: 10;
   width: 100%;
 }
 </style>

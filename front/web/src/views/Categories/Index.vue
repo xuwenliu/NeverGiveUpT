@@ -1,49 +1,65 @@
 <template>
-  <div
-    class="categories"
-    :style="{background:`url(${info.categoriesBgImg}) center center no-repeat`,backgroundSize:'cover'}"
-  >
-    <div class="content">
-      <div class="box" v-for="(item) in randomArr" :key="item.name">
-        <div id="one">
-          <span class="text">{{item.name}}</span>
-          <div
-            class="sj"
-            :style="{borderColor:`${item.rgb()} transparent transparent transparent`}"
-          ></div>
-          <div
-            class="ye"
-            :style="{borderColor:`transparent transparent transparent ${item.rgb()}`}"
-          ></div>
-          <div
-            class="ye1"
-            :style="{borderColor:`transparent ${item.rgb()} transparent transparent `}"
-          ></div>
-          <div
-            class="re"
-            :style="{borderColor:`transparent transparent transparent ${item.rgb()}`}"
-          ></div>
-          <div
-            class="blue"
-            :style="{borderColor:`transparent transparent transparent ${item.rgb()}`}"
-          ></div>
-          <div
-            class="blue1"
-            :style="{borderColor:`${item.rgb()} transparent transparent transparent`}"
-          ></div>
-          <div
-            class="green"
-            :style="{borderColor:`${item.rgb()} transparent transparent transparent`}"
-          ></div>
-          <div
-            class="green1"
-            :style="{borderColor:`transparent ${item.rgb()} transparent transparent `}"
-          ></div>
+  <transition name="slideInRight">
+    <div
+      class="categories"
+      :style="{background:`url(${info.categoriesBgImg}) center center no-repeat`,backgroundSize:'cover'}"
+    >
+      <div
+        class="content"
+        :style="{
+        overflow:isPC?'hidden':'auto',
+        marginTop:isPC?'100px':0,
+        }"
+      >
+        <div class="box" v-for="(item) in randomArr" :key="item.name">
+          <div class="winnower" @click="goDetail(item)">
+            <div class="text">{{item.name}}</div>
+            <div class="one">
+              <div
+                class="ye1"
+                :style="{borderColor:`${item.rgb()} transparent transparent transparent`}"
+              ></div>
+              <div
+                class="ye2"
+                :style="{borderColor:`transparent ${item.rgb()} transparent transparent`}"
+              ></div>
+            </div>
+            <div class="two">
+              <div
+                class="ye1"
+                :style="{borderColor:`${item.rgb()} transparent transparent transparent`}"
+              ></div>
+              <div
+                class="ye2"
+                :style="{borderColor:`transparent ${item.rgb()} transparent transparent`}"
+              ></div>
+            </div>
+            <div class="three">
+              <div
+                class="ye1"
+                :style="{borderColor:`${item.rgb()} transparent transparent transparent`}"
+              ></div>
+              <div
+                class="ye2"
+                :style="{borderColor:`transparent ${item.rgb()} transparent transparent`}"
+              ></div>
+            </div>
+            <div class="four">
+              <div
+                class="ye1"
+                :style="{borderColor:`${item.rgb()} transparent transparent transparent`}"
+              ></div>
+              <div
+                class="ye2"
+                :style="{borderColor:`transparent ${item.rgb()} transparent transparent`}"
+              ></div>
+            </div>
+          </div>
+          <div class="bang" :style="{background:item.color}"></div>
         </div>
-        <div class="bang" :style="{background:item.color}"></div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 <script>
 import categoriesBgImg from "@/assets/img/category.jpg";
@@ -59,6 +75,7 @@ export default {
       info: {
         categoriesBgImg,
         categories: ["技术", "生活", "照片", "其他"]
+        // categories: ["技术", "生活"]
       }
     };
   },
@@ -74,13 +91,13 @@ export default {
     }
   },
   methods: {
-    toggle(panel) {
-      this.panel = panel === this.panel ? "" : panel;
-    },
-    pageChange() {
-      setTimeout(() => {
-        this.num += 10;
-      }, 2000);
+    goDetail(item) {
+      this.$router.push({
+        name: "categoriesDetails",
+        query: {
+          id: item.name
+        }
+      });
     }
   }
 };
@@ -97,7 +114,8 @@ export default {
   .content {
     padding-top: 64px;
     display: flex;
-    // justify-content: space-around;
+    justify-content: space-around;
+    flex-wrap: wrap;
     margin-top: 100px;
     position: absolute;
     width: 100%;
@@ -105,167 +123,101 @@ export default {
     left: 0;
     right: 0;
     bottom: 0;
+    overflow: hidden;
+  }
+}
+.box {
+  position: relative;
+  overflow: hidden;
+  .bang {
+    width: 20px;
+    height: 100%;
+    border-radius: 10px;
+    position: absolute;
+    top: 162px;
+    left: 152px;
   }
 }
 
-#one:hover {
-  animation: run 4s linear infinite;
+.winnower {
+  z-index: 3;
+  width: 324px;
+  height: 324px;
+  position: relative;
+  animation: run 6s linear infinite;
+  cursor: pointer;
+  .text {
+    position: absolute;
+    top: 137px;
+    left: 137px;
+    color: #000;
+    font-weight: 500;
+    font-size: 16px;
+    z-index: 3;
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 50px;
+    box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2),
+      0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12);
+  }
+  .one,
+  .two,
+  .three,
+  .four {
+    position: absolute;
+    width: 162px;
+    height: 162px;
+  }
+  .one {
+    transform: rotate(90deg);
+  }
+  .two {
+    top: 162px;
+  }
+
+  .three {
+    top: 0;
+    transform: rotate(180deg);
+    left: 162px;
+  }
+  .four {
+    transform: rotate(-90deg);
+    left: 162px;
+    top: 162px;
+  }
+  .ye1 {
+    border: 81px solid #01814a;
+    border-width: 81px;
+    border-style: solid;
+    border-color: #01814a transparent transparent transparent;
+  }
+
+  .ye2 {
+    transform: rotate(-135deg);
+    position: absolute;
+    bottom: 23px;
+    right: -58px;
+    width: 0;
+    height: 0;
+    border-width: 58px;
+    border-style: solid;
+    border-color: transparent seagreen transparent transparent;
+    z-index: 2;
+  }
+}
+.winnower:hover {
+  animation: run 2s linear infinite;
 }
 
 @keyframes run {
   from {
-    transform: rotate(360deg);
-  }
-  to {
     transform: rotate(0deg);
   }
-}
-.sj {
-  margin-top: 5px;
-  transform: rotate(-46deg);
-  position: absolute;
-  top: 14px;
-  left: -49px;
-  float: left;
-  width: 0;
-  height: 0;
-  z-index: 2;
-  border-width: 50px;
-  border-style: solid;
-}
-.ye {
-  transform: rotate(0deg);
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  float: left;
-  width: 0;
-  height: 0;
-  border-width: 80px;
-  border-style: solid;
-  z-index: 2;
-}
-
-.ye1 {
-  transform: rotate(0deg);
-  position: absolute;
-  left: -80px;
-  top: 78px;
-  float: left;
-  width: 0;
-  height: 0;
-  z-index: 2;
-  border-width: 80px;
-  border-style: solid;
-  border: 80px solid orange;
-}
-
-.re {
-  transform: rotate(-46deg);
-  position: absolute;
-  left: 21px;
-  top: -61px;
-  float: left;
-  z-index: 2;
-  width: 0;
-  height: 0;
-  border-width: 59px;
-  border-style: solid;
-}
-
-.blue {
-  transform: rotate(0deg);
-  position: absolute;
-  left: 80px;
-  top: -79px;
-  float: left;
-  width: 0;
-  height: 0;
-  z-index: 2;
-  border-width: 80px;
-  border-style: solid;
-}
-
-.blue1 {
-  transform: rotate(-44deg);
-  position: absolute;
-  left: 102px;
-  top: 23px;
-  float: left;
-  width: 0;
-  height: 0;
-  z-index: 2;
-  border-width: 58px;
-  border-style: solid;
-  animation: gg 1s linear infinite;
-}
-
-.green {
-  transform: rotate(0deg);
-  position: absolute;
-  left: 80px;
-  top: 80px;
-  z-index: 2;
-  float: left;
-  width: 0;
-  height: 0;
-  border-width: 81px;
-  border-style: solid;
-  z-index: 2;
-}
-
-.green1 {
-  transform: rotate(-45deg);
-  position: absolute;
-  top: 103px;
-  left: 23px;
-  float: left;
-  width: 0;
-  height: 0;
-  border-width: 57px;
-  border-style: solid;
-  z-index: 2;
-}
-
-#mg {
-  background: salmon;
-  width: 15px;
-  height: 300px;
-  border-radius: 8px;
-  position: absolute;
-  top: 220px;
-  left: 680px;
-  z-index: 0;
-}
-#one {
-  width: 162px;
-  transform: rotate(-45deg);
-  height: 162px;
-  line-height: 168px;
-  text-align: center;
-  position: relative;
-  z-index: 3;
-  animation: run 9s linear infinite;
-  cursor: pointer;
-}
-.box {
-  position: relative;
-}
-.text {
-  position: absolute;
-  top: -4px;
-  left: 65px;
-  z-index: 3;
-  color: #fff;
-  font-weight: 500;
-  font-size: 16px;
-}
-.bang {
-  width: 20px;
-  height: 300px;
-  border-radius: 10px;
-  position: absolute;
-  top: 80px;
-  left: 70px;
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

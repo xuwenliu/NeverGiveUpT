@@ -30,6 +30,12 @@ export default new Router({
         import(/* webpackChunkName: "tags" */ "./views/Tags/Index.vue"),
     },
     {
+      path: "/tags/details",
+      name: "tagsDetails",
+      component: () =>
+        import(/* webpackChunkName: "tags" */ "./views/Tags/Details.vue"),
+    },
+    {
       path: "/categories",
       name: "categories",
       component: () =>

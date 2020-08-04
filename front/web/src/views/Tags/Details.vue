@@ -2,12 +2,12 @@
   <transition name="slideInDown">
     <div
       class="categories"
-      :style="{background:`url(${info.categoriesBgImg}) center center no-repeat`,backgroundSize:'cover'}"
+      :style="{background:`url(${info.tagsBgImg}) center center no-repeat`,backgroundSize:'cover'}"
     >
       <div class="content">
-        <mu-paper :z-depth="5" class="box">
+        <mu-paper v-if="isPC" :z-depth="5" class="box">
           <mu-list>
-            <mu-sub-header class="header">分类-技术（20）</mu-sub-header>
+            <mu-sub-header class="header">标签-Vue（20）</mu-sub-header>
             <div v-for="(item,index) in num" :key="index">
               <mu-list-item>
                 <mu-ripple style="width:100%" color="red" :opacity="0.5">
@@ -26,28 +26,63 @@
             <mu-pagination raised :total="50" :current.sync="page" @change="pageChange"></mu-pagination>
           </div>
         </mu-paper>
+
+        <div class="more" v-else :style="{height:moreHeight}">
+          <mu-load-more @refresh="refresh" :refreshing="refreshing" :loading="loading" @load="load">
+            <mu-list>
+              <div v-for="(item,index) in num" :key="index">
+                <mu-list-item>
+                  <mu-ripple style="width:100%" color="rgb(156, 39, 176)" :opacity="0.5">
+                    <mu-list-item-title class="item">
+                      <span class="title">文章标题{{item}}</span>
+                      <span>2020-09-30 12:30:45</span>
+                    </mu-list-item-title>
+                  </mu-ripple>
+                </mu-list-item>
+                <mu-divider />
+              </div>
+            </mu-list>
+          </mu-load-more>
+        </div>
       </div>
     </div>
   </transition>
 </template>
 <script>
-import categoriesBgImg from "@/assets/img/category.jpg";
+import tagsBgImg from "@/assets/img/tags.jpg";
 
 export default {
-  name: "categoriesDetails",
+  name: "tagsDetails",
   data() {
     return {
+      moreHeight: window.innerHeight - 64 + "px",
       page: 1,
-
+      isPC: this.isPC,
       num: 10,
+      refreshing: false,
+      loading: false,
       info: {
-        categoriesBgImg
+        tagsBgImg
       }
     };
   },
   methods: {
     pageChange() {
       setTimeout(() => {
+        this.num += 10;
+      }, 2000);
+    },
+    refresh() {
+      this.refreshing = true;
+      setTimeout(() => {
+        this.refreshing = false;
+        this.num = 10;
+      }, 2000);
+    },
+    load() {
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
         this.num += 10;
       }, 2000);
     }
@@ -99,6 +134,25 @@ export default {
       margin: 20px 0;
       display: flex;
       justify-content: center;
+    }
+  }
+}
+
+.more {
+  width: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  .item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    color: #000;
+    .title {
+      display: inline-block;
+      width: 70%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
   }
 }

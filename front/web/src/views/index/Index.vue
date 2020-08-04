@@ -1,13 +1,15 @@
 <template>
-  <div
-    class="index"
-    :style="{background:`url(${info.homeBgImg}) center center no-repeat`,backgroundSize:'cover'}"
-  >
-    <div class="content">
-      <img :class="{rotate:info.avatarRotate}" :src="info.avatar" alt />
-      <p class="desc">{{info.introduction}}</p>
+  <transition name="slideInRight">
+    <div
+      class="index"
+      :style="{background:`url(${info.homeBgImg}) center center no-repeat`,backgroundSize:'cover'}"
+    >
+      <div class="content">
+        <img :class="{rotate:info.avatarRotate}" :src="info.avatar" alt />
+        <p class="desc">{{info.introduction}}</p>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 <script>
 let timer = 0;

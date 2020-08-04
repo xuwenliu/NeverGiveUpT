@@ -1,33 +1,38 @@
 <template>
-  <div
-    class="tags"
-    :style="{background:`url(${info.tagsBgImg}) center center no-repeat`,backgroundSize:'cover'}"
-  >
-    <div class="content">
-      <div v-if="isPC" class="waves">
-        <i
-          :style="{
+  <transition name="slideInRight">
+    <div
+      class="tags"
+      :style="{background:`url(${info.tagsBgImg}) center center no-repeat`,backgroundSize:'cover'}"
+    >
+      <div class="content">
+        <div v-if="isPC" class="waves">
+          <i
+            :style="{
             background:chip.color,
             '-webkit-animation': `shake 1s ${0.02857 * (index+1)}s infinite`
             }"
-          v-for="(chip,index) in randomArr"
-          :key="index"
-        >{{chip.name}}({{index}})</i>
-      </div>
-      <div v-else class="tags-wap">
-        <mu-chip
-          :style="{
+            v-for="(chip,index) in randomArr"
+            :key="index"
+            @click="goDetail(chip)"
+          >{{chip.name}}({{index}})</i>
+        </div>
+        <div v-else class="tags-wap">
+          <mu-chip
+            :style="{
             '-webkit-animation': `${chip.randomAnimation} 2s ${0.02857 * (index+1)}s infinite`
             }"
-          class="tag"
-          v-for="(chip,index) in randomArr"
-          :key="index"
-          :color="chip.color"
-        >{{chip.name}}({{index}})</mu-chip>
+            class="tag"
+            v-for="(chip,index) in randomArr"
+            :key="index"
+            :color="chip.color"
+            @click="goDetail(chip)"
+          >{{chip.name}}({{index}})</mu-chip>
+        </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
+
 <script>
 import tagsBgImg from "@/assets/img/tags.jpg";
 import { randomColor, randomNum } from "@/utils";
@@ -61,22 +66,21 @@ export default {
           "css",
           "html",
           "jquery",
-          "koa",
-          "Vue",
-          "React",
-          "node.js",
-          "Angular",
-          "Umi",
-          "git",
-          "css",
-          "html",
-          "jquery",
           "koa"
         ]
       }
     };
   },
-  methods: {}
+  methods: {
+    goDetail(item) {
+      this.$router.push({
+        name: "tagsDetails",
+        query: {
+          id: item.name
+        }
+      });
+    }
+  }
 };
 </script>
 <style lang="less" scoped>

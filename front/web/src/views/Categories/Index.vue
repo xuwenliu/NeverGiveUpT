@@ -63,6 +63,8 @@
 </template>
 <script>
 import categoriesBgImg from "@/assets/img/category.jpg";
+import wap_categoriesBgImg from "@/assets/img/wap_category.jpg";
+
 import { randomColor, rgb } from "@/utils";
 export default {
   name: "categories",
@@ -73,7 +75,7 @@ export default {
       randomColor: randomColor(),
       num: 10,
       info: {
-        categoriesBgImg,
+        categoriesBgImg: this.isPC ? categoriesBgImg : wap_categoriesBgImg,
         categories: ["技术", "生活", "照片", "其他"]
         // categories: ["技术", "生活"]
       }
@@ -91,6 +93,7 @@ export default {
     }
   },
   methods: {
+    
     goDetail(item) {
       this.$router.push({
         name: "categoriesDetails",

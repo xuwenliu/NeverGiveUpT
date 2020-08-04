@@ -35,6 +35,8 @@
 
 <script>
 import tagsBgImg from "@/assets/img/tags.jpg";
+import wap_tagsBgImg from "@/assets/img/wap_tags.jpeg";
+
 import { randomColor, randomNum } from "@/utils";
 const arr = ["bounce", "drop", "rotate"];
 
@@ -55,7 +57,7 @@ export default {
     return {
       isPC: this.isPC,
       info: {
-        tagsBgImg,
+        tagsBgImg: this.isPC ? tagsBgImg : wap_tagsBgImg,
         tags: [
           "Vue",
           "React",

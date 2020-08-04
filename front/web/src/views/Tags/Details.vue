@@ -50,6 +50,7 @@
 </template>
 <script>
 import tagsBgImg from "@/assets/img/tags.jpg";
+import wap_tagsBgImg from "@/assets/img/wap_tags.jpeg";
 
 export default {
   name: "tagsDetails",
@@ -62,7 +63,7 @@ export default {
       refreshing: false,
       loading: false,
       info: {
-        tagsBgImg
+        tagsBgImg: this.isPC ? tagsBgImg : wap_tagsBgImg,
       }
     };
   },

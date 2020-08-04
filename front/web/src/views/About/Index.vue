@@ -46,8 +46,8 @@ import about from "@/assets/img/about.jpg";
 import archive from "@/assets/img/archive.jpg";
 import index from "@/assets/img/index.jpg";
 
-import about_1 from "@/assets/img/1.jpg";
-import about_2 from "@/assets/img/3.jpeg";
+import about_1 from "@/assets/img/wap_category.jpg";
+import about_2 from "@/assets/img/wap_tags.jpeg";
 import about_3 from "@/assets/img/wap_index.jpg";
 
 import { randomColor } from "@/utils";

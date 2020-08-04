@@ -16,7 +16,7 @@
         :color="lightIndex === index?'purple':''"
         flat
       >
-        <mu-icon :value="item.icon"></mu-icon>
+        <mu-icon size="16" :value="item.icon"></mu-icon>
         {{item.name}}
       </mu-button>
     </mu-appbar>

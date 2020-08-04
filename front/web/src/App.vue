@@ -2,7 +2,7 @@
   <div id="app">
     <Header></Header>
     <!-- <transition name="slideInRight"> -->
-      <router-view></router-view>
+    <router-view></router-view>
     <!-- </transition> -->
   </div>
 </template>
@@ -12,6 +12,11 @@ import Header from "@/components/Header";
 export default {
   components: {
     Header
+  },
+  data() {
+    return {
+      bubbles: 10
+    };
   }
 };
 </script>
@@ -232,80 +237,81 @@ export default {
 }
 
 @-webkit-keyframes slideOutLeft {
-    0% {
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0)
-    }
+  0% {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
 
-    to {
-        visibility: hidden;
-        -webkit-transform: translate3d(-100%,0,0);
-        transform: translate3d(-100%,0,0)
-    }
+  to {
+    visibility: hidden;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
 }
 
 @keyframes slideOutLeft {
-    0% {
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0)
-    }
+  0% {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
 
-    to {
-        visibility: hidden;
-        -webkit-transform: translate3d(-100%,0,0);
-        transform: translate3d(-100%,0,0)
-    }
+  to {
+    visibility: hidden;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
 }
 
 @-webkit-keyframes slideInDown {
-    0% {
-        -webkit-transform: translate3d(0,-100%,0);
-        transform: translate3d(0,-100%,0);
-        visibility: visible
-    }
+  0% {
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+    visibility: visible;
+  }
 
-    to {
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0)
-    }
+  to {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
 }
 
 @keyframes slideInDown {
-    0% {
-        -webkit-transform: translate3d(0,-100%,0);
-        transform: translate3d(0,-100%,0);
-        visibility: visible
-    }
+  0% {
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+    visibility: visible;
+  }
 
-    to {
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0)
-    }
+  to {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
 }
 
 @-webkit-keyframes slideOutDown {
-    0% {
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0)
-    }
+  0% {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
 
-    to {
-        visibility: hidden;
-        -webkit-transform: translate3d(0,100%,0);
-        transform: translate3d(0,100%,0)
-    }
+  to {
+    visibility: hidden;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
 }
 
 @keyframes slideOutDown {
-    0% {
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0)
-    }
+  0% {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
 
-    to {
-        visibility: hidden;
-        -webkit-transform: translate3d(0,100%,0);
-        transform: translate3d(0,100%,0)
-    }
+  to {
+    visibility: hidden;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
 }
+
 </style>

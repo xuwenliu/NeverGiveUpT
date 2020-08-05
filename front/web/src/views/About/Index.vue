@@ -1,45 +1,39 @@
 <template>
-  <transition name="slideInRight">
-    <div class="about">
-      <mu-carousel
-        hide-indicators
-        hide-controls
-        @change="change"
-        style="position:fixed;height:100%"
-      >
-        <mu-carousel-item v-for="item in info.imgs" :key="item._id">
-          <img :src="item.imgUrl" />
-        </mu-carousel-item>
-      </mu-carousel>
+  <div class="about">
+    <AboutAnimation></AboutAnimation>
+    <!-- <mu-carousel hide-indicators hide-controls @change="change" style="position:fixed;height:100%">
+      <mu-carousel-item v-for="item in info.imgs" :key="item._id">
+        <img :src="item.imgUrl" />
+      </mu-carousel-item>
+    </mu-carousel>-->
 
-      <div class="content">
-        <mu-card class="card" :style="{width: isPC? '100%':'80%'}">
-          <mu-card-header>
-            <mu-paper class="avatar-box" circle :z-depth="5">
-              <img class="avatar" :src="info.avatar" />
-            </mu-paper>
-            <mu-button v-if="info.showResume" :class="{fixed:!isPC}" :color="randomColor">
-              个人简历
-              <mu-icon right value="arrow_forward"></mu-icon>
-            </mu-button>
-          </mu-card-header>
+    <div class="content">
+      <mu-card class="card" :style="{width: isPC? '100%':'80%'}">
+        <mu-card-header>
+          <mu-paper class="avatar-box" circle :z-depth="5">
+            <img class="avatar" :src="info.avatar" />
+          </mu-paper>
+          <mu-button v-if="info.showResume" :class="{fixed:!isPC}" :color="randomColor">
+            个人简历
+            <mu-icon right value="arrow_forward"></mu-icon>
+          </mu-button>
+        </mu-card-header>
 
-          <mu-card-text>{{info.desc}}</mu-card-text>
-          <div class="tags">
-            <mu-chip
-              class="tag"
-              v-for="(chip, index) in randomArr"
-              :key="chip.name"
-              :color="chip.color"
-              @delete="remove(index)"
-              delete
-            >{{chip.name}}</mu-chip>
-            <mu-button color="primary" v-if="randomArr.length === 0" @click="reset">reset</mu-button>
-          </div>
-        </mu-card>
-      </div>
+        <mu-card-text>{{info.desc}}</mu-card-text>
+        <div class="tags">
+          <mu-chip
+            class="tag"
+            v-for="(chip, index) in randomArr"
+            :key="chip.name"
+            :color="chip.color"
+            @delete="remove(index)"
+            delete
+          >{{chip.name}}</mu-chip>
+          <mu-button color="primary" v-if="randomArr.length === 0" @click="reset">reset</mu-button>
+        </div>
+      </mu-card>
     </div>
-  </transition>
+  </div>
 </template>
 <script>
 import about from "@/assets/img/about.jpg";
@@ -49,10 +43,13 @@ import index from "@/assets/img/index.jpg";
 import about_1 from "@/assets/img/wap_category.jpg";
 import about_2 from "@/assets/img/wap_tags.jpeg";
 import about_3 from "@/assets/img/wap_index.jpg";
-
+import AboutAnimation from "@/components/AboutAnimation";
 import { randomColor } from "@/utils";
 export default {
   name: "about",
+  components: {
+    AboutAnimation
+  },
   data() {
     return {
       randomArr: [],
@@ -112,14 +109,14 @@ export default {
 </script>
 <style lang="less" scoped>
 .about {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   .content {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
     justify-content: center;
     align-items: center;

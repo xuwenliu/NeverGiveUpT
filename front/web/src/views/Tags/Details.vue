@@ -1,59 +1,66 @@
 <template>
-  <transition name="slideInDown">
-    <div
-      class="categories"
-      :style="{background:`url(${info.tagsBgImg}) center center no-repeat`,backgroundSize:'cover'}"
-    >
-      <div class="content">
-        <mu-paper v-if="isPC" :z-depth="5" class="box">
+  <div class="categories">
+    <TagsAnimation></TagsAnimation>
+    <!-- :style="{background:`url(${info.tagsBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
+    <div class="content">
+      <mu-paper v-if="isPC" :z-depth="5" class="box">
+        <mu-list>
+          <mu-sub-header class="header">标签-Vue（20）</mu-sub-header>
+          <div v-for="(item,index) in num" :key="index">
+            <mu-list-item>
+              <mu-ripple style="width:100%" color="red" :opacity="0.5">
+                <mu-list-item-title class="item">
+                  <span class="title">文章标题{{item}}</span>
+                  <span>2020-09-30 12:30:45</span>
+                </mu-list-item-title>
+              </mu-ripple>
+            </mu-list-item>
+
+            <mu-divider />
+          </div>
+        </mu-list>
+
+        <div class="pagination">
+          <mu-pagination raised :total="50" :current.sync="page" @change="pageChange"></mu-pagination>
+        </div>
+      </mu-paper>
+
+      <div class="more" v-else :style="{height:moreHeight}">
+        <div class="sub-title">标签-Vue(20)</div>
+
+        <mu-load-more @refresh="refresh" :refreshing="refreshing" :loading="loading" @load="load">
           <mu-list>
-            <mu-sub-header class="header">标签-Vue（20）</mu-sub-header>
             <div v-for="(item,index) in num" :key="index">
               <mu-list-item>
-                <mu-ripple style="width:100%" color="red" :opacity="0.5">
+                <mu-ripple style="width:100%" color="rgb(156, 39, 176)" :opacity="0.5">
                   <mu-list-item-title class="item">
                     <span class="title">文章标题{{item}}</span>
                     <span>2020-09-30 12:30:45</span>
                   </mu-list-item-title>
                 </mu-ripple>
               </mu-list-item>
-
               <mu-divider />
             </div>
           </mu-list>
-
-          <div class="pagination">
-            <mu-pagination raised :total="50" :current.sync="page" @change="pageChange"></mu-pagination>
-          </div>
-        </mu-paper>
-
-        <div class="more" v-else :style="{height:moreHeight}">
-          <mu-load-more @refresh="refresh" :refreshing="refreshing" :loading="loading" @load="load">
-            <mu-list>
-              <div v-for="(item,index) in num" :key="index">
-                <mu-list-item>
-                  <mu-ripple style="width:100%" color="rgb(156, 39, 176)" :opacity="0.5">
-                    <mu-list-item-title class="item">
-                      <span class="title">文章标题{{item}}</span>
-                      <span>2020-09-30 12:30:45</span>
-                    </mu-list-item-title>
-                  </mu-ripple>
-                </mu-list-item>
-                <mu-divider />
-              </div>
-            </mu-list>
-          </mu-load-more>
-        </div>
+        </mu-load-more>
       </div>
+
+      <mu-button v-show="!isPC" @click="$router.go(-1)" class="search-fab" small fab color="#fff">
+        <mu-icon color="#ccc" value="arrow_back"></mu-icon>
+      </mu-button>
     </div>
-  </transition>
+  </div>
 </template>
 <script>
 import tagsBgImg from "@/assets/img/tags.jpg";
 import wap_tagsBgImg from "@/assets/img/wap_tags.jpeg";
+import TagsAnimation from "@/components/TagsAnimation";
 
 export default {
   name: "tagsDetails",
+  components: {
+    TagsAnimation
+  },
   data() {
     return {
       moreHeight: window.innerHeight - 64 + "px",
@@ -63,10 +70,11 @@ export default {
       refreshing: false,
       loading: false,
       info: {
-        tagsBgImg: this.isPC ? tagsBgImg : wap_tagsBgImg,
+        tagsBgImg: this.isPC ? tagsBgImg : wap_tagsBgImg
       }
     };
   },
+  mounted() {},
   methods: {
     pageChange() {
       setTimeout(() => {
@@ -99,6 +107,7 @@ export default {
   bottom: 0;
   width: 100%;
   height: 100%;
+  background: #000;
   .content {
     padding-top: 64px;
     display: flex;
@@ -147,7 +156,7 @@ export default {
     display: flex;
     justify-content: space-between;
     padding: 0 10px;
-    color: #000;
+    color: #ccc;
     .title {
       display: inline-block;
       width: 70%;
@@ -156,5 +165,17 @@ export default {
       white-space: nowrap;
     }
   }
+}
+.sub-title {
+  position: absolute;
+  top: 20px;
+  right: 26px;
+  color: #ccc;
+}
+.search-fab {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 30px;
 }
 </style>

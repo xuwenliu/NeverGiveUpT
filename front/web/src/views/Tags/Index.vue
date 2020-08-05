@@ -1,36 +1,33 @@
 <template>
-  <transition name="slideInRight">
-    <div
-      class="tags"
-      :style="{background:`url(${info.tagsBgImg}) center center no-repeat`,backgroundSize:'cover'}"
-    >
-      <div class="content">
-        <div v-if="isPC" class="waves">
-          <i
-            :style="{
+  <div class="tags">
+    <!-- :style="{background:`url(${info.tagsBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
+    <TagsAnimation></TagsAnimation>
+    <div class="content">
+      <div v-if="isPC" class="waves">
+        <i
+          :style="{
             background:chip.color,
             '-webkit-animation': `shake 1s ${0.02857 * (index+1)}s infinite`
             }"
-            v-for="(chip,index) in randomArr"
-            :key="index"
-            @click="goDetail(chip)"
-          >{{chip.name}}({{index}})</i>
-        </div>
-        <div v-else class="tags-wap">
-          <mu-chip
-            :style="{
+          v-for="(chip,index) in randomArr"
+          :key="index"
+          @click="goDetail(chip)"
+        >{{chip.name}}({{index}})</i>
+      </div>
+      <div v-else class="tags-wap">
+        <mu-chip
+          :style="{
             '-webkit-animation': `${chip.randomAnimation} 2s ${0.02857 * (index+1)}s infinite`
             }"
-            class="tag"
-            v-for="(chip,index) in randomArr"
-            :key="index"
-            :color="chip.color"
-            @click="goDetail(chip)"
-          >{{chip.name}}({{index}})</mu-chip>
-        </div>
+          class="tag"
+          v-for="(chip,index) in randomArr"
+          :key="index"
+          :color="chip.color"
+          @click="goDetail(chip)"
+        >{{chip.name}}({{index}})</mu-chip>
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script>
@@ -38,10 +35,14 @@ import tagsBgImg from "@/assets/img/tags.jpg";
 import wap_tagsBgImg from "@/assets/img/wap_tags.jpeg";
 
 import { randomColor, randomNum } from "@/utils";
+import TagsAnimation from "@/components/TagsAnimation";
 const arr = ["bounce", "drop", "rotate"];
 
 export default {
   name: "tags",
+  components: {
+    TagsAnimation
+  },
   computed: {
     randomArr() {
       return this.info.tags.map(item => {
@@ -73,6 +74,7 @@ export default {
       }
     };
   },
+  mounted() {},
   methods: {
     goDetail(item) {
       this.$router.push({
@@ -94,12 +96,20 @@ export default {
   bottom: 0;
   width: 100%;
   height: 100%;
+  background: #000;
   .content {
     padding-top: 64px;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    right: 0;
   }
 }
 

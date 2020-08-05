@@ -51,5 +51,11 @@ export default new Router({
           /* webpackChunkName: "categories" */ "./views/Categories/Details.vue"
         ),
     },
+    {
+      path: "/archives",
+      name: "archives",
+      component: () =>
+        import(/* webpackChunkName: "archives" */ "./views/Archives/Index.vue"),
+    },
   ],
 });

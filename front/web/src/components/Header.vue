@@ -149,7 +149,7 @@ export default {
 }
 .search-fab {
   position: fixed;
-  right: 30px;
+  right: 10px;
   bottom: 30px;
 }
 .header {

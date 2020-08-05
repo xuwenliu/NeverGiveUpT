@@ -1,73 +1,75 @@
 <template>
-  <transition name="slideInRight">
+  <div class="categories">
+    <!-- :style="{background:`url(${info.categoriesBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
+
+    <CategoriesAnimation></CategoriesAnimation>
     <div
-      class="categories"
-      :style="{background:`url(${info.categoriesBgImg}) center center no-repeat`,backgroundSize:'cover'}"
-    >
-      <div
-        class="content"
-        :style="{
+      class="content"
+      :style="{
         overflow:isPC?'hidden':'auto',
         marginTop:isPC?'100px':0,
         }"
-      >
-        <div class="box" v-for="(item) in randomArr" :key="item.name">
-          <div class="winnower" @click="goDetail(item)">
-            <div class="text">{{item.name}}</div>
-            <div class="one">
-              <div
-                class="ye1"
-                :style="{borderColor:`${item.rgb()} transparent transparent transparent`}"
-              ></div>
-              <div
-                class="ye2"
-                :style="{borderColor:`transparent ${item.rgb()} transparent transparent`}"
-              ></div>
-            </div>
-            <div class="two">
-              <div
-                class="ye1"
-                :style="{borderColor:`${item.rgb()} transparent transparent transparent`}"
-              ></div>
-              <div
-                class="ye2"
-                :style="{borderColor:`transparent ${item.rgb()} transparent transparent`}"
-              ></div>
-            </div>
-            <div class="three">
-              <div
-                class="ye1"
-                :style="{borderColor:`${item.rgb()} transparent transparent transparent`}"
-              ></div>
-              <div
-                class="ye2"
-                :style="{borderColor:`transparent ${item.rgb()} transparent transparent`}"
-              ></div>
-            </div>
-            <div class="four">
-              <div
-                class="ye1"
-                :style="{borderColor:`${item.rgb()} transparent transparent transparent`}"
-              ></div>
-              <div
-                class="ye2"
-                :style="{borderColor:`transparent ${item.rgb()} transparent transparent`}"
-              ></div>
-            </div>
+    >
+      <div class="box" v-for="(item) in randomArr" :key="item.name">
+        <div class="winnower" @click="goDetail(item)">
+          <div class="text">{{item.name}}</div>
+          <div class="one">
+            <div
+              class="ye1"
+              :style="{borderColor:`${item.rgb()} transparent transparent transparent`}"
+            ></div>
+            <div
+              class="ye2"
+              :style="{borderColor:`transparent ${item.rgb()} transparent transparent`}"
+            ></div>
           </div>
-          <div class="bang" :style="{background:item.color}"></div>
+          <div class="two">
+            <div
+              class="ye1"
+              :style="{borderColor:`${item.rgb()} transparent transparent transparent`}"
+            ></div>
+            <div
+              class="ye2"
+              :style="{borderColor:`transparent ${item.rgb()} transparent transparent`}"
+            ></div>
+          </div>
+          <div class="three">
+            <div
+              class="ye1"
+              :style="{borderColor:`${item.rgb()} transparent transparent transparent`}"
+            ></div>
+            <div
+              class="ye2"
+              :style="{borderColor:`transparent ${item.rgb()} transparent transparent`}"
+            ></div>
+          </div>
+          <div class="four">
+            <div
+              class="ye1"
+              :style="{borderColor:`${item.rgb()} transparent transparent transparent`}"
+            ></div>
+            <div
+              class="ye2"
+              :style="{borderColor:`transparent ${item.rgb()} transparent transparent`}"
+            ></div>
+          </div>
         </div>
+        <div class="bang" :style="{background:item.color}"></div>
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 <script>
 import categoriesBgImg from "@/assets/img/category.jpg";
 import wap_categoriesBgImg from "@/assets/img/wap_category.jpg";
 
 import { randomColor, rgb } from "@/utils";
+import CategoriesAnimation from "@/components/CategoriesAnimation";
 export default {
   name: "categories",
+  components: {
+    CategoriesAnimation
+  },
   data() {
     return {
       panel: "",
@@ -81,6 +83,7 @@ export default {
       }
     };
   },
+  mounted() {},
   computed: {
     randomArr() {
       return this.info.categories.map(item => {
@@ -93,7 +96,6 @@ export default {
     }
   },
   methods: {
-    
     goDetail(item) {
       this.$router.push({
         name: "categoriesDetails",

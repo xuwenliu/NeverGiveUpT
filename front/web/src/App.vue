@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <Header></Header>
-    <!-- <transition name="slideInRight"> -->
-    <router-view></router-view>
-    <!-- </transition> -->
+    <transition name="fadeIn">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -196,20 +196,6 @@ export default {
   }
 }
 
-.slideInRight-enter-active {
-  animation: slideInRight 1s;
-}
-.slideInRight-leave-active {
-  animation: slideOutLeft 1s;
-}
-
-.slideInDown-enter-active {
-  animation: slideInDown 1s;
-}
-.slideInDown-leave-active {
-  animation: slideOutDown 1s;
-}
-
 @-webkit-keyframes slideInRight {
   0% {
     -webkit-transform: translate3d(100%, 0, 0);
@@ -314,4 +300,90 @@ export default {
   }
 }
 
+@-webkit-keyframes slideInRight {
+  0% {
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+    visibility: visible;
+  }
+
+  to {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+    visibility: visible;
+  }
+
+  to {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.slideInRight-enter-active {
+  animation: slideInRight 1s;
+}
+.slideInRight-leave-active {
+  animation: slideOutLeft 1s;
+}
+
+.slideInDown-enter-active {
+  animation: slideInDown 1s;
+}
+.slideInDown-leave-active {
+  animation: slideOutDown 1s;
+}
+
+.fadeIn-enter-active {
+  animation: fadeIn 1s;
+}
+.fadeIn-leave-active {
+  animation: fadeOut 1s;
+}
 </style>

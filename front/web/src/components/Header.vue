@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <mu-appbar color="transparent">
+    <mu-appbar :color="$route.name === 'articles' || $route.name === 'articlesDetails'?'#000':'transparent'">
       <mu-button v-show="!isPC" @click="toggleWapMenu(true)" icon slot="left">
         <mu-icon value="menu"></mu-icon>
       </mu-button>NeverGiveUpT

@@ -57,5 +57,11 @@ export default new Router({
       component: () =>
         import(/* webpackChunkName: "archives" */ "./views/Archives/Index.vue"),
     },
+    {
+      path: "/articles",
+      name: "articles",
+      component: () =>
+        import(/* webpackChunkName: "articles" */ "./views/Articles/Index.vue"),
+    },
   ],
 });

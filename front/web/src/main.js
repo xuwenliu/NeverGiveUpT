@@ -26,7 +26,8 @@ import {
   Pagination,
   Divider,
   LoadMore,
-  SubHeader
+  SubHeader,
+  Stepper
 } from "muse-ui";
 import "muse-ui/lib/styles/theme.less";
 import "muse-ui-progress/dist/muse-ui-progress.css";
@@ -58,6 +59,7 @@ Vue.use(Pagination);
 Vue.use(Divider);
 Vue.use(LoadMore);
 Vue.use(SubHeader);
+Vue.use(Stepper);
 
 const isPC = (() => {
   var userAgentInfo = navigator.userAgent;

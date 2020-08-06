@@ -692,3 +692,119 @@ export const about_fullScreenAnimation = (a) => {
     clearInterval(b);
   });
 };
+
+export const archives_fullScreenAnimation = (canvas) => {
+  let ctx = canvas.getContext("2d");
+  let height = void 0,
+    width = void 0,
+    particles = [],
+    outerparticles = [];
+
+  let noofpoints = 200,
+    trashold = 10;
+  let x = void 0,
+    y = void 0,
+    p = void 0,
+    n = void 0,
+    factor = 0,
+    dist = void 0,
+    inc = 0.005,
+    deltaangle = (Math.PI * 2) / noofpoints,
+    r = Math.min(height, width) * 0.5;
+
+  let distance = function distance(x1, y1, x2, y2) {
+    return Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
+  };
+  let mapVal = function mapVal(num, in_min, in_max, out_min, out_max) {
+    return ((num - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
+  };
+  let resize = function resize() {
+    height = window.innerHeight;
+    // ctx.canvas.clientHeight;
+    width = window.innerWidth;
+    // ctx.canvas.clientWidth;
+
+    if (
+      ctx.canvas.clientWidth !== canvas.width ||
+      ctx.canvas.clientHeight !== canvas.height
+    ) {
+      canvas.width = width;
+      canvas.height = height;
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      particles = [];
+      r = ~~(Math.min(canvas.width, canvas.height) * 0.4) - 10;
+      for (let i = deltaangle; i <= Math.PI * 2; i += deltaangle) {
+        x = r * Math.cos(i);
+        y = r * Math.sin(i);
+        particles.push({
+          x: x,
+          y: y,
+        });
+
+        x = r * 5 * Math.cos(i);
+        y = r * 5 * Math.sin(i);
+        outerparticles.push({
+          x: x,
+          y: y,
+        });
+      }
+    }
+  };
+  // let random = function random(min, max, isInt) {
+  //   return ~~(Math.random() * (max - min) + min);
+  // };
+
+  resize();
+
+  let draw = function draw() {
+    ctx.clearRect(-width, -height, width * 2, height * 2);
+    ctx.fillStyle = "#fff";
+    ctx.lineWidth = 0.5;
+
+    // ctx.beginPath();
+    // ctx.arc(0, 0, r, 0, Math.PI*2 ,false);
+    // ctx.closePath();
+    // ctx.stroke();
+
+    for (let i = 0; i < particles.length; i++) {
+      let o = outerparticles[i];
+      p = particles[i];
+      n = particles[~~((i * factor) % noofpoints)];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 0.1, 0, Math.PI * 2, false);
+      ctx.closePath();
+      ctx.fill();
+      dist = ~~distance(p.x, p.y, n.x, n.y);
+      if (dist > 1) {
+        dist = ~~distance(width / 2, height / 2, p.x + n.x / 2, p.y + n.y / 2);
+      }
+      ctx.strokeStyle = "hsl(" + mapVal(dist, 0, r * 2, 0, 360) + ",100%,50%)";
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(n.x, n.y);
+      ctx.stroke();
+      ctx.closePath();
+
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(o.x, o.y);
+      ctx.stroke();
+      ctx.closePath();
+    }
+  };
+
+  let render = function render() {
+    if (factor > trashold || factor < 0) {
+      inc = -inc;
+      factor = Math.abs(factor);
+    }
+
+    resize();
+    draw();
+    factor += inc;
+    requestAnimationFrame(render);
+  };
+
+  requestAnimationFrame(render);
+};
+

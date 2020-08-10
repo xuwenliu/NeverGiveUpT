@@ -3,6 +3,10 @@ import App from "./App.vue";
 
 Vue.config.productionTip = false;
 import router from "./router";
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+// use
+Vue.use(mavonEditor)
 
 import "muse-ui/lib/styles/base.less";
 import {

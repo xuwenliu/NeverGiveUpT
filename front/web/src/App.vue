@@ -21,6 +21,9 @@ export default {
 };
 </script>
 <style lang="less">
+body{
+  background: #000;
+}
 @-webkit-keyframes shake {
   0% {
     height: 50px;

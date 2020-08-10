@@ -1,8 +1,8 @@
 <template>
   <div class="articles">
     <mu-row>
-      <mu-col span="7" offset="1">
-        <mu-card class="card" v-for="item in list" :key="item">
+      <mu-col span="6" offset="2">
+        <mu-card @click="goDetail(item)" class="card" v-for="item in list" :key="item">
           <div class="cover">
             <img class="cover-img" src="../../assets/img/4.jpeg" />
           </div>
@@ -35,6 +35,7 @@
                 <mu-icon left value="loyalty"></mu-icon>React
               </mu-button>
             </mu-card-actions>
+            
           </div>
         </mu-card>
         <div class="pagination">
@@ -42,159 +43,34 @@
         </div>
       </mu-col>
       <mu-col span="2" offset="1">
-        <mu-card class="slider-card">
-          <mu-avatar class="avatar" size="100">
-            <img src="../../assets/img/4.jpeg" alt />
-          </mu-avatar>
-          <div class="title">NeverGiveUpT</div>
-          <div class="desc">专注于WEB和移动前端开发</div>
-          <div class="tags">
-            <mu-chip
-              class="chip"
-              v-for="item in tagsArr"
-              :key="item.name"
-              :color="item.color"
-            >{{item.name}}</mu-chip>
-          </div>
-          <div class="friend-link-box">
-            <p class="friend-link-title">友情链接</p>
-            <div class="friend-links">
-              <mu-button
-                v-for="item in links"
-                :key="item.icon"
-                class="link"
-                fab
-                small
-                :color="item.color"
-              >
-                <mu-icon :value="item.icon"></mu-icon>
-              </mu-button>
-            </div>
-          </div>
-        </mu-card>
-
-        <mu-card class="slider-card card-ad">
-          <div class="ad">广告</div>
-          <mu-carousel style="height:120px" hide-controls @change="change">
-            <mu-carousel-item v-for="item in imgs" :key="item._id">
-              <img style="width:100%" :src="item.imgUrl" />
-            </mu-carousel-item>
-          </mu-carousel>
-        </mu-card>
-
-        <mu-card class="slider-card">
-          <div class="friend-link-box">
-            <p class="friend-link-title">电影推荐</p>
-            <div class="friend-links">
-              <div class="tags">
-                <mu-chip
-                  class="chip"
-                  v-for="item in tagsArr"
-                  :key="item.name"
-                  :color="item.color"
-                >{{item.name}}</mu-chip>
-              </div>
-            </div>
-          </div>
-
-           <div class="friend-link-box">
-            <p class="friend-link-title">电视剧推荐</p>
-            <div class="friend-links">
-              <div class="tags">
-                <mu-chip
-                  class="chip"
-                  v-for="item in tagsArr"
-                  :key="item.name"
-                  :color="item.color"
-                >{{item.name}}</mu-chip>
-              </div>
-            </div>
-          </div>
-
-           <div class="friend-link-box">
-            <p class="friend-link-title">音乐推荐</p>
-            <div class="friend-links">
-              <div class="tags">
-                <mu-chip
-                  class="chip"
-                  v-for="item in tagsArr"
-                  :key="item.name"
-                  :color="item.color"
-                >{{item.name}}</mu-chip>
-              </div>
-            </div>
-          </div>
-
-        </mu-card>
+        <RightConfig></RightConfig>
       </mu-col>
     </mu-row>
   </div>
 </template>
 <script>
-import about from "@/assets/img/about.jpg";
-import archive from "@/assets/img/archive.jpg";
-import index from "@/assets/img/index.jpg";
+import RightConfig from "@/components/RightConfig";
 
-import about_1 from "@/assets/img/wap_category.jpg";
-import about_2 from "@/assets/img/wap_tags.jpeg";
-import about_3 from "@/assets/img/wap_index.jpg";
-import { randomColor } from "@/utils";
 export default {
   name: "articles",
-  computed: {
-    tagsArr() {
-      return this.tags.map(item => {
-        return {
-          name: item,
-          color: randomColor()
-        };
-      });
-    }
+  components: {
+    RightConfig
   },
+
   data() {
     return {
-      list: 10,
-      tags: ["Vue", "4年经验", "自由职业", "文章20篇", "博客访问300次"],
-      imgs: [
-        {
-          _id: "5f1ff64eabe2afa928d57d88",
-          imgUrl: this.isPC ? about : about_1,
-          link: "https://www.baidu.com"
-        },
-        {
-          _id: "5f1ff64eabe2afa928d57d89",
-          imgUrl: this.isPC ? archive : about_2,
-          link: "https://www.jd.com"
-        },
-        {
-          _id: "5f1ff64eabe2afa928d57d8a",
-          imgUrl: this.isPC ? index : about_3,
-          link: ""
-        }
-      ],
-      links: [
-        {
-          color: "primary",
-          icon: ":mudocs-icon-custom-github",
-          url: "https://xuwenliu.github.com"
-        },
-        {
-          color: "pink",
-          icon: "android",
-          url: ""
-        },
-        {
-          color: "indigo",
-          icon: "remove",
-          url: ""
-        },
-        {
-          color: "teal",
-          icon: "add",
-          url: ""
-        }
-      ]
+      page: 1,
+      list: 10
     };
+  },
+  methods: {
+    pageChange() {},
+    goDetail(item) {
+      this.$router.push({
+        name: "articlesDetails",
+        params: { id: item }
+      });
+    }
   }
 };
 </script>

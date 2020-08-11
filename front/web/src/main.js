@@ -3,10 +3,7 @@ import App from "./App.vue";
 
 Vue.config.productionTip = false;
 import router from "./router";
-import mavonEditor from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
-// use
-Vue.use(mavonEditor)
+import 'highlight.js/styles/qtcreator_dark.css';
 
 import "muse-ui/lib/styles/base.less";
 import {
@@ -31,7 +28,8 @@ import {
   Divider,
   LoadMore,
   SubHeader,
-  Stepper
+  Stepper,
+  Tooltip
 } from "muse-ui";
 import "muse-ui/lib/styles/theme.less";
 import "muse-ui-progress/dist/muse-ui-progress.css";
@@ -64,6 +62,7 @@ Vue.use(Divider);
 Vue.use(LoadMore);
 Vue.use(SubHeader);
 Vue.use(Stepper);
+Vue.use(Tooltip);
 
 const isPC = (() => {
   var userAgentInfo = navigator.userAgent;

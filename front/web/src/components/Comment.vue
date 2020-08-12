@@ -4,12 +4,11 @@
     <mu-text-field
       class="comment-input"
       placeholder="说点什么..."
-      underline-color="purple"
       multi-line
       :rows="4"
       full-width
     ></mu-text-field>
-    <mu-button class="comment-btn" color="purple">评论</mu-button>
+    <mu-button class="comment-btn" color="primary">评论</mu-button>
   </div>
 </template>
 <style lang="less" scoped>

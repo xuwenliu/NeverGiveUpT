@@ -3,9 +3,10 @@ import App from "./App.vue";
 
 Vue.config.productionTip = false;
 import router from "./router";
-import 'highlight.js/styles/qtcreator_dark.css';
+import "highlight.js/styles/vs2015.css";
 
 import "muse-ui/lib/styles/base.less";
+
 import {
   Button,
   Select,
@@ -29,15 +30,25 @@ import {
   LoadMore,
   SubHeader,
   Stepper,
-  Tooltip
+  Tooltip,
+  Form,
+  AutoComplete
 } from "muse-ui";
 import "muse-ui/lib/styles/theme.less";
 import "muse-ui-progress/dist/muse-ui-progress.css";
 import NProgress from "muse-ui-progress";
 import Helpers from "muse-ui/lib/Helpers";
 
-// import theme from "muse-ui/lib/theme";
-// theme.use("dark");
+import theme from "muse-ui/lib/theme";
+theme.add('teal', {
+  primary: 'purple',
+  // secondary: '#ff4081',
+  // success: '#4caf50',
+  // warning: '#ffeb3b',
+}, 'light');
+
+theme.use("teal");
+
 Vue.use(NProgress);
 Vue.use(Helpers);
 Vue.use(Button);
@@ -63,6 +74,8 @@ Vue.use(LoadMore);
 Vue.use(SubHeader);
 Vue.use(Stepper);
 Vue.use(Tooltip);
+Vue.use(Form);
+Vue.use(AutoComplete);
 
 const isPC = (() => {
   var userAgentInfo = navigator.userAgent;

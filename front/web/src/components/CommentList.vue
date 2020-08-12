@@ -9,7 +9,7 @@
         </mu-card-header>
         <mu-card-text>{{item}}散落在指尖的阳光，我试着轻轻抓住光影的踪迹，它却在眉宇间投下一片淡淡的阴影。</mu-card-text>
         <mu-card-actions>
-          <mu-button small color="purple">回复</mu-button>
+          <mu-button @click="replay(item)" small color="primary">回复</mu-button>
         </mu-card-actions>
 
         <mu-card class="card sub-card" v-for="item in 5" :key="item">
@@ -26,15 +26,55 @@
             找到阳光与阴影奏出和谐的旋律。我要用一颗敏感赤诚的心迎接每一缕滑过指尖的阳光！
           </mu-card-text>
           <mu-card-actions>
-            <mu-button small color="purple">回复</mu-button>
+            <mu-button small color="primary">回复</mu-button>
           </mu-card-actions>
         </mu-card>
       </mu-card>
     </div>
+
+    <mu-dialog
+      title="评论回复 @昵称"
+      width="600"
+      max-width="80%"
+      :esc-press-close="false"
+      :overlay-close="false"
+      :open.sync="open"
+    >
+      <mu-text-field
+        v-model="replayContent"
+        class="comment-input"
+        placeholder="说点什么..."
+        multi-line
+        :rows="4"
+        full-width
+      ></mu-text-field>
+      <mu-button slot="actions" flat color="primary" @click="close">取消</mu-button>
+      <mu-button slot="actions" flat color="primary" @click="ok">确定</mu-button>
+    </mu-dialog>
   </div>
 </template>
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      open: false,
+      replayContent:'',
+    };
+  },
+  methods: {
+    replay(item) {
+      console.log(item);
+      this.open = true;
+    },
+    close(){
+      this.open = false;
+      this.replayContent = '';
+    },
+    ok(){
+      this.close();
+    }
+  }
+};
 </script>
 <style lang="less" scoped>
 .comment-item {

@@ -12,7 +12,7 @@
         </mu-card>
         <div class="action">
           <mu-tooltip placement="top" content="点赞">
-            <mu-button fab color="purple">
+            <mu-button fab color="primary">
               <mu-icon value="thumb_up"></mu-icon>
             </mu-button>
           </mu-tooltip>
@@ -24,7 +24,7 @@
           </mu-tooltip>
 
           <mu-tooltip placement="top" content="评论">
-            <mu-button fab color="red">
+            <mu-button @click="scrollComment" fab color="red">
               <mu-icon value="chat"></mu-icon>
             </mu-button>
           </mu-tooltip>
@@ -51,7 +51,7 @@
           <div class="article-detail" v-html="articleDetail.content"></div>
 
           <mu-card-actions>
-            <mu-button flat color="purple">
+            <mu-button flat color="primary">
               <mu-icon left value="dns"></mu-icon>技术
             </mu-button>
 
@@ -67,7 +67,7 @@
 
         <div class="action-list">
           <mu-tooltip placement="top" content="点赞">
-            <mu-button fab color="purple">
+            <mu-button fab color="primary">
               <mu-icon value="thumb_up"></mu-icon>
             </mu-button>
           </mu-tooltip>
@@ -79,7 +79,7 @@
           </mu-tooltip>
         </div>
 
-        <mu-card class="card">
+        <mu-card id="comment" class="card">
           <Comment></Comment>
         </mu-card>
 
@@ -100,12 +100,15 @@ import RightConfig from "@/components/RightConfig";
 import markdown from "@/utils/markdown";
 import Comment from "@/components/Comment";
 import CommentList from "@/components/CommentList";
+
+import { animateScroll } from "@/utils";
+
 export default {
   name: "articlesDetails",
   components: {
     RightConfig,
     Comment,
-    CommentList
+    CommentList,
   },
   data() {
     return {
@@ -126,6 +129,12 @@ export default {
       this.articleDetail.content = res.content;
       this.articleDetail.toc = res.toc;
     });
+  },
+  methods: {
+    scrollComment() {
+      let target = document.getElementById("comment");
+      animateScroll(target, 500, -50);
+    }
   }
 };
 </script>

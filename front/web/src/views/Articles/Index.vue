@@ -23,7 +23,7 @@
               找到阳光与阴影奏出和谐的旋律。我要用一颗敏感赤诚的心迎接每一缕滑过指尖的阳光！
             </mu-card-text>
             <mu-card-actions>
-              <mu-button flat color="purple">
+              <mu-button flat color="primary">
                 <mu-icon left value="dns"></mu-icon>技术
               </mu-button>
 
@@ -68,7 +68,7 @@ export default {
     goDetail(item) {
       this.$router.push({
         name: "articlesDetails",
-        params: { id: item }
+        query: { id: item }
       });
     }
   }

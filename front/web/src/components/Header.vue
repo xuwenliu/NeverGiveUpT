@@ -1,12 +1,16 @@
 <template>
   <div class="header">
-    <mu-appbar :color="$route.name === 'articles' || $route.name === 'articlesDetails'?'#000':'transparent'">
+    <mu-appbar
+      :color="$route.name === 'articles' || $route.name === 'articlesDetails'?'#000':'transparent'"
+    >
       <mu-button v-show="!isPC" @click="toggleWapMenu(true)" icon slot="left">
         <mu-icon value="menu"></mu-icon>
       </mu-button>NeverGiveUpT
-      <div v-show="isPC" class="search">
+      <!-- <div v-show="isPC" class="search">
         <mu-text-field :solo="true" icon="search" v-model="keyword" label-float></mu-text-field>
-      </div>
+      </div>-->
+
+      <!-- 菜单 -->
       <mu-button
         v-show="isPC"
         @click="go(item,index)"
@@ -20,53 +24,116 @@
         {{item.name}}
       </mu-button>
     </mu-appbar>
-    <mu-bottom-sheet :open.sync="open">
+
+    <!-- wap-菜单 -->
+    <mu-bottom-sheet :open.sync="openWapMenu">
       <mu-list @item-click="toggleWapMenu(false)">
         <mu-list-item @click="go(item,index)" v-for="(item,index) in menu" :key="item.name" button>
           <mu-list-item-action>
-            <mu-icon :color="lightIndex === index?'purple':''" :value="item.icon"></mu-icon>
+            <mu-icon :color="lightIndex === index?'primary':''" :value="item.icon"></mu-icon>
           </mu-list-item-action>
-          <mu-list-item-title :style="{color:lightIndex === index?'purple':''}">{{item.name}}</mu-list-item-title>
+          <mu-list-item-title :style="{color:lightIndex === index?'primary':''}">{{item.name}}</mu-list-item-title>
         </mu-list-item>
       </mu-list>
     </mu-bottom-sheet>
 
-    <mu-button v-show="!isPC" @click="openDialog=true" class="search-fab" small fab color="purple">
-      <mu-icon value="search"></mu-icon>
-    </mu-button>
+    <!-- 搜索按钮 -->
+    <div class="tool">
+      <div class="tool-row">
+        <mu-slide-right-transition>
+          <mu-button
+            v-show="showToolBtn"
+            @click="openLoginModal=true;showToolBtn=false;"
+            fab
+            color="primary"
+          >登录</mu-button>
+        </mu-slide-right-transition>
+      </div>
+      <div class="tool-row">
+        <mu-slide-right-transition>
+          <mu-button
+            v-show="showToolBtn"
+            @click="openSearchModal=true;showToolBtn=false;"
+            fab
+            color="deepOrange600"
+          >搜索</mu-button>
+        </mu-slide-right-transition>
 
-    <mu-dialog max-width="100%" :open.sync="openDialog">
-      <mu-text-field action-icon="search" v-model="keyword" label-float></mu-text-field>
-      <mu-button slot="actions" flat color="primary" @click="openDialog = false">取消</mu-button>
-      <mu-button slot="actions" flat color="primary" @click="search">搜索</mu-button>
-    </mu-dialog>
+        <mu-button @click="showToolBtn = !showToolBtn" fab color="blue" class="search-fab">
+          <mu-icon value="adb"></mu-icon>
+        </mu-button>
+      </div>
+      <div class="tool-row">
+        <mu-slide-right-transition>
+          <mu-button
+            v-show="showToolBtn"
+            @click="openRegisterModal=true;showToolBtn=false;"
+            fab
+            color="success"
+          >注册</mu-button>
+        </mu-slide-right-transition>
+      </div>
+    </div>
+
+    <RegisterForm :open="openRegisterModal" @toggle="toggleRegisterModal"></RegisterForm>
+    <LoginForm :open="openLoginModal" @toggle="toggleLoginModal"></LoginForm>
+    <SearchForm :open="openSearchModal" @toggle="toggleSearchModal"></SearchForm>
+
+    <mu-slide-bottom-transition>
+      <mu-button class="back-top" v-show="showBackTop" @click="scrollTop" fab color="red">
+        <mu-icon value="arrow_upward"></mu-icon>
+      </mu-button>
+    </mu-slide-bottom-transition>
   </div>
 </template>
 <script>
+import RegisterForm from "@/components/RegisterForm";
+import LoginForm from "@/components/LoginForm";
+import SearchForm from "@/components/SearchForm";
 export default {
   name: "App",
-  components: {},
+  components: {
+    RegisterForm,
+    LoginForm,
+    SearchForm
+  },
   mounted() {
-    let currentName = location.hash.replace("#/", "");
+    // let currentName = location.hash.replace("#/", "");
+    let currentName = location.pathname;
     console.log(currentName);
     this.menu.forEach((item, index) => {
-      if (currentName.indexOf("categories/details") > -1) {
-        currentName = "categories";
+      if (currentName === "/categories/details") {
+        currentName = "/categories";
       }
-      if (currentName.indexOf("tags/details") > -1) {
-        currentName = "tags";
+      if (currentName === "/tags/details") {
+        currentName = "/tags";
       }
-      if (currentName === item.router) {
+      if (currentName === "/articles/details") {
+        currentName = "/articles";
+      }
+      if (currentName === "/" + item.router) {
         this.lightIndex = index;
       }
     });
+
+    window.onscroll = () => {
+      if (document.documentElement.scrollTop + document.body.scrollTop > 100) {
+        this.showBackTop = true;
+      } else {
+        this.showBackTop = false;
+      }
+    };
   },
   data() {
     return {
+      showToolBtn: false,
+      showBackTop: false,
+      openSearchModal: false,
+      openLoginModal: false,
+      openRegisterModal: false,
+      openWapMenu: false,
+
       isPC: this.isPC,
-      open: false,
-      keyword: "",
-      openDialog: false,
       lightIndex: 0,
       menu: [
         {
@@ -112,11 +179,20 @@ export default {
         name: item.router
       });
     },
-    toggleWapMenu(open) {
-      this.open = open;
+    toggleWapMenu(openWapMenu) {
+      this.openWapMenu = openWapMenu;
     },
-    search() {
-      this.openDialog = false;
+    toggleRegisterModal(openRegisterModal) {
+      this.openRegisterModal = openRegisterModal;
+    },
+    toggleLoginModal(openLoginModal) {
+      this.openLoginModal = openLoginModal;
+    },
+    toggleSearchModal(openSearchModal) {
+      this.openSearchModal = openSearchModal;
+    },
+    scrollTop() {
+      document.body.scrollIntoView();
     }
   }
 };
@@ -147,14 +223,28 @@ export default {
     }
   }
 }
-.search-fab {
-  position: fixed;
-  right: 10px;
-  bottom: 30px;
-}
 .header {
   position: fixed;
   z-index: 10;
   width: 100%;
+}
+.tool {
+  position: fixed;
+  right: 0;
+  bottom: 30px;
+  .tool-row {
+    text-align: right;
+    margin-top: 20px;
+    height: 56px;
+    .search-fab {
+      margin-left: 20px;
+      margin-right: -28px;
+    }
+  }
+}
+.back-top {
+  position: fixed;
+  right: 10px;
+  bottom: 30px;
 }
 </style>

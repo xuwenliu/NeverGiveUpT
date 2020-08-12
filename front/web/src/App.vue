@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <Header></Header>
-    <transition name="fadeIn">
+    <!-- <transition name="fadeIn"> -->
       <router-view></router-view>
-    </transition>
+    <!-- </transition> -->
   </div>
 </template>
 

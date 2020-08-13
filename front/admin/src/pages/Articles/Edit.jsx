@@ -121,10 +121,10 @@ const ArticlesEdit = (props) => {
         message.success(
           publishStatus === 1
             ? intl.formatMessage({
-                id: 'common.publish_success',
+                id: 'articles.publish_success',
               })
             : intl.formatMessage({
-                id: 'common.save_draft_success',
+                id: 'articles.save_draft_success',
               }),
         );
       } else {

@@ -2,10 +2,8 @@
   <div>
     <IndexAnimation></IndexAnimation>
     <div class="index">
-      <!-- :style="{background:`url(${info.homeBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
       <div class="content">
-        <!-- <img :class="{rotate:info.avatarRotate}" :src="info.avatar" alt /> -->
-        <p class="desc">{{info.introduction}}</p>
+        <p>{{info.introduction}}</p>
       </div>
     </div>
   </div>
@@ -13,8 +11,6 @@
 <script>
 let timer = 0;
 let i = 0;
-import wap_index from "@/assets/img/wap_index.jpg";
-import index from "@/assets/img/index.jpg";
 import IndexAnimation from "@/components/IndexAnimation";
 export default {
   name: "index",
@@ -23,27 +19,30 @@ export default {
   },
   data() {
     return {
-      height: window.innerHeight,
-      info: {
-        homeBgImg: this.isPC ? index : wap_index,
-        avatar: "https://xuwenliu.github.io/img/avatar.jpg",
-        avatarRotate: true,
-        introductionTarget: "There is a kind of call to eat together.",
-        introduction: "",
-        effects: false
-      }
+      info: {}
     };
   },
   mounted() {
-    this.$progress.start();
-    if (this.info.effects) {
-      this.typing();
-    } else {
-      this.info.introduction = this.info.introductionTarget;
-    }
-    this.$progress.done();
+    this.getInfo();
   },
   methods: {
+    async getInfo() {
+      this.$progress.start();
+      const res = await this.$axios.get("/home");
+
+      if (res.data) {
+        this.info = {
+          ...res.data,
+          introductionTarget: res.data.introduction
+        };
+        this.$progress.done();
+        if (this.info.effects) {
+          this.typing();
+        } else {
+          this.info.introduction = this.info.introductionTarget;
+        }
+      }
+    },
     typing() {
       if (i <= this.info.introductionTarget.length) {
         this.info.introduction =
@@ -75,26 +74,6 @@ export default {
     font-size: 18px;
     color: #fff;
     font-weight: 500;
-    img {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
-    }
-    img.rotate {
-      -webkit-animation: rotate 3s linear infinite;
-      animation: rotate 3s linear infinite;
-    }
-  }
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-    transition: all 3s;
   }
 }
 </style>

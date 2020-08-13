@@ -10,9 +10,12 @@
         marginTop:isPC?'100px':0,
         }"
     >
-      <div class="box" v-for="(item) in randomArr" :key="item.name">
+      <div class="box" v-for="(item) in categories" :key="item.name">
         <div class="winnower" @click="goDetail(item)">
-          <div class="text">{{item.name}}</div>
+          <div class="text">
+            <span>{{item.name}}</span>
+            <span>({{item.articleNum}})</span>
+          </div>
           <div class="one">
             <div
               class="ye1"
@@ -60,9 +63,6 @@
   </div>
 </template>
 <script>
-import categoriesBgImg from "@/assets/img/category.jpg";
-import wap_categoriesBgImg from "@/assets/img/wap_category.jpg";
-
 import { randomColor, rgb } from "@/utils";
 import CategoriesAnimation from "@/components/CategoriesAnimation";
 export default {
@@ -72,35 +72,35 @@ export default {
   },
   data() {
     return {
-      panel: "",
-      page: 1,
       randomColor: randomColor(),
-      num: 10,
-      info: {
-        categoriesBgImg: this.isPC ? categoriesBgImg : wap_categoriesBgImg,
-        categories: ["技术", "生活", "照片", "其他"]
-        // categories: ["技术", "生活"]
-      }
+      categories: []
     };
   },
-  mounted() {},
-  computed: {
-    randomArr() {
-      return this.info.categories.map(item => {
-        return {
-          name: item,
-          color: randomColor(),
-          rgb
-        };
-      });
-    }
+  mounted() {
+    this.getInfo();
   },
   methods: {
+    async getInfo() {
+      this.$progress.start();
+      const res = await this.$axios.get("/categories");
+      if (res.data) {
+        this.categories = res.data.list
+          ? res.data.list.map(item => {
+              return {
+                ...item,
+                color: randomColor(),
+                rgb
+              };
+            })
+          : [];
+        this.$progress.done();
+      }
+    },
     goDetail(item) {
       this.$router.push({
         name: "categoriesDetails",
         query: {
-          id: item.name
+          id: item._id
         }
       });
     }
@@ -159,12 +159,14 @@ export default {
     font-weight: 500;
     font-size: 16px;
     z-index: 3;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     background: #fff;
     border-radius: 50%;
     text-align: center;
-    line-height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2),
       0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12);
   }

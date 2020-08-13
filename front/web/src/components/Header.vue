@@ -3,43 +3,54 @@
     <mu-appbar
       :color="$route.name === 'articles' || $route.name === 'articlesDetails'?'#000':'transparent'"
     >
+      <!-- 菜单图标 -->
       <mu-button v-show="!isPC" @click="toggleWapMenu(true)" icon slot="left">
         <mu-icon value="menu"></mu-icon>
-      </mu-button>NeverGiveUpT
-      <!-- <div v-show="isPC" class="search">
-        <mu-text-field :solo="true" icon="search" v-model="keyword" label-float></mu-text-field>
-      </div>-->
+      </mu-button>
+
+      <!-- 头像 -->
+      <mu-avatar v-if="info.logo" slot="left" style="margin-left:20px" :size="50">
+        <img :src="info.logo" />
+      </mu-avatar>
+
+      <!-- title -->
+      <span v-if="info.title">{{info.title}}</span>
 
       <!-- 菜单 -->
       <mu-button
         v-show="isPC"
         @click="go(item,index)"
         slot="right"
-        v-for="(item,index) in menu"
-        :key="item.name"
+        v-for="(item,index) in info.menu"
+        :key="item.menuName"
         :color="lightIndex === index?'purple':''"
         flat
       >
         <mu-icon size="16" :value="item.icon"></mu-icon>
-        {{item.name}}
+        {{item.menuName}}
       </mu-button>
     </mu-appbar>
 
     <!-- wap-菜单 -->
     <mu-bottom-sheet :open.sync="openWapMenu">
       <mu-list @item-click="toggleWapMenu(false)">
-        <mu-list-item @click="go(item,index)" v-for="(item,index) in menu" :key="item.name" button>
+        <mu-list-item
+          @click="go(item,index)"
+          v-for="(item,index) in info.menu"
+          :key="item.menuName"
+          button
+        >
           <mu-list-item-action>
-            <mu-icon :color="lightIndex === index?'primary':''" :value="item.icon"></mu-icon>
+            <mu-icon :color="lightIndex === index?'purple':''" :value="item.icon"></mu-icon>
           </mu-list-item-action>
-          <mu-list-item-title :style="{color:lightIndex === index?'primary':''}">{{item.name}}</mu-list-item-title>
+          <mu-list-item-title :style="{color:lightIndex === index?'purple':''}">{{item.menuName}}</mu-list-item-title>
         </mu-list-item>
       </mu-list>
     </mu-bottom-sheet>
 
     <!-- 搜索按钮 -->
-    <div class="tool">
-      <div class="tool-row">
+    <div class="tool" v-if="isShowAction">
+      <div v-if="info.login" class="tool-row">
         <mu-slide-right-transition>
           <mu-button
             v-show="showToolBtn"
@@ -52,7 +63,7 @@
       <div class="tool-row">
         <mu-slide-right-transition>
           <mu-button
-            v-show="showToolBtn"
+            v-show="showToolBtn && info.openSearch"
             @click="openSearchModal=true;showToolBtn=false;"
             fab
             color="deepOrange600"
@@ -63,7 +74,7 @@
           <mu-icon value="adb"></mu-icon>
         </mu-button>
       </div>
-      <div class="tool-row">
+      <div v-if="info.register" class="tool-row">
         <mu-slide-right-transition>
           <mu-button
             v-show="showToolBtn"
@@ -90,6 +101,38 @@
 import RegisterForm from "@/components/RegisterForm";
 import LoginForm from "@/components/LoginForm";
 import SearchForm from "@/components/SearchForm";
+const menus = [
+  {
+    name: "首页",
+    router: "index",
+    icon: "home"
+  },
+  {
+    name: "文章",
+    router: "articles",
+    icon: "note_add"
+  },
+  {
+    name: "归档",
+    router: "archives",
+    icon: "drafts"
+  },
+  {
+    name: "分类",
+    router: "categories",
+    icon: "dns"
+  },
+  {
+    name: "标签",
+    router: "tags",
+    icon: "loyalty"
+  },
+  {
+    name: "关于",
+    router: "about",
+    icon: "perm_identity"
+  }
+];
 export default {
   name: "App",
   components: {
@@ -98,23 +141,7 @@ export default {
     SearchForm
   },
   mounted() {
-    // let currentName = location.hash.replace("#/", "");
-    let currentName = location.pathname;
-    console.log(currentName);
-    this.menu.forEach((item, index) => {
-      if (currentName === "/categories/details") {
-        currentName = "/categories";
-      }
-      if (currentName === "/tags/details") {
-        currentName = "/tags";
-      }
-      if (currentName === "/articles/details") {
-        currentName = "/articles";
-      }
-      if (currentName === "/" + item.router) {
-        this.lightIndex = index;
-      }
-    });
+    this.getInfo();
 
     window.onscroll = () => {
       if (document.documentElement.scrollTop + document.body.scrollTop > 100) {
@@ -133,43 +160,52 @@ export default {
       openRegisterModal: false,
       openWapMenu: false,
 
+      isShowAction: true,
+
       isPC: this.isPC,
       lightIndex: 0,
-      menu: [
-        {
-          name: "首页",
-          router: "index",
-          icon: "home"
-        },
-        {
-          name: "文章",
-          router: "articles",
-          icon: "note_add"
-        },
-        {
-          name: "归档",
-          router: "archives",
-          icon: "drafts"
-        },
-        {
-          name: "分类",
-          router: "categories",
-          icon: "dns"
-        },
-        {
-          name: "标签",
-          router: "tags",
-          icon: "loyalty"
-        },
-        {
-          name: "关于",
-          router: "about",
-          icon: "perm_identity"
-        }
-      ]
+      info: {}
     };
   },
   methods: {
+    async getInfo() {
+      const res = await this.$axios.get("/header");
+      if (res.data) {
+        this.info = res.data.header;
+        this.info.menu.map(item => {
+          menus.forEach(sub => {
+            if (item.router === sub.router) {
+              item.icon = sub.icon;
+            }
+          });
+          return item;
+        });
+        this.isShowAction = !(
+          !this.info.openSearch &&
+          !this.info.register &&
+          !this.info.login
+        );
+        this.dealwithRouter(this.info.menu);
+      }
+    },
+    dealwithRouter(menuArr) {
+      // let currentName = location.hash.replace("#/", "");
+      let currentName = location.pathname;
+      menuArr.forEach((item, index) => {
+        if (currentName === "/categories/details") {
+          currentName = "/categories";
+        }
+        if (currentName === "/tags/details") {
+          currentName = "/tags";
+        }
+        if (currentName === "/articles/details") {
+          currentName = "/articles";
+        }
+        if (currentName === "/" + item.router) {
+          this.lightIndex = index;
+        }
+      });
+    },
     go(item, index) {
       if (this.$route.name === item.router) {
         return;
@@ -231,7 +267,7 @@ export default {
 .tool {
   position: fixed;
   right: 0;
-  bottom: 30px;
+  bottom: 100px;
   .tool-row {
     text-align: right;
     margin-top: 20px;

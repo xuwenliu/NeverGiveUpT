@@ -5,6 +5,48 @@ class ArticlesService extends Service {
     super(ctx);
   }
 
+  // 更新分类下的文章数量
+  async updateCategoriesArticleNum() {
+    const { ctx } = this;
+    const categories = await ctx.model.Categories.find(); // 查出所有分类
+    if (categories && categories.length > 0) {
+      categories.forEach(async (item) => {
+        const articleNum = await ctx.model.Articles.find({
+          categories: item.name,
+        }).countDocuments();
+        await ctx.model.Categories.update(
+          {
+            name: item.name,
+          },
+          {
+            articleNum,
+          }
+        );
+      });
+    }
+  }
+
+  // 更新标签下的文章数量
+  async updateTagsArticleNum() {
+    const { ctx } = this;
+    const tags = await ctx.model.Tags.find(); // 查出所有标签
+    if (tags && tags.length > 0) {
+      tags.forEach(async (item) => {
+        const articleNum = await ctx.model.Articles.find({
+          tags: { $elemMatch: { $eq: item.name } },
+        }).countDocuments();
+        await ctx.model.Tags.update(
+          {
+            name: item.name,
+          },
+          {
+            articleNum,
+          }
+        );
+      });
+    }
+  }
+
   async index(params) {
     const { ctx } = this;
     const page = params.page * 1;
@@ -87,6 +129,10 @@ class ArticlesService extends Service {
       createTime: ctx.helper.moment().unix(),
     };
     const res = await ctx.model.Articles.create(data);
+
+    await this.updateCategoriesArticleNum();
+    await this.updateTagsArticleNum();
+
     return {
       msg: "文章添加成功",
       data: res,
@@ -109,6 +155,9 @@ class ArticlesService extends Service {
     await ctx.model.Articles.deleteOne({
       _id: id,
     });
+    await this.updateCategoriesArticleNum();
+    await this.updateTagsArticleNum();
+
     return {
       msg: "文章删除成功",
     };
@@ -139,6 +188,10 @@ class ArticlesService extends Service {
       },
       updateData
     );
+
+    await this.updateCategoriesArticleNum();
+    await this.updateTagsArticleNum();
+
     return {
       msg: "文章修改成功",
     };

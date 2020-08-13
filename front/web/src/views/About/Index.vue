@@ -23,26 +23,26 @@
         <div class="tags">
           <mu-chip
             class="tag"
-            v-for="(chip, index) in randomArr"
-            :key="chip.name"
-            :color="chip.color"
+            v-for="(item, index) in info.tags"
+            :key="item.name"
+            :color="item.color"
             @delete="remove(index)"
             delete
-          >{{chip.name}}</mu-chip>
-          <mu-button color="primary" v-if="randomArr.length === 0" @click="reset">reset</mu-button>
+          >{{item.name}}</mu-chip>
+          <mu-button color="primary" v-if="info.tags && info.tags.length === 0" @click="reset">reset</mu-button>
         </div>
       </mu-card>
     </div>
   </div>
 </template>
 <script>
-import about from "@/assets/img/about.jpg";
-import archive from "@/assets/img/archive.jpg";
-import index from "@/assets/img/index.jpg";
+// import about from "@/assets/img/about.jpg";
+// import archive from "@/assets/img/archive.jpg";
+// import index from "@/assets/img/index.jpg";
 
-import about_1 from "@/assets/img/wap_category.jpg";
-import about_2 from "@/assets/img/wap_tags.jpeg";
-import about_3 from "@/assets/img/wap_index.jpg";
+// import about_1 from "@/assets/img/wap_category.jpg";
+// import about_2 from "@/assets/img/wap_tags.jpeg";
+// import about_3 from "@/assets/img/wap_index.jpg";
 import AboutAnimation from "@/components/AboutAnimation";
 import { randomColor } from "@/utils";
 export default {
@@ -52,57 +52,65 @@ export default {
   },
   data() {
     return {
-      randomArr: [],
       randomColor: randomColor(),
       info: {
-        avatar: "https://xuwenliu.github.io/img/avatar.jpg",
-        aboutBgImg: about,
-        tags: ["Vue", "React", "node.js", "Angular", "Umi"],
-        showResume: true,
-        desc:
-          "    50元跟着胖哥学一年，掌握程序的学习方法。 也许你刚步入IT\n行业，也许你遇到了成长瓶颈，也许你不知道该学习什么知识，\n也许你不会融入团队，也许...........有些时候你陷入彷徨。 你需\n要一个强力的队友，你需要一个资深老手，你需要一个随时可\n以帮助你的人，你更需要一个陪你加速前行的。 我在这个行业\n走了12年，从后端、前端到移动端都从事过。",
-        imgs: [
-          {
-            _id: "5f1ff64eabe2afa928d57d88",
-            imgUrl: this.isPC ? about : about_1,
-            link: "https://www.baidu.com"
-          },
-          {
-            _id: "5f1ff64eabe2afa928d57d89",
-            imgUrl: this.isPC ? archive : about_2,
-            link: "https://www.jd.com"
-          },
-          {
-            _id: "5f1ff64eabe2afa928d57d8a",
-            imgUrl: this.isPC ? index : about_3,
-            link: ""
-          }
-        ]
+        // avatar: "https://xuwenliu.github.io/img/avatar.jpg",
+        // aboutBgImg: about,
+        // tags: ["Vue", "React", "node.js", "Angular", "Umi"],
+        // showResume: true,
+        // desc:
+        //   "    50元跟着胖哥学一年，掌握程序的学习方法。 也许你刚步入IT\n行业，也许你遇到了成长瓶颈，也许你不知道该学习什么知识，\n也许你不会融入团队，也许...........有些时候你陷入彷徨。 你需\n要一个强力的队友，你需要一个资深老手，你需要一个随时可\n以帮助你的人，你更需要一个陪你加速前行的。 我在这个行业\n走了12年，从后端、前端到移动端都从事过。",
+        // imgs: [
+        //   {
+        //     _id: "5f1ff64eabe2afa928d57d88",
+        //     imgUrl: this.isPC ? about : about_1,
+        //     link: "https://www.baidu.com"
+        //   },
+        //   {
+        //     _id: "5f1ff64eabe2afa928d57d89",
+        //     imgUrl: this.isPC ? archive : about_2,
+        //     link: "https://www.jd.com"
+        //   },
+        //   {
+        //     _id: "5f1ff64eabe2afa928d57d8a",
+        //     imgUrl: this.isPC ? index : about_3,
+        //     link: ""
+        //   }
+        // ]
       }
     };
   },
-  created() {
-    this.$progress.start();
+  mounted() {
     this.createdBalls();
+    this.getInfo();
   },
+
   methods: {
+    async getInfo() {
+      this.$progress.start();
+      const res = await this.$axios.get("/about");
+      if (res.data) {
+        this.info = res.data;
+        this.info.tags = this.info.tags.map(item => {
+          return {
+            name: item,
+            color: randomColor()
+          };
+        });
+        this.$progress.done();
+      }
+    },
     createdBalls() {
       this.randomColor = randomColor();
-      this.randomArr = this.info.tags.map(item => {
-        return {
-          name: item,
-          color: randomColor()
-        };
-      });
     },
     change() {
       this.createdBalls();
     },
     remove(index) {
-      this.randomArr.splice(index, 1);
+      this.info.tags.splice(index, 1);
     },
     reset() {
-      this.createdBalls();
+      this.getInfo();
     }
   }
 };

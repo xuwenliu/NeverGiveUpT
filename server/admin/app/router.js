@@ -7,6 +7,8 @@ module.exports = (app) => {
     controller,
     jwt,
   } = app;
+
+  // 后台接口
   const baseRouter = app.config.baseRouter; // /api/v1
   router.post(baseRouter + "/admin/login", controller.admin.adminLogin); // 管理员登录
   router.post(baseRouter + "/upload", jwt, controller.utils.uploadFiles); //上传文件到七牛云
@@ -31,5 +33,19 @@ module.exports = (app) => {
   router.resources("config", baseRouter + "/config/right/introduction", jwt, controller.config.right.introduction); // 右侧配置-个人简介
   router.resources("config", baseRouter + "/config/right/ad", jwt, controller.config.right.ad); // 右侧配置-广告设置
   router.resources("config", baseRouter + "/config/right/recommend", jwt, controller.config.right.recommend); // 右侧配置-推荐设置
+
+  // 前台接口
+  const webRouter = baseRouter + '/web';
+  router.get(webRouter + "/home", controller.web.home.index); //首页信息获取
+  router.get(webRouter + "/header", controller.web.header.index); //导航栏信息获取
+
+  router.get(webRouter + "/categories", controller.web.categories.index); //分类信息获取
+  router.get(webRouter + "/categories/details", controller.web.categories.details); //分类下的文章列表信息获取
+
+  router.get(webRouter + "/tags", controller.web.tags.index); //标签信息获取
+  router.get(webRouter + "/tags/details", controller.web.tags.details); //标签下的文章列表信息获取
+
+  router.get(webRouter + "/about", controller.web.about.index); //关于信息获取
+
 
 };

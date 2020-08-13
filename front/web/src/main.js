@@ -32,25 +32,41 @@ import {
   Stepper,
   Tooltip,
   Form,
-  AutoComplete
+  AutoComplete,
+  Snackbar
 } from "muse-ui";
 import "muse-ui/lib/styles/theme.less";
 import "muse-ui-progress/dist/muse-ui-progress.css";
 import NProgress from "muse-ui-progress";
 import Helpers from "muse-ui/lib/Helpers";
+import Toast from "muse-ui-toast";
 
 import theme from "muse-ui/lib/theme";
-theme.add('teal', {
-  primary: 'purple',
-  // secondary: '#ff4081',
-  // success: '#4caf50',
-  // warning: '#ffeb3b',
-}, 'light');
+theme.add(
+  "teal",
+  {
+    primary: "purple",
+    // secondary: '#ff4081',
+    // success: '#4caf50',
+    // warning: '#ffeb3b',
+  },
+  "light"
+);
 
 theme.use("teal");
 
 Vue.use(NProgress);
 Vue.use(Helpers);
+Vue.use(Toast, {
+  position: "top", // 弹出的位置
+  time: 2000, // 显示的时长
+  closeIcon: "close", // 关闭的图标
+  close: true, // 是否显示关闭按钮
+  successIcon: "check_circle", // 成功信息图标
+  infoIcon: "info", // 信息信息图标
+  warningIcon: "priority_high", // 提醒信息图标
+  errorIcon: "warning", // 错误信息图标
+});
 Vue.use(Button);
 Vue.use(Select);
 Vue.use(AppBar);
@@ -76,6 +92,7 @@ Vue.use(Stepper);
 Vue.use(Tooltip);
 Vue.use(Form);
 Vue.use(AutoComplete);
+Vue.use(Snackbar);
 
 const isPC = (() => {
   var userAgentInfo = navigator.userAgent;
@@ -98,6 +115,17 @@ const isPC = (() => {
   return flag;
 })();
 Vue.prototype.isPC = isPC;
+
+import axios from "@/utils/axios";
+Vue.prototype.$axios = axios;
+
+
+//过滤器
+import * as filters from './filter';
+Object.keys(filters).forEach(k => Vue.filter(k, filters[k])) //注册过滤器
+Vue.prototype.filterDate = filters.filterDate; //时间过滤方法
+
+
 new Vue({
   router,
   render: (h) => h(App),

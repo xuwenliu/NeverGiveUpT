@@ -6,34 +6,31 @@
       <div v-if="isPC" class="waves">
         <i
           :style="{
-            background:chip.color,
+            background:item.color,
             '-webkit-animation': `shake 1s ${0.02857 * (index+1)}s infinite`
             }"
-          v-for="(chip,index) in randomArr"
+          v-for="(item,index) in tags"
           :key="index"
-          @click="goDetail(chip)"
-        >{{chip.name}}({{index}})</i>
+          @click="goDetail(item)"
+        >{{item.name}}({{item.articleNum}})</i>
       </div>
       <div v-else class="tags-wap">
         <mu-chip
           :style="{
-            '-webkit-animation': `${chip.randomAnimation} 2s ${0.02857 * (index+1)}s infinite`
+            '-webkit-animation': `${item.randomAnimation} 2s ${0.02857 * (index+1)}s infinite`
             }"
           class="tag"
-          v-for="(chip,index) in randomArr"
+          v-for="(item,index) in tags"
           :key="index"
-          :color="chip.color"
-          @click="goDetail(chip)"
-        >{{chip.name}}({{index}})</mu-chip>
+          :color="item.color"
+          @click="goDetail(item)"
+        >{{item.name}}({{item.articleNum}})</mu-chip>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import tagsBgImg from "@/assets/img/tags.jpg";
-import wap_tagsBgImg from "@/assets/img/wap_tags.jpeg";
-
 import { randomColor, randomNum } from "@/utils";
 import TagsAnimation from "@/components/TagsAnimation";
 const arr = ["bounce", "drop", "rotate"];
@@ -43,44 +40,37 @@ export default {
   components: {
     TagsAnimation
   },
-  computed: {
-    randomArr() {
-      return this.info.tags.map(item => {
-        return {
-          name: item,
-          color: randomColor(),
-          randomAnimation: arr[randomNum(0, 3)]
-        };
-      });
-    }
-  },
   data() {
     return {
       isPC: this.isPC,
-      info: {
-        tagsBgImg: this.isPC ? tagsBgImg : wap_tagsBgImg,
-        tags: [
-          "Vue",
-          "React",
-          "node.js",
-          "Angular",
-          "Umi",
-          "git",
-          "css",
-          "html",
-          "jquery",
-          "koa"
-        ]
-      }
+      tags: []
     };
   },
-  mounted() {},
+  mounted() {
+    this.getInfo();
+  },
   methods: {
+    async getInfo() {
+      this.$progress.start();
+      const res = await this.$axios.get("/tags");
+      if (res.data) {
+        this.tags = res.data.list
+          ? res.data.list.map(item => {
+              return {
+                ...item,
+                color: randomColor(),
+                randomAnimation: arr[randomNum(0, 3)]
+              };
+            })
+          : [];
+        this.$progress.done();
+      }
+    },
     goDetail(item) {
       this.$router.push({
         name: "tagsDetails",
         query: {
-          id: item.name
+          id: item._id
         }
       });
     }

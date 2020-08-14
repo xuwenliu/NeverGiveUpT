@@ -46,6 +46,13 @@ module.exports = (app) => {
   router.get(webRouter + "/tags/details", controller.web.tags.details); //标签下的文章列表信息获取
 
   router.get(webRouter + "/about", controller.web.about.index); //关于信息获取
+  router.get(webRouter + "/archives", controller.web.archives.index); //归档信息获取
+
+  router.get(webRouter + "/articles", controller.web.articles.index); //文章列表获取
+  router.get(webRouter + "/articles/details", controller.web.articles.details); //文章详情获取
+
+  router.get(webRouter + "/rightConfig", controller.web.rightConfig.index); //右侧广告，推荐获取
 
 
+  
 };

@@ -30,7 +30,7 @@ module.exports = {
     port: 8090,
     proxy: {
       "/api/v1/web": {
-        target: "http://127.0.0.1:7001",
+        target: "http://127.0.0.1:7002",
         ws: false,
         changeOrigin: true, //是否跨域
       },

@@ -33,7 +33,7 @@ import {
   Tooltip,
   Form,
   AutoComplete,
-  Snackbar
+  Snackbar,
 } from "muse-ui";
 import "muse-ui/lib/styles/theme.less";
 import "muse-ui-progress/dist/muse-ui-progress.css";
@@ -54,6 +54,17 @@ theme.add(
 );
 
 theme.use("teal");
+
+import VueLazyload from "vue-lazyload";
+import loadingImg from "./assets/img/loading.gif";
+import errorImg from "./assets/img/index.jpg";
+
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  error: errorImg,
+  loading: loadingImg,
+  attempt: 1,
+});
 
 Vue.use(NProgress);
 Vue.use(Helpers);
@@ -119,12 +130,10 @@ Vue.prototype.isPC = isPC;
 import axios from "@/utils/axios";
 Vue.prototype.$axios = axios;
 
-
 //过滤器
-import * as filters from './filter';
-Object.keys(filters).forEach(k => Vue.filter(k, filters[k])) //注册过滤器
+import * as filters from "./filter";
+Object.keys(filters).forEach((k) => Vue.filter(k, filters[k])); //注册过滤器
 Vue.prototype.filterDate = filters.filterDate; //时间过滤方法
-
 
 new Vue({
   router,

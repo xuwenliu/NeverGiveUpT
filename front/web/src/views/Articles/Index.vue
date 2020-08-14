@@ -1,74 +1,95 @@
 <template>
   <div class="articles">
+    <Header></Header>
     <mu-row>
       <mu-col span="6" offset="2">
-        <mu-card @click="goDetail(item)" class="card" v-for="item in list" :key="item">
+        <mu-card @click="goDetail(item)" class="card" v-for="item in info.list" :key="item._id">
           <div class="cover">
-            <img class="cover-img" src="../../assets/img/4.jpeg" />
+            <img class="cover-img" v-lazy="item.cover" />
           </div>
-          <div>
-            <div
-              class="title"
-            >散落在指尖的阳光，我试着轻轻抓住光影的踪迹，它却在眉宇间投下一片淡淡的阴影。散落在指尖的阳光，我试着轻轻抓住光影的踪迹，它却在眉宇间投下一片淡淡的阴影。</div>
+          <div class="content">
+            <div class="title">{{item.title}}</div>
             <mu-card-actions class="sub-title">
-              <mu-button flat color="success">查看(20)</mu-button>
-              <mu-button flat color="primary">评论(20)</mu-button>
-              <mu-button flat color="red">点赞(20)</mu-button>
-              <mu-button flat color="#9e9e9e">2020-8-25 12:00:00</mu-button>
+              <mu-button flat color="success">查看({{item.views}})</mu-button>
+              <mu-button flat color="primary">评论({{item.comment}})</mu-button>
+              <mu-button flat color="red">点赞({{item.like}})</mu-button>
+              <mu-button flat color="#9e9e9e">{{item.createTime | filterDate}}</mu-button>
             </mu-card-actions>
-            <mu-card-text class="text">
-              文章简介：散落在指尖的阳光，我试着轻轻抓住光影的踪迹，它却在眉宇间投下一片淡淡的阴影。
-              调皮的阳光掀动了四月的心帘，温暖如约的歌声渐起。
-              似乎在诉说着-我也可以在漆黑的角落里，找到阴影背后的阳光，
-              找到阳光与阴影奏出和谐的旋律。我要用一颗敏感赤诚的心迎接每一缕滑过指尖的阳光！
-            </mu-card-text>
+            <mu-card-text class="text">{{item.introduction}}</mu-card-text>
             <mu-card-actions>
               <mu-button flat color="primary">
-                <mu-icon left value="dns"></mu-icon>技术
+                <mu-icon left value="dns"></mu-icon>
+                {{item.categories}}
               </mu-button>
 
-              <mu-button flat>
-                <mu-icon left value="loyalty"></mu-icon>Vue
-              </mu-button>
-
-              <mu-button flat>
-                <mu-icon left value="loyalty"></mu-icon>React
+              <mu-button flat v-for="sub in item.tags" :key="sub">
+                <mu-icon left value="loyalty"></mu-icon>
+                {{sub}}
               </mu-button>
             </mu-card-actions>
-            
           </div>
         </mu-card>
-        <div class="pagination">
-          <mu-pagination raised circle :total="50" :current.sync="page" @change="pageChange"></mu-pagination>
+        <div v-if="info.totalCount > pageSize" class="pagination">
+          <mu-pagination
+            raised
+            circle
+            :total="info.totalCount"
+            :current.sync="page"
+            :pageSize.sync="pageSize"
+            @change="pageChange"
+          ></mu-pagination>
         </div>
       </mu-col>
       <mu-col span="2" offset="1">
-        <RightConfig></RightConfig>
+        <RightConfig showPosition="文章"></RightConfig>
       </mu-col>
     </mu-row>
+
+    <Footer></Footer>
   </div>
 </template>
 <script>
 import RightConfig from "@/components/RightConfig";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 
 export default {
   name: "articles",
   components: {
-    RightConfig
+    RightConfig,
+    Footer,
+    Header
   },
 
   data() {
     return {
       page: 1,
-      list: 10
+      pageSize: 10,
+      info: {}
     };
   },
+  mounted() {
+    this.getList();
+  },
   methods: {
-    pageChange() {},
+    async getList() {
+      this.$progress.start();
+      const res = await this.$axios.get(
+        `/articles?page=${this.page}&pageSize=${this.pageSize}`
+      );
+      if (res.data) {
+        this.info = res.data;
+        this.$progress.done();
+      }
+    },
+    pageChange(page) {
+      this.page = page;
+      this.getList();
+    },
     goDetail(item) {
       this.$router.push({
         name: "articlesDetails",
-        query: { id: item }
+        query: { id: item._id }
       });
     }
   }
@@ -77,7 +98,6 @@ export default {
 <style lang="less" scoped>
 .articles {
   padding-top: 64px;
-  background: #000;
   .card {
     display: flex;
     justify-content: space-between;
@@ -113,13 +133,17 @@ export default {
       margin-right: 10px;
     }
     .cover {
-      width: 100%;
+      flex: 1;
       border-radius: 0;
       padding: 16px;
       .cover-img {
-        width: 100%;
+        width: 240px;
+        height: 120px;
         vertical-align: middle;
       }
+    }
+    .content {
+      flex: 2;
     }
   }
 }

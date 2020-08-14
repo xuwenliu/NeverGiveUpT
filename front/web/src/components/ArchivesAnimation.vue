@@ -235,7 +235,6 @@ export default {
 .animation {
   width: 100%;
   height: 100%;
-  background-color: #000;
   overflow: hidden;
   margin: 0;
   position: relative;

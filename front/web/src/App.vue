@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header></Header>
+    <!-- <Header></Header> -->
     <!-- <transition name="fadeIn"> -->
       <router-view></router-view>
     <!-- </transition> -->
@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import Header from "@/components/Header";
+// import Header from "@/components/Header";
 export default {
   components: {
-    Header
+    // Header
   },
   data() {
     return {
@@ -21,8 +21,8 @@ export default {
 };
 </script>
 <style lang="less">
-body {
-  background: #000;
+body,html {
+  background: #000!important;
 }
 
 .clearfix {

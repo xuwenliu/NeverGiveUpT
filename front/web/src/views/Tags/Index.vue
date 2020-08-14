@@ -86,7 +86,6 @@ export default {
   bottom: 0;
   width: 100%;
   height: 100%;
-  background: #000;
   .content {
     padding-top: 64px;
     display: flex;

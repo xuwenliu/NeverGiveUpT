@@ -3,59 +3,17 @@
     <ArchivesAnimation></ArchivesAnimation>
     <div class="content">
       <mu-stepper :activeStep="step" :linear="false" orientation="vertical">
-        <mu-step>
-          <mu-step-button @click="changeStep(0)">
-            <span class="title">2020</span>
+        <mu-step v-for="(item,index) in list" :key="item.year">
+          <mu-step-button @click="changeStep(index)">
+            <span class="title">{{item.year}}</span>
           </mu-step-button>
           <mu-step-content>
             <mu-stepper :activeStep="0" :linear="false" orientation="vertical">
-              <mu-step>
+              <mu-step v-for="sub in item.list" :key="sub._id">
                 <mu-step-label>
                   <mu-icon slot="icon" value="note_add" color="#fff"></mu-icon>
-                  <span class="title">2020-第一篇文章</span>
+                  <span class="title" @click="goDetail(sub)">{{sub.title}}</span>
                 </mu-step-label>
-              </mu-step>
-              <mu-step>
-                <mu-step-label>
-                  <mu-icon slot="icon" value="note_add" color="#fff"></mu-icon>
-                  <span class="title">2020-第二篇文章</span>
-                </mu-step-label>
-              </mu-step>
-              <mu-step>
-                <mu-step-label>
-                  <mu-icon slot="icon" value="note_add" color="#fff"></mu-icon>
-                  <span class="title">2020-第三篇文章</span>
-                </mu-step-label>
-                <mu-step-content></mu-step-content>
-              </mu-step>
-            </mu-stepper>
-          </mu-step-content>
-        </mu-step>
-        <mu-step>
-          <mu-step-button @click="changeStep(1)">
-            <mu-icon slot="icon" value="note_add" color="#fff"></mu-icon>
-            <span class="title">2019</span>
-          </mu-step-button>
-          <mu-step-content>
-            <mu-stepper :activeStep="0" :linear="false" orientation="vertical">
-              <mu-step>
-                <mu-step-label>
-                  <mu-icon slot="icon" value="note_add" color="#fff"></mu-icon>
-                  <span class="title">2019-第一篇文章</span>
-                </mu-step-label>
-              </mu-step>
-              <mu-step>
-                <mu-step-label>
-                  <mu-icon slot="icon" value="note_add" color="#fff"></mu-icon>
-                  <span class="title">2019-第二篇文章</span>
-                </mu-step-label>
-              </mu-step>
-              <mu-step>
-                <mu-step-label>
-                  <mu-icon slot="icon" value="note_add" color="#fff"></mu-icon>
-                  <span class="title">2019-第三篇文章</span>
-                </mu-step-label>
-                <mu-step-content></mu-step-content>
               </mu-step>
             </mu-stepper>
           </mu-step-content>
@@ -73,12 +31,49 @@ export default {
   },
   data() {
     return {
-      step: 0
+      step: 0,
+      list: {}
     };
   },
+  mounted() {
+    this.getInfo();
+  },
   methods: {
+    async getInfo() {
+      this.$progress.start();
+      const res = await this.$axios.get("/archives");
+
+      if (res.data) {
+        const list = res.data;
+        list.map(item => {
+          item.year = new Date(item.createTime * 1000).getFullYear();
+          return item;
+        });
+        const couponInstance = list.reduce((all, cur) => {
+          all[cur.year] = all[cur.year] ? all[cur.year].concat(cur) : [cur];
+          return all;
+        }, {});
+        const result = [];
+        for (let i in couponInstance) {
+          result.push({
+            year: i,
+            list: couponInstance[i]
+          });
+        }
+        this.list = result.reverse();
+        this.$progress.done();
+      }
+    },
     changeStep(index) {
       this.step = index;
+    },
+    goDetail(item) {
+      this.$router.push({
+        name: "articlesDetails",
+        query: {
+          id: item._id
+        }
+      });
     }
   }
 };
@@ -106,6 +101,7 @@ export default {
   align-items: center;
   .title {
     color: #fff;
+    cursor: pointer;
   }
 }
 </style>

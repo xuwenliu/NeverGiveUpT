@@ -210,7 +210,6 @@
 
 .animation {
   height: 100%;
-  background-color: #000;
   overflow: hidden;
   margin: 0;
   -webkit-perspective: 1000px;

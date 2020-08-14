@@ -232,7 +232,15 @@ export default {
     }
   }
 };
-</script><style lang="less" scoped>
+</script>
+<style lang="less" scoped>
+.header {
+  position: fixed;
+  z-index: 10;
+  width: 100%;
+  top: 0;
+}
+
 .mu-appbar {
   /deep/ .mu-appbar-right {
     flex: 1;
@@ -259,11 +267,7 @@ export default {
     }
   }
 }
-.header {
-  position: fixed;
-  z-index: 10;
-  width: 100%;
-}
+
 .tool {
   position: fixed;
   right: 0;

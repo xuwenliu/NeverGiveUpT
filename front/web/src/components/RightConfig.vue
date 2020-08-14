@@ -2,10 +2,10 @@
   <div>
     <mu-card v-if="!hideIntroduction" class="slider-card">
       <mu-avatar class="avatar" size="100">
-        <img src="../assets/img/4.jpeg" alt />
+        <img v-lazy="avatar" alt />
       </mu-avatar>
-      <div class="title">NeverGiveUpT</div>
-      <div class="desc">专注于WEB和移动前端开发</div>
+      <div class="title">{{introduction.nickName}}</div>
+      <div class="desc">{{introduction.desc}}</div>
       <div class="tags">
         <mu-chip
           class="chip"
@@ -24,6 +24,7 @@
             fab
             small
             :color="item.color"
+            @click="goLink(item)"
           >
             <mu-icon :value="item.icon"></mu-icon>
           </mu-button>
@@ -34,50 +35,53 @@
     <mu-card v-if="!hideAd" class="slider-card card-ad">
       <div class="ad">广告</div>
       <mu-carousel style="height:120px" hide-controls>
-        <mu-carousel-item v-for="item in imgs" :key="item._id">
-          <img style="width:100%" :src="item.imgUrl" />
+        <mu-carousel-item v-for="item in ad.imgs" :key="item._id">
+          <img style="width:100%;cursor:pointer;" v-lazy="item.imgUrl" @click="goLink(item)" />
         </mu-carousel-item>
       </mu-carousel>
     </mu-card>
 
-    <mu-card v-if="!hideRecommend" class="slider-card">
+    <mu-card v-if="suggest.movie.length > 0" class="slider-card">
       <div class="friend-link-box">
         <p class="friend-link-title">电影推荐</p>
         <div class="friend-links">
           <div class="tags">
             <mu-chip
               class="chip"
-              v-for="item in tagsArr"
+              v-for="item in suggest.movie"
               :key="item.name"
               :color="item.color"
+              @click="goLink(item)"
             >{{item.name}}</mu-chip>
           </div>
         </div>
       </div>
 
-      <div class="friend-link-box">
+      <div v-if="suggest.teleplay.length > 0" class="friend-link-box">
         <p class="friend-link-title">电视剧推荐</p>
         <div class="friend-links">
           <div class="tags">
             <mu-chip
               class="chip"
-              v-for="item in tagsArr"
+              v-for="item in suggest.teleplay"
               :key="item.name"
               :color="item.color"
+              @click="goLink(item)"
             >{{item.name}}</mu-chip>
           </div>
         </div>
       </div>
 
-      <div class="friend-link-box">
+      <div v-if="suggest.music.length > 0" class="friend-link-box">
         <p class="friend-link-title">音乐推荐</p>
         <div class="friend-links">
           <div class="tags">
             <mu-chip
               class="chip"
-              v-for="item in tagsArr"
+              v-for="item in suggest.music"
               :key="item.name"
               :color="item.color"
+              @click="goLink(item)"
             >{{item.name}}</mu-chip>
           </div>
         </div>
@@ -86,83 +90,99 @@
   </div>
 </template>
 <script>
-import about from "@/assets/img/about.jpg";
-import archive from "@/assets/img/archive.jpg";
-import index from "@/assets/img/index.jpg";
-
-import about_1 from "@/assets/img/wap_category.jpg";
-import about_2 from "@/assets/img/wap_tags.jpeg";
-import about_3 from "@/assets/img/wap_index.jpg";
 import { randomColor } from "@/utils";
 export default {
   props: {
-    hideAd: {
-      type: Boolean,
-      default: false
-    },
-    hideIntroduction:{
-      type: Boolean,
-      default: false
-    },
-    hideRecommend:{
-      type: Boolean,
-      default: false
+    showPosition: {
+      type: String
     }
   },
   computed: {
     tagsArr() {
-      return this.tags.map(item => {
+      return this.introduction.tags
+        ? this.introduction.tags.map(item => {
+            return {
+              name: item,
+              color: randomColor()
+            };
+          })
+        : [];
+    },
+    links() {
+      return this.introduction.friendLink
+        ? this.introduction.friendLink.map(item => {
+            return {
+              ...item,
+              color: randomColor()
+            };
+          })
+        : [];
+    },
+    suggest() {
+      if (!this.recommend) {
         return {
-          name: item,
-          color: randomColor()
+          music: [],
+          movie: [],
+          teleplay: []
         };
-      });
+      } else {
+        const data = this.recommend.map(item => {
+          return {
+            ...item,
+            color: randomColor()
+          };
+        });
+        return {
+          movie: data.filter(
+            item =>
+              item.project === "1" &&
+              item.showPosition.includes(this.showPosition)
+          ),
+          teleplay: data.filter(
+            item =>
+              item.project === "2" &&
+              item.showPosition.includes(this.showPosition)
+          ),
+          music: data.filter(
+            item =>
+              item.project === "3" &&
+              item.showPosition.includes(this.showPosition)
+          )
+        };
+      }
     }
   },
-  mounted() {},
   data() {
     return {
-      tags: ["Vue", "4年经验", "自由职业", "文章20篇", "博客访问300次"],
-      imgs: [
-        {
-          _id: "5f1ff64eabe2afa928d57d88",
-          imgUrl: this.isPC ? about : about_1,
-          link: "https://www.baidu.com"
-        },
-        {
-          _id: "5f1ff64eabe2afa928d57d89",
-          imgUrl: this.isPC ? archive : about_2,
-          link: "https://www.jd.com"
-        },
-        {
-          _id: "5f1ff64eabe2afa928d57d8a",
-          imgUrl: this.isPC ? index : about_3,
-          link: ""
-        }
-      ],
-      links: [
-        {
-          color: "primary",
-          icon: ":mudocs-icon-custom-github",
-          url: "https://xuwenliu.github.com"
-        },
-        {
-          color: "pink",
-          icon: "android",
-          url: ""
-        },
-        {
-          color: "indigo",
-          icon: "remove",
-          url: ""
-        },
-        {
-          color: "teal",
-          icon: "add",
-          url: ""
-        }
-      ]
+      avatar: "https://xuwenliu.github.io/img/avatar.jpg",
+      ad: {},
+      introduction: {},
+      recommend: [],
+      hideAd: false,
+      hideIntroduction: false,
+      hideRecommend: false
     };
+  },
+  mounted() {
+    this.getInfo();
+  },
+  methods: {
+    async getInfo() {
+      const res = await this.$axios.get("/rightConfig");
+      if (res.data) {
+        this.ad = res.data.ad;
+        this.introduction = res.data.introduction;
+        this.recommend = res.data.recommend;
+
+        this.hideAd = !this.ad.showPosition.includes(this.showPosition);
+        this.hideIntroduction = !this.introduction.showPosition.includes(
+          this.showPosition
+        );
+      }
+    },
+    goLink(item) {
+      window.open(item.link);
+    }
   }
 };
 </script>

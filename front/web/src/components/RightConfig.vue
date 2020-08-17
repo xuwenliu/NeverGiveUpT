@@ -154,7 +154,7 @@ export default {
   },
   data() {
     return {
-      avatar: "https://xuwenliu.github.io/img/avatar.jpg",
+      avatar: this.avatar,
       ad: {},
       introduction: {},
       recommend: [],

@@ -58,18 +58,17 @@ const get = (url, data) => {
   });
 };
 
-const post = (url, data, isUploadFile = false) => {
-  // let TOKEN = sessionStorage.getItem("token");
+const post = (url, data) => {
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   return axios({
     method: "post",
     url,
     headers: {
       Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8;",
-      data,
+      Authorization: "Bearer " + user.token || "",
     },
-    data: isUploadFile ? data : JSON.stringify(data),
+    data,
   }).then((response) => {
     return response;
   });

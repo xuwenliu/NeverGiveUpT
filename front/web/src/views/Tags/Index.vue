@@ -1,24 +1,11 @@
 <template>
   <div class="tags">
     <!-- :style="{background:`url(${info.tagsBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
+    <Header :light-index="4"></Header>
     <TagsAnimation></TagsAnimation>
     <div class="content">
-      <div v-if="isPC" class="waves">
-        <i
-          :style="{
-            background:item.color,
-            '-webkit-animation': `shake 1s ${0.02857 * (index+1)}s infinite`
-            }"
-          v-for="(item,index) in tags"
-          :key="index"
-          @click="goDetail(item)"
-        >{{item.name}}({{item.articleNum}})</i>
-      </div>
-      <div v-else class="tags-wap">
+      <div class="tags-wap">
         <mu-chip
-          :style="{
-            '-webkit-animation': `${item.randomAnimation} 2s ${0.02857 * (index+1)}s infinite`
-            }"
           class="tag"
           v-for="(item,index) in tags"
           :key="index"
@@ -31,14 +18,15 @@
 </template>
 
 <script>
-import { randomColor, randomNum } from "@/utils";
+import { randomColor } from "@/utils";
 import TagsAnimation from "@/components/TagsAnimation";
-const arr = ["bounce", "drop", "rotate"];
+import Header from "@/components/Header";
 
 export default {
   name: "tags",
   components: {
-    TagsAnimation
+    TagsAnimation,
+    Header
   },
   data() {
     return {
@@ -59,7 +47,6 @@ export default {
               return {
                 ...item,
                 color: randomColor(),
-                randomAnimation: arr[randomNum(0, 3)]
               };
             })
           : [];
@@ -102,34 +89,11 @@ export default {
   }
 }
 
-.waves {
-  position: absolute;
-  width: 100%;
-  height: 400px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  i {
-    display: inline-block;
-    height: 50px;
-    width: 20px;
-    margin-right: 20px;
-    background: skyblue;
-    writing-mode: vertical-lr;
-    text-align: center;
-    color: #fff;
-    box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2),
-      0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12);
-    cursor: pointer;
-  }
-}
-
 .tags-wap {
   padding: 0 20px;
   .tag {
     margin-right: 20px;
     margin-bottom: 20px;
-    // animation: drop 5s linear infinite;
     cursor: pointer;
   }
 }

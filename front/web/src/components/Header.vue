@@ -1,8 +1,6 @@
 <template>
   <div class="header">
-    <mu-appbar
-      :color="$route.name === 'articles' || $route.name === 'articlesDetails'?'#000':'transparent'"
-    >
+    <mu-appbar :color="background">
       <!-- 菜单图标 -->
       <mu-button v-show="!isPC" @click="toggleWapMenu(true)" icon slot="left">
         <mu-icon value="menu"></mu-icon>
@@ -19,7 +17,7 @@
       <!-- 菜单 -->
       <mu-button
         v-show="isPC"
-        @click="go(item,index)"
+        @click="go(item)"
         slot="right"
         v-for="(item,index) in info.menu"
         :key="item.menuName"
@@ -29,13 +27,29 @@
         <mu-icon size="16" :value="item.icon"></mu-icon>
         {{item.menuName}}
       </mu-button>
+      <mu-button v-if="user" flat slot="right" ref="button" @click="openUser = !openUser">
+        <div class="user">
+          <span>{{user.email || user.nickName}}</span>
+          <mu-icon value="expand_more"></mu-icon>
+        </div>
+      </mu-button>
+      <mu-popover :open.sync="openUser" :trigger="trigger">
+        <mu-list>
+          <mu-list-item button>
+            <mu-list-item-title>个人中心</mu-list-item-title>
+          </mu-list-item>
+          <mu-list-item button @click="logout">
+            <mu-list-item-title>退出登录</mu-list-item-title>
+          </mu-list-item>
+        </mu-list>
+      </mu-popover>
     </mu-appbar>
 
     <!-- wap-菜单 -->
     <mu-bottom-sheet :open.sync="openWapMenu">
       <mu-list @item-click="toggleWapMenu(false)">
         <mu-list-item
-          @click="go(item,index)"
+          @click="go(item)"
           v-for="(item,index) in info.menu"
           :key="item.menuName"
           button
@@ -50,7 +64,7 @@
 
     <!-- 搜索按钮 -->
     <div class="tool" v-if="isShowAction">
-      <div v-if="info.login" class="tool-row">
+      <div v-if="info.login && !user" class="tool-row">
         <mu-slide-right-transition>
           <mu-button
             v-show="showToolBtn"
@@ -74,7 +88,7 @@
           <mu-icon value="adb"></mu-icon>
         </mu-button>
       </div>
-      <div v-if="info.register" class="tool-row">
+      <div v-if="info.register && !user" class="tool-row">
         <mu-slide-right-transition>
           <mu-button
             v-show="showToolBtn"
@@ -140,16 +154,15 @@ export default {
     LoginForm,
     SearchForm
   },
-  mounted() {
-    this.getInfo();
-
-    window.onscroll = () => {
-      if (document.documentElement.scrollTop + document.body.scrollTop > 100) {
-        this.showBackTop = true;
-      } else {
-        this.showBackTop = false;
-      }
-    };
+  props: {
+    lightIndex: {
+      type: Number,
+      default: 0
+    },
+    background: {
+      type: String,
+      default: "transparent"
+    }
   },
   data() {
     return {
@@ -163,10 +176,27 @@ export default {
       isShowAction: true,
 
       isPC: this.isPC,
-      lightIndex: 0,
-      info: {}
+      info: {},
+
+      openUser: false,
+      trigger: null,
+      user: JSON.parse(localStorage.getItem("user"))
     };
   },
+  mounted() {
+    this.getInfo();
+    if (this.user) {
+      this.trigger = this.$refs.button.$el;
+    }
+    window.onscroll = () => {
+      if (document.documentElement.scrollTop + document.body.scrollTop > 100) {
+        this.showBackTop = true;
+      } else {
+        this.showBackTop = false;
+      }
+    };
+  },
+
   methods: {
     async getInfo() {
       const res = await this.$axios.get("/header");
@@ -185,32 +215,12 @@ export default {
           !this.info.register &&
           !this.info.login
         );
-        this.dealwithRouter(this.info.menu);
       }
     },
-    dealwithRouter(menuArr) {
-      // let currentName = location.hash.replace("#/", "");
-      let currentName = location.pathname;
-      menuArr.forEach((item, index) => {
-        if (currentName === "/categories/details") {
-          currentName = "/categories";
-        }
-        if (currentName === "/tags/details") {
-          currentName = "/tags";
-        }
-        if (currentName === "/articles/details") {
-          currentName = "/articles";
-        }
-        if (currentName === "/" + item.router) {
-          this.lightIndex = index;
-        }
-      });
-    },
-    go(item, index) {
+    go(item) {
       if (this.$route.name === item.router) {
         return;
       }
-      this.lightIndex = index;
       this.$router.push({
         name: item.router
       });
@@ -229,6 +239,15 @@ export default {
     },
     scrollTop() {
       document.body.scrollIntoView();
+    },
+    async logout() {
+      const res = await this.$axios.post("/logout");
+      if (res) {
+        localStorage.removeItem("user");
+        this.openUser = false;
+        this.user = null;
+        this.$toast.success(res.msg);
+      }
     }
   }
 };
@@ -286,5 +305,18 @@ export default {
   position: fixed;
   right: 10px;
   bottom: 30px;
+}
+.user {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  span {
+    display: block;
+    width: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
   <div class="archive">
+    <Header :light-index="2"></Header>
     <ArchivesAnimation></ArchivesAnimation>
     <div class="content">
       <mu-stepper :activeStep="step" :linear="false" orientation="vertical">
@@ -24,10 +25,13 @@
 </template>
 <script>
 import ArchivesAnimation from "@/components/ArchivesAnimation";
+import Header from "@/components/Header";
+
 export default {
   name: "archive",
   components: {
-    ArchivesAnimation
+    ArchivesAnimation,
+    Header
   },
   data() {
     return {

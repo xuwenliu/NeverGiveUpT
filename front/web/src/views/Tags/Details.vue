@@ -1,5 +1,6 @@
 <template>
   <div class="categories">
+    <Header :light-index="4"></Header>
     <TagsAnimation></TagsAnimation>
     <!-- :style="{background:`url(${info.tagsBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
     <div class="content">
@@ -36,9 +37,9 @@
         </div>
       </mu-paper>
 
+      <!-- wap-loadmore -->
       <div class="more" v-else :style="{height:moreHeight}">
         <div class="sub-title">标签-{{info.name}}({{info.totalCount}})</div>
-
         <mu-load-more @refresh="refresh" :refreshing="refreshing" :loading="loading" @load="load">
           <mu-list>
             <div v-for="(item,index) in info.list" :key="index">
@@ -57,10 +58,12 @@
               </mu-list-item>
               <mu-divider />
             </div>
+            
           </mu-list>
         </mu-load-more>
       </div>
 
+      <!-- wap-展示返回按钮 -->
       <mu-button v-show="!isPC" @click="$router.go(-1)" class="search-fab" small fab color="#fff">
         <mu-icon color="#ccc" value="arrow_back"></mu-icon>
       </mu-button>
@@ -69,11 +72,13 @@
 </template>
 <script>
 import TagsAnimation from "@/components/TagsAnimation";
+import Header from "@/components/Header";
 
 export default {
   name: "tagsDetails",
   components: {
-    TagsAnimation
+    TagsAnimation,
+    Header
   },
   data() {
     return {
@@ -200,9 +205,8 @@ export default {
   }
 }
 .sub-title {
-  position: absolute;
-  top: 20px;
-  right: 26px;
+  font-size: 20px;
+  padding: 16px 26px 0;
   color: #ccc;
 }
 .search-fab {

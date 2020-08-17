@@ -10,18 +10,16 @@
     >
       <mu-form ref="form" :model="validateForm">
         <mu-form-item label="邮箱/昵称" prop="email" :rules="emailRules">
-          <mu-text-field v-model="validateForm.email" prop="email"></mu-text-field>
+          <mu-text-field v-model.trim="validateForm.email" prop="email"></mu-text-field>
         </mu-form-item>
 
         <mu-form-item label="密码" prop="password" :rules="passwordRules">
-          <mu-text-field v-model="validateForm.password" prop="password"></mu-text-field>
+          <mu-text-field v-model.trim="validateForm.password" type="password" prop="password"></mu-text-field>
         </mu-form-item>
-
       </mu-form>
 
       <mu-button slot="actions" flat small @click="clear">取消</mu-button>
       <mu-button slot="actions" flat small color="primary" @click="submit">登录</mu-button>
-
     </mu-dialog>
   </div>
 </template>
@@ -51,10 +49,17 @@ export default {
   },
   methods: {
     submit() {
-      this.$refs.form.validate().then(result => {
-        console.log("form valid: ", result);
+      this.$refs.form.validate().then(async result => {
         if (result) {
-          this.$emit("toggle", false);
+          const res = await this.$axios.post("/login", this.validateForm);
+          if (res.data) {
+            localStorage.setItem("user", JSON.stringify(res.data));
+            this.$toast.success("登录成功");
+            location.reload();
+            this.$emit("toggle", false);
+          } else {
+            this.$toast.error(res.msg);
+          }
         }
       });
     },

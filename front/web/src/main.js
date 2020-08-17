@@ -34,12 +34,14 @@ import {
   Form,
   AutoComplete,
   Snackbar,
+  Popover
 } from "muse-ui";
 import "muse-ui/lib/styles/theme.less";
 import "muse-ui-progress/dist/muse-ui-progress.css";
 import NProgress from "muse-ui-progress";
 import Helpers from "muse-ui/lib/Helpers";
 import Toast from "muse-ui-toast";
+
 
 import theme from "muse-ui/lib/theme";
 theme.add(
@@ -104,6 +106,7 @@ Vue.use(Tooltip);
 Vue.use(Form);
 Vue.use(AutoComplete);
 Vue.use(Snackbar);
+Vue.use(Popover);
 
 const isPC = (() => {
   var userAgentInfo = navigator.userAgent;
@@ -134,6 +137,8 @@ Vue.prototype.$axios = axios;
 import * as filters from "./filter";
 Object.keys(filters).forEach((k) => Vue.filter(k, filters[k])); //注册过滤器
 Vue.prototype.filterDate = filters.filterDate; //时间过滤方法
+
+Vue.prototype.avatar = "https://xuwenliu.github.io/img/avatar.jpg";
 
 new Vue({
   router,

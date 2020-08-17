@@ -1,7 +1,7 @@
 <template>
   <div class="categories">
     <!-- :style="{background:`url(${info.categoriesBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
-
+    <Header :light-index="3"></Header>
     <CategoriesAnimation></CategoriesAnimation>
     <div class="content">
       <mu-paper v-if="isPC" :z-depth="5" class="box">
@@ -68,14 +68,14 @@
   </div>
 </template>
 <script>
-// import categoriesBgImg from "@/assets/img/category.jpg";
-// import wap_categoriesBgImg from "@/assets/img/wap_category.jpg";
 import CategoriesAnimation from "@/components/CategoriesAnimation";
+import Header from "@/components/Header";
 
 export default {
   name: "categoriesDetails",
   components: {
-    CategoriesAnimation
+    CategoriesAnimation,
+    Header
   },
   data() {
     return {
@@ -93,14 +93,14 @@ export default {
   },
   methods: {
     async getInfo() {
-       this.$progress.start();
+      this.$progress.start();
       const id = this.$route.query.id;
       const res = await this.$axios.get(
         `/categories/details?id=${id}&page=${this.page}&pageSize=${this.pageSize}`
       );
       if (res.data) {
         this.info = res.data;
-         this.$progress.done();
+        this.$progress.done();
       }
     },
     pageChange(page) {
@@ -201,9 +201,8 @@ export default {
   }
 }
 .sub-title {
-  position: absolute;
-  top: 20px;
-  right: 26px;
+  font-size: 20px;
+  padding: 16px 26px 0;
   color: #ccc;
 }
 .search-fab {

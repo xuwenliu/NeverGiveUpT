@@ -54,5 +54,10 @@ module.exports = (app) => {
   router.get(webRouter + "/rightConfig", controller.web.rightConfig.index); //右侧广告，推荐获取
 
 
+  router.post(webRouter + "/register", controller.web.user.register); //注册
+  router.post(webRouter + "/login", controller.web.user.login); //登录
+  router.post(webRouter + "/logout", controller.web.user.logout); //退出登录
+
+
   
 };

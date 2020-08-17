@@ -11,16 +11,16 @@
     >
       <mu-form ref="form" :model="validateForm">
         <mu-form-item label="邮箱（必填）" prop="email" :rules="emailRules">
-          <mu-text-field v-model="validateForm.email" prop="email"></mu-text-field>
+          <mu-text-field v-model.trim="validateForm.email" prop="email"></mu-text-field>
         </mu-form-item>
 
         <mu-form-item label="昵称" prop="nickName" :rules="nickNameRules">
-          <mu-text-field v-model="validateForm.nickName" prop="nickName"></mu-text-field>
+          <mu-text-field v-model.trim="validateForm.nickName" prop="nickName"></mu-text-field>
         </mu-form-item>
 
         <mu-form-item label="密码（必填）" prop="password" :rules="passwordRules">
           <mu-text-field
-            v-model="validateForm.password"
+            v-model.trim="validateForm.password"
             prop="password"
             :action-icon="visibility ? 'visibility_off' : 'visibility'"
             :action-click="() => (visibility = !visibility)"
@@ -31,7 +31,7 @@
         <mu-form-item label="确认密码" prop="confirmPassword" :rules="confirmPasswordRules">
           <mu-text-field
             type="password"
-            v-model="validateForm.confirmPassword"
+            v-model.trim="validateForm.confirmPassword"
             prop="confirmPassword"
           ></mu-text-field>
         </mu-form-item>
@@ -102,7 +102,7 @@ export default {
       ],
       introductionRules: [
         {
-          validate: val => val <= 1000,
+          validate: val => val.length <= 1000,
           message: "最大1000字符"
         }
       ],
@@ -117,10 +117,17 @@ export default {
   },
   methods: {
     submit() {
-      this.$refs.form.validate().then(result => {
-        console.log("form valid: ", result);
+      this.$refs.form.validate().then(async result => {
         if (result) {
-          this.$emit("toggle", false);
+          const res = await this.$axios.post("/register", this.validateForm);
+          if (res.data) {
+            localStorage.setItem("user", JSON.stringify(res.data));
+            this.$toast.success("注册成功");
+            location.reload();
+            this.$emit("toggle", false);
+          } else {
+            this.$toast.error(res.msg);
+          }
         }
       });
     },

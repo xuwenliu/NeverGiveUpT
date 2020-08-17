@@ -1,5 +1,6 @@
 <template>
   <div class="details">
+    <Header :light-index="1"></Header>
     <mu-row style="padding-bottom:64px;">
       <div class="toc-fixed">
         <mu-card class="card">
@@ -13,19 +14,19 @@
           </div>
         </mu-card>
         <div class="action" :class="toc.length>0?'':'noMulu'">
-          <mu-tooltip placement="top" content="点赞">
+          <mu-tooltip v-if="info.isLike" placement="top" content="点赞">
             <mu-button fab color="primary">
               <mu-icon value="thumb_up"></mu-icon>
             </mu-button>
           </mu-tooltip>
 
-          <mu-tooltip placement="top" content="收藏">
+          <mu-tooltip v-if="info.isCollect" placement="top" content="收藏">
             <mu-button fab color="greenA700">
               <mu-icon value="grade"></mu-icon>
             </mu-button>
           </mu-tooltip>
 
-          <mu-tooltip placement="top" content="评论">
+          <mu-tooltip v-if="info.isComment" placement="top" content="评论">
             <mu-button @click="scrollComment" fab color="red">
               <mu-icon value="chat"></mu-icon>
             </mu-button>
@@ -64,13 +65,13 @@
         </mu-card>
 
         <div class="action-list">
-          <mu-tooltip placement="top" content="点赞">
+          <mu-tooltip v-if="info.isLike" placement="top" content="点赞">
             <mu-button fab color="primary">
               <mu-icon value="thumb_up"></mu-icon>
             </mu-button>
           </mu-tooltip>
 
-          <mu-tooltip placement="top" content="收藏">
+          <mu-tooltip v-if="info.isCollect" placement="top" content="收藏">
             <mu-button fab color="greenA700">
               <mu-icon value="grade"></mu-icon>
             </mu-button>
@@ -100,6 +101,8 @@ import markdown from "@/utils/markdown";
 import Comment from "@/components/Comment";
 import CommentList from "@/components/CommentList";
 import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+
 
 import { animateScroll } from "@/utils";
 
@@ -109,7 +112,8 @@ export default {
     RightConfig,
     Comment,
     CommentList,
-    Footer
+    Footer,
+    Header
   },
   data() {
     return {
@@ -121,7 +125,7 @@ export default {
   computed: {
     min() {
       if (this.content) {
-        return Math.ceil(this.info.content.length / 1000);
+        return Math.floor(this.info.content.length / 1000);
       }
       return 0;
     },

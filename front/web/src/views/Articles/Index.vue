@@ -1,34 +1,43 @@
 <template>
   <div class="articles">
-    <Header></Header>
+    <Header :light-index="1"></Header>
     <mu-row>
-      <mu-col span="6" offset="2">
-        <mu-card @click="goDetail(item)" class="card" v-for="item in info.list" :key="item._id">
-          <div class="cover">
-            <img class="cover-img" v-lazy="item.cover" />
-          </div>
-          <div class="content">
-            <div class="title">{{item.title}}</div>
-            <mu-card-actions class="sub-title">
-              <mu-button flat color="success">查看({{item.views}})</mu-button>
-              <mu-button flat color="primary">评论({{item.comment}})</mu-button>
-              <mu-button flat color="red">点赞({{item.like}})</mu-button>
-              <mu-button flat color="#9e9e9e">{{item.createTime | filterDate}}</mu-button>
-            </mu-card-actions>
-            <mu-card-text class="text">{{item.introduction}}</mu-card-text>
-            <mu-card-actions>
-              <mu-button flat color="primary">
-                <mu-icon left value="dns"></mu-icon>
-                {{item.categories}}
-              </mu-button>
+      <mu-col span="10">
+        <mu-row style="justify-content: center!important;">
+          <mu-col span="8">
+            <mu-card @click="goDetail(item)" class="card" v-for="item in info.list" :key="item._id">
+              <mu-col sm="12" md="4">
+                <div class="cover">
+                  <img class="cover-img" v-lazy="item.cover" />
+                </div>
+              </mu-col>
+              <mu-col sm="12" md="8">
+                <div class="content">
+                  <div class="title">{{item.title}}</div>
+                  <mu-card-actions class="sub-title">
+                    <mu-button flat color="success">查看({{item.views}})</mu-button>
+                    <mu-button flat color="primary">评论({{item.comment}})</mu-button>
+                    <mu-button flat color="red">点赞({{item.like}})</mu-button>
+                    <mu-button flat color="#9e9e9e">{{item.createTime | filterDate}}</mu-button>
+                  </mu-card-actions>
+                  <mu-card-text class="text">{{item.introduction}}</mu-card-text>
+                  <mu-card-actions>
+                    <mu-button flat color="primary">
+                      <mu-icon left value="dns"></mu-icon>
+                      {{item.categories}}
+                    </mu-button>
 
-              <mu-button flat v-for="sub in item.tags" :key="sub">
-                <mu-icon left value="loyalty"></mu-icon>
-                {{sub}}
-              </mu-button>
-            </mu-card-actions>
-          </div>
-        </mu-card>
+                    <mu-button flat v-for="sub in item.tags" :key="sub">
+                      <mu-icon left value="loyalty"></mu-icon>
+                      {{sub}}
+                    </mu-button>
+                  </mu-card-actions>
+                </div>
+              </mu-col>
+            </mu-card>
+          </mu-col>
+        </mu-row>
+
         <div v-if="info.totalCount > pageSize" class="pagination">
           <mu-pagination
             raised
@@ -40,8 +49,12 @@
           ></mu-pagination>
         </div>
       </mu-col>
-      <mu-col span="2" offset="1">
-        <RightConfig showPosition="文章"></RightConfig>
+      <mu-col span="2" v-if="isPC">
+        <mu-row>
+          <mu-col span="12">
+            <RightConfig showPosition="文章"></RightConfig>
+          </mu-col>
+        </mu-row>
       </mu-col>
     </mu-row>
 
@@ -100,8 +113,7 @@ export default {
   padding-top: 64px;
   .card {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-wrap: wrap;
     margin-top: 16px;
     border-radius: 10px;
     cursor: pointer;
@@ -119,6 +131,7 @@ export default {
     }
     .sub-title {
       display: flex;
+      flex-wrap: wrap;
       justify-content: flex-end;
     }
     .text {
@@ -137,8 +150,8 @@ export default {
       border-radius: 0;
       padding: 16px;
       .cover-img {
-        width: 240px;
-        height: 120px;
+        width: 100%;
+        height: 160px;
         vertical-align: middle;
       }
     }

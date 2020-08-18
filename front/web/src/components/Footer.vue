@@ -28,5 +28,6 @@ export default {
 .footer {
   color: #fff;
   text-align: center;
+  font-size: 0.26667rem;
 }
 </style>

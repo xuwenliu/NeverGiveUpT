@@ -78,7 +78,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .comment-item {
-  padding-bottom: 20px;
+  padding-bottom: 0.53333rem;
   /deep/ .mu-card-text {
     padding-top: 0;
     .who {
@@ -87,8 +87,8 @@ export default {
   }
 }
 .card {
-  margin: 16px 40px 0 40px;
-  padding-bottom: 16px;
+  margin: 0.42667rem 1.06667rem 0 1.06667rem;
+  padding-bottom: 0.42667rem;
   box-shadow: none;
   border-radius: 0;
 }

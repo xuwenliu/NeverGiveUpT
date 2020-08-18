@@ -6,7 +6,8 @@ import router from "./router";
 import "highlight.js/styles/vs2015.css";
 
 import "muse-ui/lib/styles/base.less";
-
+import "./global.less";
+import "lib-flexible";
 import {
   Button,
   Select,
@@ -126,7 +127,7 @@ const isPC = (() => {
       break;
     }
   }
-  return flag;
+  return flag && window.innerWidth > 800;
 })();
 Vue.prototype.isPC = isPC;
 

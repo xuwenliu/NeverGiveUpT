@@ -1,5 +1,5 @@
 <template>
-  <div class="tags">
+  <div class="common">
     <!-- :style="{background:`url(${info.tagsBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
     <Header :light-index="4"></Header>
     <TagsAnimation></TagsAnimation>
@@ -46,7 +46,7 @@ export default {
           ? res.data.list.map(item => {
               return {
                 ...item,
-                color: randomColor(),
+                color: randomColor()
               };
             })
           : [];
@@ -65,35 +65,26 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.tags {
+.content {
+  padding-top: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
   width: 100%;
   height: 100%;
-  .content {
-    padding-top: 64px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    bottom: 0;
-    right: 0;
-  }
+  bottom: 0;
+  right: 0;
 }
 
 .tags-wap {
-  padding: 0 20px;
+  padding: 0 0.53333rem;
   .tag {
-    margin-right: 20px;
-    margin-bottom: 20px;
+    margin-right: 0.53333rem;
+    margin-bottom: 0.53333rem;
     cursor: pointer;
   }
 }

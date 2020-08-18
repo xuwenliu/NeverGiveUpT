@@ -1,10 +1,10 @@
 <template>
-  <div class="categories">
+  <div class="common">
     <!-- :style="{background:`url(${info.categoriesBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
     <Header :light-index="3"></Header>
     <CategoriesAnimation></CategoriesAnimation>
     <div class="content">
-      <mu-paper v-if="isPC" :z-depth="5" class="box">
+      <mu-paper v-if="isPC" :z-depth="5" class="pc-box">
         <mu-list>
           <mu-sub-header class="header">分类-{{info.name}}({{info.totalCount}})</mu-sub-header>
           <div v-for="(item,index) in info.list" :key="index">
@@ -37,7 +37,7 @@
         </div>
       </mu-paper>
 
-      <div class="more" v-else :style="{height:moreHeight}">
+      <div class="wap-box" v-else :style="{height:moreHeight}">
         <div class="sub-title">分类-{{info.name}}({{info.totalCount}})</div>
         <mu-load-more @refresh="refresh" :refreshing="refreshing" :loading="loading" @load="load">
           <mu-list>
@@ -61,7 +61,7 @@
         </mu-load-more>
       </div>
 
-      <mu-button v-show="!isPC" @click="$router.go(-1)" class="search-fab" small fab color="#fff">
+      <mu-button v-show="!isPC" @click="$router.go(-1)" class="back-fab" small fab color="#fff">
         <mu-icon color="#ccc" value="arrow_back"></mu-icon>
       </mu-button>
     </div>
@@ -135,80 +135,16 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.categories {
+.content {
+  padding-top: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
+  width: 100%;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  width: 100%;
-  height: 100%;
-  .content {
-    padding-top: 64px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    width: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    .box {
-      width: 50%;
-      background: rgba(255, 255, 255, 0.7);
-      .header {
-        font-size: 24px;
-        color: #333;
-      }
-      .item {
-        display: flex;
-        justify-content: space-between;
-        padding: 0 20px;
-        color: #555;
-        .title {
-          display: inline-block;
-          width: 70%;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          white-space: nowrap;
-        }
-      }
-    }
-    .pagination {
-      margin: 20px 0;
-      display: flex;
-      justify-content: center;
-    }
-  }
-}
-.more {
-  width: 100%;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  .item {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 10px;
-    color: #ccc;
-    .title {
-      display: inline-block;
-      width: 70%;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-  }
-}
-.sub-title {
-  font-size: 20px;
-  padding: 16px 26px 0;
-  color: #ccc;
-}
-.search-fab {
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 30px;
 }
 </style>

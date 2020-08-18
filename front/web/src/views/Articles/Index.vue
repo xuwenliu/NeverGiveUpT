@@ -1,62 +1,56 @@
 <template>
   <div class="articles">
-    <Header :light-index="1"></Header>
-    <mu-row>
-      <mu-col span="10">
-        <mu-row style="justify-content: center!important;">
-          <mu-col span="8">
-            <mu-card @click="goDetail(item)" class="card" v-for="item in info.list" :key="item._id">
-              <mu-col sm="12" md="4">
-                <div class="cover">
-                  <img class="cover-img" v-lazy="item.cover" />
-                </div>
-              </mu-col>
-              <mu-col sm="12" md="8">
-                <div class="content">
-                  <div class="title">{{item.title}}</div>
-                  <mu-card-actions class="sub-title">
-                    <mu-button flat color="success">查看({{item.views}})</mu-button>
-                    <mu-button flat color="primary">评论({{item.comment}})</mu-button>
-                    <mu-button flat color="red">点赞({{item.like}})</mu-button>
-                    <mu-button flat color="#9e9e9e">{{item.createTime | filterDate}}</mu-button>
-                  </mu-card-actions>
-                  <mu-card-text class="text">{{item.introduction}}</mu-card-text>
-                  <mu-card-actions>
-                    <mu-button flat color="primary">
-                      <mu-icon left value="dns"></mu-icon>
-                      {{item.categories}}
-                    </mu-button>
+    <Header :light-index="1" background="#000"></Header>
+    <div class="content">
+      <div class="left">
+        <mu-card
+          @click="goDetail(item)"
+          :style="{width:isPC?'80%':'90%'}"
+          class="card"
+          v-for="item in info.list"
+          :key="item._id"
+        >
+          <div v-if="isPC" class="cover">
+            <img class="cover-img" v-lazy="item.cover" />
+          </div>
+          <div class="card-box">
+            <div class="title">{{item.title}}</div>
+            <mu-card-actions class="sub-title">
+              <mu-button flat color="success">查看({{item.views}})</mu-button>
+              <mu-button flat color="primary">评论({{item.comment}})</mu-button>
+              <mu-button flat color="red">点赞({{item.like}})</mu-button>
+              <mu-button flat color="#9e9e9e">{{item.createTime | filterDate}}</mu-button>
+            </mu-card-actions>
+            <mu-card-text class="text">{{item.introduction}}</mu-card-text>
+            <mu-card-actions>
+              <mu-chip class="chip" color="primary">
+                <mu-icon size="16" left value="dns"></mu-icon>
+                {{item.categories}}
+              </mu-chip>
 
-                    <mu-button flat v-for="sub in item.tags" :key="sub">
-                      <mu-icon left value="loyalty"></mu-icon>
-                      {{sub}}
-                    </mu-button>
-                  </mu-card-actions>
-                </div>
-              </mu-col>
-            </mu-card>
-          </mu-col>
-        </mu-row>
+              <mu-chip class="chip" v-for="sub in item.tags" color="red" :key="sub">
+                <mu-icon size="16" left value="loyalty"></mu-icon>
+                {{sub}}
+              </mu-chip>
+            </mu-card-actions>
+          </div>
+        </mu-card>
+      </div>
+      <div v-if="isPC" class="right">
+        <RightConfig showPosition="文章"></RightConfig>
+      </div>
+    </div>
 
-        <div v-if="info.totalCount > pageSize" class="pagination">
-          <mu-pagination
-            raised
-            circle
-            :total="info.totalCount"
-            :current.sync="page"
-            :pageSize.sync="pageSize"
-            @change="pageChange"
-          ></mu-pagination>
-        </div>
-      </mu-col>
-      <mu-col span="2" v-if="isPC">
-        <mu-row>
-          <mu-col span="12">
-            <RightConfig showPosition="文章"></RightConfig>
-          </mu-col>
-        </mu-row>
-      </mu-col>
-    </mu-row>
+    <div v-if="info.totalCount > pageSize" class="pagination">
+      <mu-pagination
+        raised
+        circle
+        :total="info.totalCount"
+        :current.sync="page"
+        :pageSize.sync="pageSize"
+        @change="pageChange"
+      ></mu-pagination>
+    </div>
 
     <Footer></Footer>
   </div>
@@ -76,6 +70,7 @@ export default {
 
   data() {
     return {
+      isPC: this.isPC,
       page: 1,
       pageSize: 10,
       info: {}
@@ -111,125 +106,80 @@ export default {
 <style lang="less" scoped>
 .articles {
   padding-top: 64px;
-  .card {
+  .content {
+    padding-bottom: 0.53333rem;
     display: flex;
-    flex-wrap: wrap;
-    margin-top: 16px;
-    border-radius: 10px;
-    cursor: pointer;
-    &:hover {
-      animation: pulse 1s;
-    }
-    .title {
-      padding: 16px 16px 0 16px;
-      font-size: 18px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-    }
-    .sub-title {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-    .text {
-      padding: 0 16px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
-    }
-    .chip {
-      margin-right: 10px;
-    }
-    .cover {
-      flex: 1;
-      border-radius: 0;
-      padding: 16px;
-      .cover-img {
-        width: 100%;
-        height: 160px;
-        vertical-align: middle;
+    .left {
+      flex: 9;
+      .card {
+        width: 80%;
+        margin: 0.42667rem auto 0;
+        display: flex;
+        flex-wrap: wrap;
+        border-radius: 0.26667rem;
+        cursor: pointer;
+        &:hover {
+          animation: pulse 1s;
+        }
+        .title {
+          padding: 0.42667rem 0.42667rem 0 0.42667rem;
+          font-size: 0.4rem;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 1;
+        }
+        .sub-title {
+          display: flex;
+          flex-wrap: wrap;
+        }
+        .text {
+          padding: 0 0.42667rem;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 3;
+        }
+        .chip {
+          margin-right: 0.26667rem;
+        }
+        .cover {
+          flex: 1;
+          border-radius: 0;
+          padding: 0.42667rem;
+          .cover-img {
+            object-fit: cover;
+            width: 100%;
+            height: 4.26667rem;
+            vertical-align: middle;
+          }
+        }
+        .card-box {
+          flex: 2;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+        }
       }
     }
-    .content {
-      flex: 2;
+    .right {
+      flex: 3;
+      display: flex;
+      justify-content: center;
     }
+  }
+
+  .box {
+    justify-content: center !important;
+    padding-bottom: 0.53333rem;
   }
 }
 
 .pagination {
-  margin: 20px 0;
+  margin: 0.53333rem 0;
   display: flex;
   justify-content: center;
-}
-
-.slider-card {
-  position: relative;
-  margin-top: 16px;
-  text-align: center;
-  padding: 16px;
-  border-radius: 5px;
-  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14),
-    0 1px 8px 0 rgba(0, 0, 0, 0.12);
-  .avatar {
-    box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2),
-      0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12);
-  }
-  .title {
-    font-size: 20px;
-    color: purple;
-  }
-  .desc {
-    font-size: 14px;
-    margin: 10px 0;
-  }
-  .tags {
-    .chip {
-      margin: 0 10px 10px 0;
-    }
-  }
-  .friend-link-box {
-    .friend-link-title {
-      position: relative;
-      &::before {
-        content: "";
-        width: 30%;
-        height: 1px;
-        background: #ccc;
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-      &::after {
-        content: "";
-        width: 30%;
-        height: 1px;
-        background: #ccc;
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-    }
-    .friend-links {
-      display: flex;
-      justify-content: space-around;
-    }
-  }
-  .ad {
-    position: absolute;
-    z-index: 1;
-    right: 8px;
-    top: 8px;
-    font-size: 12px;
-  }
-}
-.card-ad {
-  padding: 8px;
 }
 </style>

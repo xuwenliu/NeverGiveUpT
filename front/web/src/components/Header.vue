@@ -188,6 +188,13 @@ export default {
     if (this.user) {
       this.trigger = this.$refs.button.$el;
     }
+    // window.onresize = () => {
+    //   if (window.innerWidth <= 800) {
+    //     this.isPC = false;
+    //   } else {
+    //     this.isPC = true;
+    //   }
+    // };
     window.onscroll = () => {
       if (document.documentElement.scrollTop + document.body.scrollTop > 100) {
         this.showBackTop = true;
@@ -268,29 +275,11 @@ export default {
     flex: 1;
   }
 }
-.search {
-  float: right;
-  .mu-input {
-    margin-bottom: 0;
-    color: #fff;
-    padding-left: 0;
-  }
-  /deep/ .mu-input-content {
-    background: hsla(0, 0%, 100%, 0.15);
-    .mu-text-field-input {
-      padding-left: 56px;
-      color: #fff;
-    }
-    .mu-text-field-input::placeholder {
-      color: #fff;
-    }
-  }
-}
 
 .tool {
   position: fixed;
   right: 0;
-  bottom: 100px;
+  bottom: 2.66667rem;
   .tool-row {
     text-align: right;
     margin-top: 20px;
@@ -301,22 +290,25 @@ export default {
     }
   }
 }
+
 .back-top {
   position: fixed;
-  right: 10px;
-  bottom: 30px;
+  right: 0.26667rem;
+  bottom: 0.4rem;
 }
 .user {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
+  max-width: 2.66667rem;
   span {
     display: block;
-    width: 60px;
+    flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    text-align: right;
   }
 }
 </style>

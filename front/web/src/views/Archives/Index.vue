@@ -1,5 +1,5 @@
 <template>
-  <div class="archive">
+  <div class="common">
     <Header :light-index="2"></Header>
     <ArchivesAnimation></ArchivesAnimation>
     <div class="content">
@@ -83,15 +83,6 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.archive {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-}
 .content {
   width: 100%;
   height: 100%;

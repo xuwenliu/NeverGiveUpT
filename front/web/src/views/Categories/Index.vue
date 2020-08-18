@@ -1,5 +1,5 @@
 <template>
-  <div class="categories">
+  <div class="common">
     <!-- :style="{background:`url(${info.categoriesBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
     <Header :light-index="3"></Header>
     <CategoriesAnimation></CategoriesAnimation>
@@ -68,31 +68,22 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.categories {
+.content {
+  padding-top: 64px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   position: absolute;
+  width: 100%;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  width: 100%;
-  height: 100%;
-  .content {
-    padding-top: 64px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    position: absolute;
-    width: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
 }
 
 .paper {
-  width: 100px;
-  height: 100px;
+  width: 2.66667rem;
+  height: 2.66667rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -105,7 +96,7 @@ export default {
     align-items: center;
     color: #000;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 0.42667rem;
   }
 }
 </style>

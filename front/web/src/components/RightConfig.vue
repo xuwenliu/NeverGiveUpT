@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="right-config">
     <mu-card v-if="!hideIntroduction" class="slider-card">
       <mu-avatar class="avatar" size="100">
         <img v-lazy="avatar" alt />
@@ -187,6 +187,9 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.right-config{
+  width: 4rem;
+}
 .slider-card {
   position: relative;
   margin-top: 16px;

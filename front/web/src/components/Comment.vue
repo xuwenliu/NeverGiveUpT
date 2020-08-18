@@ -13,10 +13,10 @@
 </template>
 <style lang="less" scoped>
 .comment-input {
-  padding: 0 16px;
+  padding: 0 0.42667rem;
 }
 .comment-btn {
-  margin:0 16px 16px 0;
+  margin:0 0.42667rem 0.42667rem 0;
   float: right;
 
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="about">
+  <div class="common">
     <Header :light-index="5" background="#000"></Header>
     <AboutAnimation></AboutAnimation>
 
@@ -89,103 +89,56 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.about {
+.content {
+  padding-top: 64px;
+  width: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  .content {
-    padding-top: 64px;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /deep/ .mu-card-header {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    /deep/ .mu-card-header {
-      display: flex;
-      justify-content: flex-end;
-      height: 50px;
-    }
-    .avatar-box {
-      width: 100px;
-      height: 100px;
-      position: absolute;
-      top: -50px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1;
-      .avatar {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-      }
+    justify-content: flex-end;
+    height: 1.33333rem;
+  }
+  .avatar-box {
+    width: 2.66667rem;
+    height: 2.66667rem;
+    position: absolute;
+    top: -1.33333rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    .avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
     }
   }
 }
 .tags {
-  padding: 16px;
+  padding: 0.42667rem;
   .tag {
-    margin-bottom: 16px;
-    margin-right: 16px;
+    margin-bottom: 0.42667rem;
+    margin-right: 0.42667rem;
   }
 }
 .mu-carousel {
-  height: 200px;
-  margin-top: 20px;
+  height: 5.33333rem;
+  margin-top: 0.53333rem;
 }
 .mu-carousel-item > img {
   width: 100%;
   height: 100%;
 }
 .card {
-  max-width: 375px;
+  max-width: 10rem;
   margin: 0 auto;
   animation: backInUp 2s;
   background: rgba(255, 255, 255, 0.5);
 }
 
-@-webkit-keyframes backInUp {
-  0% {
-    -webkit-transform: translateY(1200px) scale(0.7);
-    transform: translateY(1200px) scale(0.7);
-    opacity: 0.7;
-  }
 
-  80% {
-    -webkit-transform: translateY(0) scale(0.7);
-    transform: translateY(0) scale(0.7);
-    opacity: 0.7;
-  }
-
-  to {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes backInUp {
-  0% {
-    -webkit-transform: translateY(1200px) scale(0.7);
-    transform: translateY(1200px) scale(0.7);
-    opacity: 0.7;
-  }
-
-  80% {
-    -webkit-transform: translateY(0) scale(0.7);
-    transform: translateY(0) scale(0.7);
-    opacity: 0.7;
-  }
-
-  to {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-    opacity: 1;
-  }
-}
 </style>

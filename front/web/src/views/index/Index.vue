@@ -2,8 +2,8 @@
   <div>
     <IndexAnimation></IndexAnimation>
     <Header></Header>
-    <div class="index">
-      <div class="content">
+    <div class="common">
+      <div class="home">
         <p>{{info.introduction}}</p>
       </div>
     </div>
@@ -61,23 +61,14 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.index {
-  width: 100%;
-  height: 100%;
+.home {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  .content {
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    text-align: center;
-    transform: translateY(-50%);
-    font-size: 18px;
-    color: #fff;
-    font-weight: 500;
-  }
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  transform: translateY(-50%);
+  font-size: 0.48rem;
+  color: #fff;
+  font-weight: 500;
 }
 </style>

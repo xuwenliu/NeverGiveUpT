@@ -35,10 +35,26 @@ class ArticlesService extends Service {
 
   async details(params) {
     const { ctx } = this;
-    const id = params.id; // 文章id
+    const { id, views } = params; // 文章id
+    if (views * 1 === 1) {
+      // 第一次查看该文章
+      const oldView = await ctx.model.Articles.findOne({
+        _id: id,
+      });
+      const up = await ctx.model.Articles.updateOne(
+        {
+          _id: id,
+        },
+        {
+          views: oldView.views + 1,
+        }
+      );
+    }
+
     const res = await ctx.model.Articles.findOne({
       _id: id,
     });
+
     return {
       data: res,
       msg: "文章详情获取成功",

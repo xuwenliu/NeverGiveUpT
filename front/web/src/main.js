@@ -35,7 +35,8 @@ import {
   Form,
   AutoComplete,
   Snackbar,
-  Popover
+  Popover,
+  Badge
 } from "muse-ui";
 import "muse-ui/lib/styles/theme.less";
 import "muse-ui-progress/dist/muse-ui-progress.css";
@@ -108,6 +109,7 @@ Vue.use(Form);
 Vue.use(AutoComplete);
 Vue.use(Snackbar);
 Vue.use(Popover);
+Vue.use(Badge);
 
 const isPC = (() => {
   var userAgentInfo = navigator.userAgent;

@@ -59,5 +59,10 @@ module.exports = (app) => {
   router.post(webRouter + "/logout", controller.web.user.logout); //退出登录
 
 
+  router.post(webRouter + "/comment",jwt, controller.web.comment.submit); //提交评论
+  router.get(webRouter + "/comment/list", controller.web.comment.list); //评论列表
+  router.post(webRouter + "/like",jwt, controller.web.like.submit); //点赞
+
+
   
 };

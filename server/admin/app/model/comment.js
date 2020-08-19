@@ -19,22 +19,27 @@ module.exports = (app) => {
       targetReplayId: {
         type: "string",
         required: false,
+        default: "",
       },
       targetReplayContent: {
         type: "string",
         required: false,
         max: 200,
+        default: "",
       },
       currentReplayContent: {
         type: "string",
         required: false,
         max: 200,
+        default: "",
       },
-      commentTime: { // 评论时间
+      commentTime: {
+        // 评论时间
         type: "number",
         default: 0,
       },
-      auditTime: { // 审核时间
+      auditTime: {
+        // 审核时间
         type: "number",
         default: 0,
       },

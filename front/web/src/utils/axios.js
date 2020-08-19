@@ -43,8 +43,17 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
-    vue.$toast.error("服务器连接异常");
-    return Promise.resolve(error.response);
+    const status = error.response.status;
+    const obj = {
+      401: "请注册或登录",
+      422: "参数错误",
+    };
+    if (status) {
+      vue.$toast.error(obj[status]);
+    } else {
+      vue.$toast.error("服务器连接异常");
+    }
+    return Promise.reject();
   }
 );
 

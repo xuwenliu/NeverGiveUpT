@@ -251,9 +251,11 @@ export default {
       const res = await this.$axios.post("/logout");
       if (res) {
         localStorage.removeItem("user");
+        sessionStorage.removeItem("liked");
         this.openUser = false;
         this.user = null;
         this.$toast.success(res.msg);
+        location.reload();
       }
     }
   }
@@ -303,7 +305,7 @@ export default {
   max-width: 2.66667rem;
   span {
     display: block;
-    flex: 1;
+    width: 80px;
     overflow: hidden;
     text-overflow: ellipsis;
     overflow: hidden;

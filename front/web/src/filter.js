@@ -1,4 +1,4 @@
-export const filterDate = (date, fmt = 'YYYY-MM-DD HH:mm:ss') => {
+export const filterDate = (date, fmt = 'YYYY-MM-DD HH:mm') => {
   if (!date) {
       return '';
   }

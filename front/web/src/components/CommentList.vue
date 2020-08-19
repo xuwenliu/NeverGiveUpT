@@ -1,39 +1,51 @@
 <template>
   <div class="comment-list">
     <div class="comment-item">
-      <mu-card class="card" v-for="item in 5" :key="item">
-        <mu-card-header title="昵称" sub-title="2020-09-03">
-          <mu-avatar slot="avatar">
-            <img src="../assets/img/4.jpeg" />
-          </mu-avatar>
+      <mu-card class="card" :class="classStyle" v-for="(item) in list" :key="item._id">
+        <mu-card-header :title="item.nickName" :sub-title="item.commentTime | filterDate">
+          <!-- <mu-avatar slot="avatar">
+            <img src="../assets/img/index.jpg" />
+          </mu-avatar>-->
         </mu-card-header>
-        <mu-card-text>{{item}}散落在指尖的阳光，我试着轻轻抓住光影的踪迹，它却在眉宇间投下一片淡淡的阴影。</mu-card-text>
-        <mu-card-actions>
+        <mu-card-text>
+          <span v-if="prevWho" class="who">@{{prevWho}}</span>
+          {{item.currentReplayContent}}
+          <mu-badge v-if="item.auditStatus == 3" content="未审核" color="#ccc"></mu-badge>
+        </mu-card-text>
+        <mu-card-actions v-if="!user || user.email !== item.nickName">
           <mu-button @click="replay(item)" small color="primary">回复</mu-button>
         </mu-card-actions>
 
-        <mu-card class="card sub-card" v-for="item in 5" :key="item">
-          <mu-card-header title="昵称" sub-title="2020-09-03">
+        <!-- 递归组件 调用自身，必须指定name属性commentList -->
+        <div v-if="item.children">
+          <comment-list
+            :prevWho="item.nickName"
+            classStyle="sub-card"
+            :articleId="articleId"
+            :articleTitle="articleTitle"
+            :list="item.children"
+          ></comment-list>
+        </div>
+
+        <!-- <mu-card class="card sub-card" v-for="sub in item.children" :key="sub._id">
+          <mu-card-header :title="sub.nickName" :sub-title="sub.commentTime | filterDate">
             <mu-avatar slot="avatar">
               <img src="../assets/img/4.jpeg" />
             </mu-avatar>
           </mu-card-header>
           <mu-card-text>
-            <span class="who">@昵称已经来了</span>
-            散落在指尖的阳光，我试着轻轻抓住光影的踪迹，它却在眉宇间投下一片淡淡的阴影。
-            调皮的阳光掀动了四月的心帘，温暖如约的歌声渐起。
-            似乎在诉说着，我也可以在漆黑的角落里，找到阴影背后的阳光，
-            找到阳光与阴影奏出和谐的旋律。我要用一颗敏感赤诚的心迎接每一缕滑过指尖的阳光！
+            <span class="who">@{{item.nickName}}</span>
+            {{sub.currentReplayContent}}
           </mu-card-text>
-          <mu-card-actions>
-            <mu-button small color="primary">回复</mu-button>
+          <mu-card-actions v-if="!user || user.email !== sub.nickName">
+            <mu-button @click="replay(sub)" small color="primary">回复</mu-button>
           </mu-card-actions>
-        </mu-card>
+        </mu-card>-->
       </mu-card>
     </div>
 
     <mu-dialog
-      title="评论回复 @昵称"
+      :title="modalTitle"
       width="600"
       max-width="80%"
       :esc-press-close="false"
@@ -55,23 +67,94 @@
 </template>
 <script>
 export default {
+  name: "commentList",
+  props: {
+    list: {
+      type: Array,
+      default: () => {}
+    },
+    articleId: {
+      type: String,
+      default: ""
+    },
+    articleTitle: {
+      type: String,
+      default: ""
+    },
+    classStyle: {
+      type: String,
+      default: ""
+    },
+    prevWho: {
+      type: String,
+      default: ""
+    }
+  },
   data() {
     return {
       open: false,
-      replayContent:'',
+      replayContent: "",
+      modalTitle: "",
+      user: JSON.parse(localStorage.getItem("user")),
+      showList: [],
+      replayItem: {}
     };
   },
   methods: {
+    buildTree(list) {
+      let temp = {};
+      let tree = {};
+      for (let i in list) {
+        temp[list[i]._id] = list[i];
+      }
+      for (let i in temp) {
+        if (temp[i].targetReplayId) {
+          if (!temp[temp[i].targetReplayId].children) {
+            temp[temp[i].targetReplayId].children = new Object();
+          }
+          temp[temp[i].targetReplayId].children[temp[i]._id] = temp[i];
+        } else {
+          tree[temp[i]._id] = temp[i];
+        }
+      }
+      return tree;
+    },
+
     replay(item) {
-      console.log(item);
+      if (!this.user) {
+        this.$toast.info("登录才能回复");
+        return;
+      }
       this.open = true;
+      this.modalTitle = `回复 @${item.nickName}`;
+      this.replayItem = item;
     },
-    close(){
+    close() {
       this.open = false;
-      this.replayContent = '';
+      this.replayContent = "";
     },
-    ok(){
-      this.close();
+    ok() {
+      if (!this.replayContent) {
+        this.$toast.info("请输入回复内容");
+        return;
+      }
+      this.replaySubmit();
+    },
+    async replaySubmit() {
+      const postData = {
+        nickName: this.user.email ? this.user.email : this.user.nickName,
+        articleId: this.articleId,
+        articleTitle: this.articleTitle,
+        targetReplayId: this.replayItem._id,
+        targetReplayContent: this.replayItem.currentReplayContent,
+        currentReplayContent: this.replayContent
+      };
+      const res = await this.$axios.post("/comment", postData);
+      if (res.data) {
+        this.$toast.success("回复成功,请耐心等待审核");
+        location.reload();
+        this.close();
+      }
     }
   }
 };

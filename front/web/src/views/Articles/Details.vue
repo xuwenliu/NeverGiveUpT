@@ -14,7 +14,7 @@
         </div>
       </mu-card>
       <div class="action" :class="toc.length>0?'':'noMulu'">
-        <mu-button v-if="info.isLike" fab color="primary">
+        <mu-button @click="like" v-if="info.isLike" fab color="primary">
           <mu-icon value="thumb_up"></mu-icon>
         </mu-button>
 
@@ -61,7 +61,7 @@
           </mu-card>
 
           <div class="action-list">
-            <mu-button v-if="info.isLike" fab color="primary">
+            <mu-button @click="like" v-if="info.isLike" fab color="primary">
               <mu-icon value="thumb_up"></mu-icon>
             </mu-button>
 
@@ -71,13 +71,18 @@
           </div>
 
           <mu-card id="comment" class="card">
-            <Comment></Comment>
+            <Comment @comment="comment" :comment-success="commentSuccess"></Comment>
           </mu-card>
 
           <mu-card class="card">
-            <mu-card-title title="评论（20）"></mu-card-title>
+            <mu-card-title :title="commentTitle"></mu-card-title>
             <mu-divider></mu-divider>
-            <CommentList></CommentList>
+            <CommentList
+              v-if="commentList.length > 0"
+              :articleId="info._id"
+              :articleTitle="info.title"
+              :list="commentList"
+            ></CommentList>
           </mu-card>
         </div>
       </div>
@@ -112,7 +117,9 @@ export default {
     return {
       info: {},
       content: "",
-      toc: ""
+      toc: "",
+      commentSuccess: false,
+      commentList: []
     };
   },
   computed: {
@@ -129,16 +136,25 @@ export default {
         return enter === null ? lenE : lenE - enter.length;
       }
       return 0;
+    },
+    commentTitle() {
+      return `评论（${this.info.comment}）`;
     }
   },
   mounted() {
-    this.getInfo();
+    this.getInfo(1);
+    this.getCommentList();
   },
   methods: {
-    async getInfo() {
+    /**
+     * views 统计预览次数，这里统计第一次进入页面的次数
+     */
+    async getInfo(views) {
       this.$progress.start();
       const id = this.$route.query.id;
-      const res = await this.$axios.get(`/articles/details?id=${id}`);
+      const res = await this.$axios.get(
+        `/articles/details?id=${id}&views=${views}`
+      );
       if (res.data) {
         this.info = res.data;
         const article = markdown.marked(this.info.content);
@@ -149,9 +165,69 @@ export default {
         this.$progress.done();
       }
     },
+
+    async getCommentList() {
+      const articleId = this.$route.query.id;
+      const res = await this.$axios.get(`/comment/list?articleId=${articleId}`);
+      if (res.data) {
+        this.commentList = this.listToTree(res.data);
+      }
+    },
+
+    listToTree(list) {
+      let info = list.reduce(
+        (map, node) => ((map[node._id] = node), (node.children = []), map),
+        {}
+      );
+      return list.filter(node => {
+        info[node.targetReplayId] &&
+          info[node.targetReplayId].children.push(node);
+        return !node.targetReplayId;
+      });
+    },
+
     scrollComment() {
       let target = document.getElementById("comment");
       animateScroll(target, 500, -50);
+    },
+    async comment(data) {
+      const postData = {
+        nickName: data.email ? data.email : data.nickName,
+        articleId: this.info._id,
+        articleTitle: this.info.title,
+        currentReplayContent: data.content
+      };
+      const res = await this.$axios.post("/comment", postData);
+      if (res.data) {
+        this.$toast.success(res.msg);
+        this.getInfo();
+        this.commentSuccess = true;
+      }
+    },
+    async like() {
+      const oldLikeArr = JSON.parse(sessionStorage.getItem("like"));
+      if (oldLikeArr) {
+        const isliked = oldLikeArr.some(item => item === this.info._id);
+        if (isliked) {
+          this.$toast.info("您已经点赞了！");
+          return;
+        }
+      }
+
+      const postData = {
+        articleId: this.info._id
+      };
+      const res = await this.$axios.post("/like", postData);
+      if (res.data) {
+        this.$toast.success(res.msg);
+        this.getInfo();
+        const oldLikeArr = JSON.parse(sessionStorage.getItem("like"));
+        let save = [postData.articleId];
+        if (oldLikeArr) {
+          save = [...oldLikeArr, postData.articleId];
+        }
+        sessionStorage.setItem("like", JSON.stringify(save));
+      }
     }
   }
 };

@@ -1,7 +1,12 @@
 <template>
   <div class="comment-list">
     <div class="comment-item">
-      <mu-card class="card" :class="classStyle" v-for="(item) in list" :key="item._id">
+      <mu-card
+        class="card"
+        :class="[classStyle,isPC?'':'wap-card']"
+        v-for="(item) in list"
+        :key="item._id"
+      >
         <mu-card-header :title="item.nickName" :sub-title="item.commentTime | filterDate">
           <!-- <mu-avatar slot="avatar">
             <img src="../assets/img/index.jpg" />
@@ -92,6 +97,7 @@ export default {
   },
   data() {
     return {
+      isPC: this.isPC,
       open: false,
       replayContent: "",
       modalTitle: "",
@@ -174,6 +180,9 @@ export default {
   padding-bottom: 0.42667rem;
   box-shadow: none;
   border-radius: 0;
+}
+.wap-card {
+  margin: 4px 10px 0 10px;
 }
 .sub-card {
   border-left: 1px dashed purple;

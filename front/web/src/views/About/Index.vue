@@ -19,7 +19,9 @@
             <img v-lazy="item.imgUrl" />
           </mu-carousel-item>
         </mu-carousel>
-        <mu-card-text>{{info.desc}}</mu-card-text>
+        <mu-card-text>
+          <div v-html="info.desc"></div>
+        </mu-card-text>
         <div class="tags">
           <mu-chip
             class="tag"

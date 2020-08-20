@@ -12,7 +12,6 @@ class CommentService extends Service {
     const pageSize = params.pageSize * 1;
     params = ctx.helper.filterEmptyField(params);
 
-
     let mustCon = {};
     if (params.auditStatus !== "0") {
       mustCon = {
@@ -27,11 +26,15 @@ class CommentService extends Service {
       $and: [
         mustCon,
         {
-          nickName: { $regex: params.nickName ? new RegExp(params.nickName,'i')  : "" },
+          nickName: {
+            $regex: params.nickName ? new RegExp(params.nickName, "i") : "",
+          },
         },
         {
           articleTitle: {
-            $regex: params.articleTitle ? new RegExp(params.articleTitle,'i') : "",
+            $regex: params.articleTitle
+              ? new RegExp(params.articleTitle, "i")
+              : "",
           },
         },
       ],
@@ -88,6 +91,7 @@ class CommentService extends Service {
 
     const updateData = {
       auditStatus: params.auditStatus,
+      auditTime: ctx.helper.moment().unix(),
     };
     await ctx.model.Comment.updateOne(
       {

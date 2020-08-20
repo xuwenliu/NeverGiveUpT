@@ -41,7 +41,7 @@ class ArticlesService extends Service {
       const oldView = await ctx.model.Articles.findOne({
         _id: id,
       });
-      const up = await ctx.model.Articles.updateOne(
+      await ctx.model.Articles.updateOne(
         {
           _id: id,
         },
@@ -50,13 +50,38 @@ class ArticlesService extends Service {
         }
       );
     }
-
-    const res = await ctx.model.Articles.findOne({
-      _id: id,
+    const queryCon = {
+      status: 1,
+      publishStatus: 1,
+    };
+    const allArticles = await ctx.model.Articles.find(queryCon).sort({
+      createTime: -1,
     });
+    const index = allArticles.findIndex((item) => item._id == id);
+    
+    let prev = null;
+    let next = null;
+    if (index === 0) {
+      // 没有上一篇文章
+      prev = null;
+      next = allArticles[index + 1];
+    } else if (index === allArticles.length - 1) {
+      // 没有下一篇文章
+      prev = allArticles[index - 1];
+      next = null;
+    } else {
+      prev = allArticles[index - 1];
+      next = allArticles[index + 1];
+    }
+
+    const data = {
+      prev,
+      next,
+      current: allArticles[index],
+    };
 
     return {
-      data: res,
+      data,
       msg: "文章详情获取成功",
     };
   }

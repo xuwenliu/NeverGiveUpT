@@ -4,7 +4,6 @@
     <div class="content">
       <div class="left">
         <mu-card
-          @click="goDetail(item)"
           :style="{width:isPC?'80%':'90%'}"
           class="card"
           v-for="item in info.list"
@@ -14,24 +13,28 @@
             <img class="cover-img" v-lazy="item.cover" />
           </div>
           <div class="card-box">
-            <div class="title">{{item.title}}</div>
+            <div class="title" @click="goDetail(item)">{{item.title}}</div>
             <mu-card-actions class="sub-title">
-              <mu-button flat color="success">查看({{item.views}})</mu-button>
-              <mu-button flat color="primary">评论({{item.comment}})</mu-button>
-              <mu-button flat color="red">点赞({{item.like}})</mu-button>
-              <mu-button flat color="#9e9e9e">{{item.createTime | filterDate}}</mu-button>
+              <mu-button class="cursor-default" flat color="success">查看({{item.views}})</mu-button>
+              <mu-button class="cursor-default" flat color="primary">评论({{item.comment}})</mu-button>
+              <mu-button class="cursor-default" flat color="red">点赞({{item.like}})</mu-button>
+              <mu-button
+                class="cursor-default"
+                flat
+                color="#9e9e9e"
+              >{{item.createTime | filterDate}}</mu-button>
             </mu-card-actions>
             <mu-card-text class="text">{{item.introduction}}</mu-card-text>
             <mu-card-actions>
-              <mu-chip class="chip" color="primary">
-                <mu-icon size="16" left value="dns"></mu-icon>
+              <mu-button flat class="chip cursor-default" color="primary">
+                <mu-icon left value="dns"></mu-icon>
                 {{item.categories}}
-              </mu-chip>
+              </mu-button>
 
-              <mu-chip class="chip" v-for="sub in item.tags" color="red" :key="sub">
-                <mu-icon size="16" left value="loyalty"></mu-icon>
+              <mu-button flat class="chip cursor-default" v-for="sub in item.tags" :key="sub">
+                <mu-icon left value="loyalty"></mu-icon>
                 {{sub}}
-              </mu-chip>
+              </mu-button>
             </mu-card-actions>
           </div>
         </mu-card>
@@ -117,7 +120,6 @@ export default {
         display: flex;
         flex-wrap: wrap;
         border-radius: 0.26667rem;
-        cursor: pointer;
         &:hover {
           animation: pulse 1s;
         }
@@ -129,6 +131,7 @@ export default {
           display: -webkit-box;
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 1;
+          cursor: pointer;
         }
         .sub-title {
           display: flex;

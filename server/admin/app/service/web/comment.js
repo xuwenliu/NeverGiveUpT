@@ -40,6 +40,8 @@ class CommentService extends Service {
       auditStatus: {
         $ne: "2", // 评论状态不为驳回的
       },
+    }).sort({
+      commentTime: -1,
     });
     return {
       msg: "评论列表获取成功",

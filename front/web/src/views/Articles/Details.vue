@@ -37,23 +37,32 @@
               <img v-lazy="info.cover" style="height:100%" />
             </mu-card-media>
             <mu-card-actions class="sub-title">
-              <mu-button v-if="wordLength > 0" flat color="deepPurple500">字数({{wordLength}})</mu-button>
-              <mu-button v-if="min>0" flat color="tealA400">阅读大约{{min}}分钟</mu-button>
-              <mu-button flat color="success">查看({{info.views}})</mu-button>
-              <mu-button flat color="primary">评论({{info.comment}})</mu-button>
-              <mu-button flat color="red">点赞({{info.like}})</mu-button>
-              <mu-button flat color="#9e9e9e">{{info.createTime | filterDate}}</mu-button>
+              <mu-button
+                class="cursor-default"
+                v-if="wordLength > 0"
+                flat
+                color="deepPurple500"
+              >字数({{wordLength}})</mu-button>
+              <mu-button class="cursor-default" v-if="min>0" flat color="tealA400">阅读大约{{min}}分钟</mu-button>
+              <mu-button class="cursor-default" flat color="success">查看({{info.views}})</mu-button>
+              <mu-button class="cursor-default" flat color="primary">评论({{info.comment}})</mu-button>
+              <mu-button class="cursor-default" flat color="red">点赞({{info.like}})</mu-button>
+              <mu-button
+                class="cursor-default"
+                flat
+                color="#9e9e9e"
+              >{{info.createTime | filterDate}}</mu-button>
             </mu-card-actions>
 
             <div class="article-detail" v-html="content"></div>
 
             <mu-card-actions>
-              <mu-button flat color="primary">
+              <mu-button class="cursor-default" flat color="primary">
                 <mu-icon left value="dns"></mu-icon>
                 {{info.categories}}
               </mu-button>
 
-              <mu-button flat v-for="sub in info.tags" :key="sub">
+              <mu-button class="cursor-default" flat v-for="sub in info.tags" :key="sub">
                 <mu-icon left value="loyalty"></mu-icon>
                 {{sub}}
               </mu-button>
@@ -84,6 +93,8 @@
               :list="commentList"
             ></CommentList>
           </mu-card>
+
+          <prev-next :prev="prev" :next="next"></prev-next>
         </div>
       </div>
       <div v-if="isPC" class="right">
@@ -101,6 +112,7 @@ import Comment from "@/components/Comment";
 import CommentList from "@/components/CommentList";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import PrevNext from "@/components/PrevNext";
 
 import { animateScroll } from "@/utils";
 
@@ -111,11 +123,14 @@ export default {
     Comment,
     CommentList,
     Footer,
-    Header
+    Header,
+    PrevNext
   },
   data() {
     return {
       info: {},
+      prev: {},
+      next: {},
       content: "",
       toc: "",
       commentSuccess: false,
@@ -156,7 +171,9 @@ export default {
         `/articles/details?id=${id}&views=${views}`
       );
       if (res.data) {
-        this.info = res.data;
+        this.info = res.data.current;
+        this.prev = res.data.prev;
+        this.next = res.data.next;
         const article = markdown.marked(this.info.content);
         article.then(res => {
           this.content = res.content;
@@ -200,8 +217,8 @@ export default {
       const res = await this.$axios.post("/comment", postData);
       if (res.data) {
         this.$toast.success(res.msg);
-        this.getInfo();
         this.commentSuccess = true;
+        location.reload();
       }
     },
     async like() {

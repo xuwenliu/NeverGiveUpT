@@ -11,7 +11,7 @@
             <mu-list-item>
               <mu-ripple
                 @click="goArticlesDetails(item)"
-                style="width:100%"
+                style="width:100%;cursor:pointer"
                 color="red"
                 :opacity="0.5"
               >
@@ -45,7 +45,7 @@
               <mu-list-item>
                 <mu-ripple
                   @click="goArticlesDetails(item)"
-                  style="width:100%"
+                  style="width:100%;cursor:pointer"
                   color="rgb(156, 39, 176)"
                   :opacity="0.5"
                 >
@@ -75,7 +75,7 @@ export default {
   name: "categoriesDetails",
   components: {
     CategoriesAnimation,
-    Header
+    Header,
   },
   data() {
     return {

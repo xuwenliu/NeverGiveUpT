@@ -3,6 +3,9 @@
     <!-- :style="{background:`url(${info.categoriesBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
     <Header :light-index="3"></Header>
     <CategoriesAnimation></CategoriesAnimation>
+    <div v-if="isPC" class="right-box">
+      <RightConfig showPosition="分类详情"></RightConfig>
+    </div>
     <div class="content">
       <mu-paper v-if="isPC" :z-depth="5" class="pc-box">
         <mu-list>
@@ -70,12 +73,14 @@
 <script>
 import CategoriesAnimation from "@/components/CategoriesAnimation";
 import Header from "@/components/Header";
+import RightConfig from "@/components/RightConfig";
 
 export default {
   name: "categoriesDetails",
   components: {
     CategoriesAnimation,
     Header,
+    RightConfig
   },
   data() {
     return {

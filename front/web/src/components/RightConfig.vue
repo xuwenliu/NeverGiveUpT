@@ -26,7 +26,9 @@
             :color="item.color"
             @click="goLink(item)"
           >
-            <mu-icon :value="item.icon"></mu-icon>
+            <mu-avatar size="40">
+              <img :src="item.icon" alt />
+            </mu-avatar>
           </mu-button>
         </div>
       </div>
@@ -41,8 +43,11 @@
       </mu-carousel>
     </mu-card>
 
-    <mu-card v-if="suggest.movie.length > 0" class="slider-card">
-      <div class="friend-link-box">
+    <mu-card
+      v-if="suggest.movie.length > 0 || suggest.teleplay.length > 0 || suggest.music.length > 0"
+      class="slider-card"
+    >
+      <div v-if="suggest.movie.length > 0" class="friend-link-box">
         <p class="friend-link-title">电影推荐</p>
         <div class="friend-links">
           <div class="tags">
@@ -90,7 +95,7 @@
   </div>
 </template>
 <script>
-import { randomColor } from "@/utils";
+import { randomColor, Icon } from "@/utils";
 export default {
   props: {
     showPosition: {
@@ -113,7 +118,8 @@ export default {
         ? this.introduction.friendLink.map(item => {
             return {
               ...item,
-              color: randomColor()
+              color: randomColor(),
+              icon: Icon[item.icon]
             };
           })
         : [];
@@ -187,7 +193,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.right-config{
+.right-config {
   width: 4rem;
 }
 .slider-card {

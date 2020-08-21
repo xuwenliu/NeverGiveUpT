@@ -1,16 +1,7 @@
 <template>
-  <div class="prev-next clearfix">
-    <mu-tooltip class="prev" v-if="prev" placement="top" :content="prev.title">
-      <mu-button @click="goDetails(prev)">
-        <mu-icon left value="arrow_back"></mu-icon>上一篇
-      </mu-button>
-    </mu-tooltip>
-    <mu-tooltip class="next" v-if="next" placement="top" :content="next.title">
-      <mu-button @click="goDetails(next)" color="primary">
-        下一篇
-        <mu-icon right value="arrow_forward"></mu-icon>
-      </mu-button>
-    </mu-tooltip>
+  <div class="prev-next">
+    <div class="prev" @click="goDetails(prev)" v-if="prev">上一篇： {{prev.title}}</div>
+    <div class="next" @click="goDetails(next)" v-if="next">下一篇： {{next.title}}</div>
   </div>
 </template>
 <script>
@@ -37,11 +28,15 @@ export default {
 </script>
 <style lang="less" scoped>
 .prev-next {
-  .prev {
-    float: left;
+  color: #5e35b1;
+  font-size: 0.24rem;
+  .prev{
+    cursor: pointer;
+    padding: 5px 0;
   }
   .next {
-    float: right;
+    cursor: pointer;
+    padding: 5px 0;
   }
 }
 </style>

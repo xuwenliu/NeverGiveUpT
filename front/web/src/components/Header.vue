@@ -188,13 +188,13 @@ export default {
     if (this.user) {
       this.trigger = this.$refs.button.$el;
     }
-    // window.onresize = () => {
-    //   if (window.innerWidth <= 800) {
-    //     this.isPC = false;
-    //   } else {
-    //     this.isPC = true;
-    //   }
-    // };
+    window.onresize = () => {
+      if (window.innerWidth <= 750) {
+        this.isPC = false;
+      } else {
+        this.isPC = true;
+      }
+    };
     window.onscroll = () => {
       if (document.documentElement.scrollTop + document.body.scrollTop > 100) {
         this.showBackTop = true;
@@ -270,9 +270,6 @@ export default {
 }
 
 .mu-appbar {
-  /deep/ .mu-appbar-right {
-    flex: 1;
-  }
   .mu-flat-button {
     flex: 1;
   }
@@ -302,10 +299,9 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  max-width: 2.66667rem;
   span {
     display: block;
-    width: 80px;
+    width: 60px;
     overflow: hidden;
     text-overflow: ellipsis;
     overflow: hidden;

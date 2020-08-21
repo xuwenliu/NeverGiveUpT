@@ -2,6 +2,9 @@
   <div class="common">
     <Header :light-index="2"></Header>
     <ArchivesAnimation></ArchivesAnimation>
+    <div v-if="isPC" class="right-box">
+      <RightConfig showPosition="归档"></RightConfig>
+    </div>
     <div class="content">
       <mu-stepper :activeStep="step" :linear="false" orientation="vertical">
         <mu-step v-for="(item,index) in list" :key="item.year">
@@ -26,15 +29,18 @@
 <script>
 import ArchivesAnimation from "@/components/ArchivesAnimation";
 import Header from "@/components/Header";
+import RightConfig from "@/components/RightConfig";
 
 export default {
   name: "archive",
   components: {
     ArchivesAnimation,
-    Header
+    Header,
+    RightConfig
   },
   data() {
     return {
+      isPC:this.isPC,
       step: 0,
       list: {}
     };

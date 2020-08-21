@@ -6,6 +6,9 @@
       <div class="home">
         <p>{{info.introduction}}</p>
       </div>
+      <div v-if="isPC" class="right-box">
+        <RightConfig showPosition="首页"></RightConfig>
+      </div>
     </div>
   </div>
 </template>
@@ -14,15 +17,18 @@ let timer = 0;
 let i = 0;
 import IndexAnimation from "@/components/IndexAnimation";
 import Header from "@/components/Header";
+import RightConfig from "@/components/RightConfig";
 
 export default {
   name: "index",
   components: {
     IndexAnimation,
-    Header
+    Header,
+    RightConfig
   },
   data() {
     return {
+      isPC: this.isPC,
       info: {}
     };
   },
@@ -71,4 +77,5 @@ export default {
   color: #fff;
   font-weight: 500;
 }
+
 </style>

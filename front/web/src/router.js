@@ -72,5 +72,11 @@ export default new Router({
           /* webpackChunkName: "articles" */ "./views/Articles/Details.vue"
         ),
     },
+    {
+      path: "/resume",
+      name: "resume",
+      component: () =>
+        import(/* webpackChunkName: "resume" */ "./views/Resume.vue"),
+    },
   ],
 });

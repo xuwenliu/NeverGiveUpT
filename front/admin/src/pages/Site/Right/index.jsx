@@ -753,7 +753,7 @@ const Right = () => {
                           id: 'site.right.p_choose_tags_multiple',
                         })}
                         style={{ width: '100%' }}
-                        mode="multiple"
+                        mode="tags"
                       >
                         {tags.map((item) => (
                           <Option value={item} key={item}>

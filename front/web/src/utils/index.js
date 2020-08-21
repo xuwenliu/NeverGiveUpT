@@ -826,3 +826,12 @@ export const animateScroll = (element, speed, offset) => {
   }
   window.requestAnimationFrame(step);
 };
+
+import github from "@/assets/img/github.png";
+import sf from "@/assets/img/sf.jpeg";
+import zhihu from "@/assets/img/zhihu.jpg";
+export const Icon = {
+  github,
+  sf,
+  zhihu,
+};

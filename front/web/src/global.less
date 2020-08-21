@@ -610,5 +610,31 @@ img {
 }
 
 .cursor-default {
-  cursor: default!important;
+  cursor: default !important;
+}
+.common {
+  .right-box {
+    position: fixed;
+    top: 80px;
+    right: 70px;
+    z-index:3;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .articles .content .right {
+    display: none !important;
+  }
+  .common .right-box {
+    display: none !important;
+  }
+  .header .mu-appbar .mu-appbar-right {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .articles .content .left .card .cover {
+    display: none !important;
+  }
 }

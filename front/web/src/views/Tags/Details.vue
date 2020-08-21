@@ -2,6 +2,9 @@
   <div class="common">
     <Header :light-index="4"></Header>
     <TagsAnimation></TagsAnimation>
+    <div v-if="isPC" class="right-box">
+      <RightConfig showPosition="标签详情"></RightConfig>
+    </div>
     <!-- :style="{background:`url(${info.tagsBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
     <div class="content">
       <mu-paper v-if="isPC" :z-depth="5" class="pc-box">
@@ -72,12 +75,14 @@
 <script>
 import TagsAnimation from "@/components/TagsAnimation";
 import Header from "@/components/Header";
+import RightConfig from "@/components/RightConfig";
 
 export default {
   name: "tagsDetails",
   components: {
     TagsAnimation,
-    Header
+    Header,
+    RightConfig
   },
   data() {
     return {

@@ -3,6 +3,10 @@
     <!-- :style="{background:`url(${info.categoriesBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
     <Header :light-index="3"></Header>
     <CategoriesAnimation></CategoriesAnimation>
+    <div v-if="isPC" class="right-box">
+      <RightConfig showPosition="分类"></RightConfig>
+    </div>
+
     <div class="content" :style="{'flex-direction':isPC?'row':'column'}">
       <mu-paper
         class="paper"
@@ -24,12 +28,14 @@
 import { randomColor } from "@/utils";
 import CategoriesAnimation from "@/components/CategoriesAnimation";
 import Header from "@/components/Header";
+import RightConfig from "@/components/RightConfig";
 
 export default {
   name: "categories",
   components: {
     CategoriesAnimation,
-    Header
+    Header,
+    RightConfig
   },
   data() {
     return {

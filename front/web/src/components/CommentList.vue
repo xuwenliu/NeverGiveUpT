@@ -8,9 +8,9 @@
         :key="item._id"
       >
         <mu-card-header :title="item.nickName" :sub-title="item.commentTime | filterDate">
-          <!-- <mu-avatar slot="avatar">
-            <img src="../assets/img/index.jpg" />
-          </mu-avatar>-->
+          <mu-avatar slot="avatar">
+            <img src="../assets/img/user_avatar.png" />
+          </mu-avatar>
         </mu-card-header>
         <mu-card-text>
           <span v-if="prevWho" class="who">@{{prevWho}}</span>

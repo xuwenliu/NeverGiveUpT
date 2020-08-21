@@ -3,6 +3,9 @@
     <!-- :style="{background:`url(${info.tagsBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
     <Header :light-index="4"></Header>
     <TagsAnimation></TagsAnimation>
+    <div v-if="isPC" class="right-box">
+      <RightConfig showPosition="标签"></RightConfig>
+    </div>
     <div class="content">
       <div class="tags-wap">
         <mu-chip
@@ -21,12 +24,14 @@
 import { randomColor } from "@/utils";
 import TagsAnimation from "@/components/TagsAnimation";
 import Header from "@/components/Header";
+import RightConfig from "@/components/RightConfig";
 
 export default {
   name: "tags",
   components: {
     TagsAnimation,
-    Header
+    Header,
+    RightConfig
   },
   data() {
     return {

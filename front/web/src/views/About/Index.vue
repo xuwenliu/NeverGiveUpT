@@ -2,14 +2,16 @@
   <div class="common">
     <Header :light-index="5" background="#000"></Header>
     <AboutAnimation></AboutAnimation>
-
+    <div v-if="isPC" class="right-box">
+      <RightConfig showPosition="关于"></RightConfig>
+    </div>
     <div class="content">
       <mu-card class="card" :style="{marginTop:isPC?'100px':'0'}">
         <mu-card-header>
           <mu-paper v-if="isPC" class="avatar-box" circle :z-depth="5">
             <img class="avatar" v-lazy="avatar" />
           </mu-paper>
-          <mu-button v-if="info.showResume" :color="randomColor">
+          <mu-button @click="goResume" v-if="info.showResume" :color="randomColor">
             个人简历
             <mu-icon right value="arrow_forward"></mu-icon>
           </mu-button>
@@ -41,12 +43,14 @@
 import AboutAnimation from "@/components/AboutAnimation";
 import { randomColor } from "@/utils";
 import Header from "@/components/Header";
+import RightConfig from "@/components/RightConfig";
 
 export default {
   name: "about",
   components: {
     AboutAnimation,
-    Header
+    Header,
+    RightConfig
   },
   data() {
     return {
@@ -86,6 +90,11 @@ export default {
     },
     reset() {
       this.getInfo();
+    },
+    goResume(){
+      this.$router.push({
+        name:'resume'
+      })
     }
   }
 };
@@ -141,6 +150,4 @@ export default {
   animation: backInUp 2s;
   background: rgba(255, 255, 255, 0.5);
 }
-
-
 </style>

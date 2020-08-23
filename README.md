@@ -36,15 +36,15 @@
 	```
 	需要访问后台接口则需要设置项目代理，参看：front/admin/config/proxy.js
 	```js
-	dev: {
-    '/api': {
-      target: 'http://127.0.0.1:7002', // 上面服务端启动的地址
-      changeOrigin: true,
-      pathRewrite: {
-        '^/api': '/api/v1', // 意思是将形如：/api/about 接口地址代理成：/api/v1/about
-      },
-    },
-  },
+        dev: {
+        '/api': {
+            target: 'http://127.0.0.1:7002', // 上面服务端启动的地址
+            changeOrigin: true,
+            pathRewrite: {
+                '^/api': '/api/v1', // 意思是将形如：/api/about 接口地址代理成：/api/v1/about
+            },
+        },
+    }
 	```
 	
 4. 启动客户端（前台）

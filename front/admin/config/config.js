@@ -48,7 +48,7 @@ export default defineConfig({
           routes: [
             {
               path: '/',
-              redirect: '/Dashboard',
+              redirect: '/home',
             },
             {
               path: '/home',

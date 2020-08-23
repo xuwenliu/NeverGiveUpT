@@ -15,7 +15,7 @@
               <mu-ripple
                 @click="goArticlesDetails(item)"
                 style="width:100%;cursor:pointer"
-                color="red"
+                color="purple"
                 :opacity="0.5"
               >
                 <mu-list-item-title class="item">

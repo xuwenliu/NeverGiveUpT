@@ -146,6 +146,7 @@ export default {
 }
 .card {
   max-width: 10rem;
+  width: 10rem;
   margin: 0 auto;
   animation: backInUp 2s;
   background: rgba(255, 255, 255, 0.5);

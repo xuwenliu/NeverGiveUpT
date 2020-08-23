@@ -16,7 +16,7 @@
               <mu-step v-for="sub in item.list" :key="sub._id">
                 <mu-step-label>
                   <mu-icon slot="icon" value="note_add" color="#fff"></mu-icon>
-                  <span class="title" @click="goDetail(sub)">{{sub.title}}</span>
+                  <span class="title" @click="goDetail(sub)">{{sub.createTime | filterDate('MM-DD')}} {{sub.title}}</span>
                 </mu-step-label>
               </mu-step>
             </mu-stepper>

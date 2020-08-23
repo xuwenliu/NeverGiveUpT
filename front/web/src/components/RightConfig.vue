@@ -34,7 +34,7 @@
       </div>
     </mu-card>
 
-    <mu-card v-if="!hideAd" class="slider-card card-ad">
+    <mu-card v-if="!hideAd && ad" class="slider-card card-ad">
       <div class="ad">广告</div>
       <mu-carousel style="height:120px" hide-controls>
         <mu-carousel-item v-for="item in ad.imgs" :key="item._id">
@@ -176,11 +176,11 @@ export default {
     async getInfo() {
       const res = await this.$axios.get("/rightConfig");
       if (res.data) {
-        this.ad = res.data.ad;
+        this.ad = res.data.ad ;
         this.introduction = res.data.introduction;
         this.recommend = res.data.recommend;
 
-        this.hideAd = !this.ad.showPosition.includes(this.showPosition);
+        this.hideAd = this.ad && !this.ad.showPosition.includes(this.showPosition);
         this.hideIntroduction = !this.introduction.showPosition.includes(
           this.showPosition
         );

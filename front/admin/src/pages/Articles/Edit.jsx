@@ -111,6 +111,7 @@ const ArticlesEdit = (props) => {
       const postData = {
         ...params,
         ...getValues,
+        createTime: getValues.createTime * 1,
         publishStatus,
         status: 1,
       };
@@ -121,11 +122,11 @@ const ArticlesEdit = (props) => {
         message.success(
           publishStatus === 1
             ? intl.formatMessage({
-                id: 'articles.publish_success',
-              })
+              id: 'articles.publish_success',
+            })
             : intl.formatMessage({
-                id: 'articles.save_draft_success',
-              }),
+              id: 'articles.save_draft_success',
+            }),
         );
       } else {
         message.error(res.msg);
@@ -185,6 +186,16 @@ const ArticlesEdit = (props) => {
             placeholder={intl.formatMessage({
               id: 'articles.p_title_pattern',
             })}
+          />
+        </Form.Item>
+
+        <Form.Item
+          {...layout}
+          label='创建时间'
+          name="createTime"
+        >
+          <Input
+            disabled={params.disabled}
           />
         </Form.Item>
 

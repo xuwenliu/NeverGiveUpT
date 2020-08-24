@@ -126,7 +126,7 @@ class ArticlesService extends Service {
     }
     const data = {
       ...params,
-      createTime: ctx.helper.moment().unix(),
+      createTime: params.createTime || ctx.helper.moment().unix(),
     };
     const res = await ctx.model.Articles.create(data);
 
@@ -179,7 +179,7 @@ class ArticlesService extends Service {
 
     const updateData = {
       ...params,
-      createTime: oldIdArticles.createTime,
+      createTime:  params.createTime || oldIdArticles.createTime,
       updateTime: ctx.helper.moment().unix(),
     };
     await ctx.model.Articles.updateOne(

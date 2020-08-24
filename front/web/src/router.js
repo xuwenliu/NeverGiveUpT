@@ -16,7 +16,7 @@ export default new Router({
       path: "/index",
       name: "index",
       component: () =>
-        import(/* webpackChunkName: "index" */ "./views/Index/Index.vue"),
+        import(/* webpackChunkName: "index" */ "./views/index/Index.vue"),
     },
     {
       path: "/about",

@@ -63,6 +63,7 @@ const request = extend({
   credentials: 'include', // 默认请求是否带上cookie
 });
 request.interceptors.request.use((url, options) => {
+  url = url.replace('/api','/api/v1');
   const method = options.method.toLocaleLowerCase();
   if (method === 'delete' || method === 'put') {
   const id = options.data.id ? options.data.id : options.data._id;

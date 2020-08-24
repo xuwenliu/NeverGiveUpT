@@ -6,7 +6,7 @@
       <RightConfig showPosition="归档"></RightConfig>
     </div>
     <div class="content">
-      <mu-stepper :activeStep="step" :linear="false" orientation="vertical">
+      <mu-stepper class="stepper" :activeStep="step" :linear="false" orientation="vertical">
         <mu-step v-for="(item,index) in list" :key="item.year">
           <mu-step-button @click="changeStep(index)">
             <span class="title">{{item.year}}</span>
@@ -100,6 +100,10 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  .stepper{
+    max-height: 500px;
+    overflow-y: auto;
+  }
   .title {
     color: #fff;
     cursor: pointer;

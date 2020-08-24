@@ -29,7 +29,7 @@
       </mu-button>
       <mu-button v-if="user" flat slot="right" ref="button" @click="openUser = !openUser">
         <div class="user">
-          <span>{{user.email || user.nickName}}</span>
+          <span>{{user.nickName || user.email}}</span>
           <mu-icon value="expand_more"></mu-icon>
         </div>
       </mu-button>

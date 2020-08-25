@@ -21,7 +21,7 @@
         slot="right"
         v-for="(item,index) in info.menu"
         :key="item.menuName"
-        :color="lightIndex === index?'purple':''"
+        :color="lightIndex === index?'#00e676':''"
         flat
       >
         <mu-icon size="16" :value="item.icon"></mu-icon>
@@ -55,9 +55,9 @@
           button
         >
           <mu-list-item-action>
-            <mu-icon :color="lightIndex === index?'purple':''" :value="item.icon"></mu-icon>
+            <mu-icon :color="lightIndex === index?'#00e676':''" :value="item.icon"></mu-icon>
           </mu-list-item-action>
-          <mu-list-item-title :style="{color:lightIndex === index?'purple':''}">{{item.menuName}}</mu-list-item-title>
+          <mu-list-item-title :style="{color:lightIndex === index?'#00e676':''}">{{item.menuName}}</mu-list-item-title>
         </mu-list-item>
       </mu-list>
     </mu-bottom-sheet>
@@ -161,7 +161,6 @@ export default {
     },
     background: {
       type: String,
-      default: "transparent"
     }
   },
   data() {

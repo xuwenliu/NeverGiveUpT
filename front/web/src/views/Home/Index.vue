@@ -1,7 +1,7 @@
 <template>
   <div>
     <IndexAnimation></IndexAnimation>
-    <Header></Header>
+    <Header background="transparent"></Header>
     <div class="common">
       <div class="home">
         <p>{{info.introduction}}</p>

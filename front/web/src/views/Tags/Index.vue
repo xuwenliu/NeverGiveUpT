@@ -2,12 +2,11 @@
   <div class="common">
     <!-- :style="{background:`url(${info.tagsBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
     <Header :light-index="4"></Header>
-    <TagsAnimation></TagsAnimation>
     <div v-if="isPC" class="right-box">
       <RightConfig showPosition="标签"></RightConfig>
     </div>
     <div class="content">
-      <div class="tags-wap">
+      <div class="tags-wap" :style="{width:isPC?'70%':'100%'}">
         <mu-chip
           class="tag"
           v-for="(item,index) in tags"
@@ -22,14 +21,11 @@
 
 <script>
 import { randomColor } from "@/utils";
-import TagsAnimation from "@/components/TagsAnimation";
 import Header from "@/components/Header";
 import RightConfig from "@/components/RightConfig";
-
 export default {
   name: "tags",
   components: {
-    TagsAnimation,
     Header,
     RightConfig
   },
@@ -58,6 +54,7 @@ export default {
         this.$progress.done();
       }
     },
+   
     goDetail(item) {
       this.$router.push({
         name: "tagsDetails",
@@ -87,6 +84,7 @@ export default {
 
 .tags-wap {
   padding: 0 0.53333rem;
+  width: 70%;
   .tag {
     margin-right: 0.53333rem;
     margin-bottom: 0.53333rem;

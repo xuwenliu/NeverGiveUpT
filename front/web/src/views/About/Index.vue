@@ -1,13 +1,12 @@
 <template>
   <div class="common">
-    <Header :light-index="5" background="#000"></Header>
-    <AboutAnimation></AboutAnimation>
+    <Header :light-index="5"></Header>
     <div v-if="isPC" class="right-box">
       <RightConfig showPosition="关于"></RightConfig>
     </div>
     <div class="content">
       <mu-card class="card" :style="{marginTop:isPC?'100px':'0'}">
-        <mu-card-header>
+        <mu-card-header v-if="isPC && info.showResume">
           <mu-paper v-if="isPC" class="avatar-box" circle :z-depth="5">
             <img class="avatar" v-lazy="avatar" />
           </mu-paper>
@@ -16,7 +15,12 @@
             <mu-icon right value="arrow_forward"></mu-icon>
           </mu-button>
         </mu-card-header>
-        <mu-carousel hide-indicators hide-controls @change="change">
+        <mu-carousel
+          :style="{marginTop:isPC?'0.53333rem':'0'}"
+          hide-indicators
+          hide-controls
+          @change="change"
+        >
           <mu-carousel-item v-for="item in info.imgs" :key="item._id">
             <img v-lazy="item.imgUrl" />
           </mu-carousel-item>
@@ -40,7 +44,6 @@
   </div>
 </template>
 <script>
-import AboutAnimation from "@/components/AboutAnimation";
 import { randomColor } from "@/utils";
 import Header from "@/components/Header";
 import RightConfig from "@/components/RightConfig";
@@ -48,7 +51,6 @@ import RightConfig from "@/components/RightConfig";
 export default {
   name: "about",
   components: {
-    AboutAnimation,
     Header,
     RightConfig
   },
@@ -91,10 +93,10 @@ export default {
     reset() {
       this.getInfo();
     },
-    goResume(){
+    goResume() {
       this.$router.push({
-        name:'resume'
-      })
+        name: "resume"
+      });
     }
   }
 };
@@ -148,7 +150,5 @@ export default {
   max-width: 10rem;
   width: 10rem;
   margin: 0 auto;
-  animation: backInUp 2s;
-  background: rgba(255, 255, 255, 0.5);
 }
 </style>

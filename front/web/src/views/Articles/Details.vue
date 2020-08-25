@@ -1,6 +1,6 @@
 <template>
   <div class="details">
-    <Header :light-index="1" background="#000"></Header>
+    <Header :light-index="1"></Header>
 
     <div v-if="isPC" class="toc-fixed">
       <mu-card class="card">
@@ -41,12 +41,12 @@
                 class="cursor-default"
                 v-if="wordLength > 0"
                 flat
-                color="deepPurple500"
+                color="warning"
               >字数({{wordLength}})</mu-button>
-              <mu-button class="cursor-default" v-if="min>0" flat color="tealA400">阅读大约{{min}}分钟</mu-button>
-              <mu-button class="cursor-default" flat color="success">查看({{info.views}})</mu-button>
-              <mu-button class="cursor-default" flat color="primary">评论({{info.comment}})</mu-button>
-              <mu-button class="cursor-default" flat color="red">点赞({{info.like}})</mu-button>
+              <mu-button class="cursor-default" v-if="min>0" flat color="secondary">阅读大约{{min}}分钟</mu-button>
+              <mu-button class="cursor-default" flat color="info">查看({{info.views}})</mu-button>
+              <mu-button class="cursor-default" flat color="error">评论({{info.comment}})</mu-button>
+              <mu-button class="cursor-default" flat color="primary">点赞({{info.like}})</mu-button>
               <mu-button
                 class="cursor-default"
                 flat
@@ -271,7 +271,7 @@ export default {
     /deep/ a {
       color: #2196f3;
       &:hover {
-        color: purple;
+        color: #00e676;
       }
     }
   }

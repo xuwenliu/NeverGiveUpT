@@ -8,6 +8,8 @@ import "highlight.js/styles/vs2015.css";
 import "muse-ui/lib/styles/base.less";
 import "./global.less";
 import "lib-flexible";
+import vuetimeline from "@growthbunker/vuetimeline"
+Vue.use(vuetimeline)
 import {
   Button,
   Select,
@@ -25,18 +27,15 @@ import {
   Paper,
   Chip,
   Grid,
-  ExpansionPanel,
   Pagination,
   Divider,
   LoadMore,
   SubHeader,
-  Stepper,
-  Tooltip,
   Form,
   AutoComplete,
-  Snackbar,
   Popover,
-  Badge
+  Badge,
+  Snackbar
 } from "muse-ui";
 import "muse-ui/lib/styles/theme.less";
 import "muse-ui-progress/dist/muse-ui-progress.css";
@@ -46,15 +45,16 @@ import Toast from "muse-ui-toast";
 
 
 import theme from "muse-ui/lib/theme";
+
 theme.add(
   "teal",
   {
-    primary: "purple",
+    primary: "#00e676",
     // secondary: '#ff4081',
     // success: '#4caf50',
     // warning: '#ffeb3b',
   },
-  "light"
+  "dark"
 );
 
 theme.use("teal");
@@ -98,18 +98,15 @@ Vue.use(Carousel);
 Vue.use(Paper);
 Vue.use(Chip);
 Vue.use(Grid);
-Vue.use(ExpansionPanel);
 Vue.use(Pagination);
 Vue.use(Divider);
 Vue.use(LoadMore);
 Vue.use(SubHeader);
-Vue.use(Stepper);
-Vue.use(Tooltip);
 Vue.use(Form);
 Vue.use(AutoComplete);
-Vue.use(Snackbar);
 Vue.use(Popover);
 Vue.use(Badge);
+Vue.use(Snackbar);
 
 const isPC = (() => {
   var userAgentInfo = navigator.userAgent;

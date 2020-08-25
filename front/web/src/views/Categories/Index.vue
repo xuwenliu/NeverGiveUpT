@@ -2,7 +2,6 @@
   <div class="common">
     <!-- :style="{background:`url(${info.categoriesBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
     <Header :light-index="3"></Header>
-    <CategoriesAnimation></CategoriesAnimation>
     <div v-if="isPC" class="right-box">
       <RightConfig showPosition="分类"></RightConfig>
     </div>
@@ -14,11 +13,12 @@
         :z-depth="5"
         v-for="(item) in categories"
         :key="item.name"
+        circle
         @click="goDetail(item)"
       >
         <div class="text">
           <span>{{item.name}}</span>
-          <span>({{item.articleNum}})</span>
+          <span>{{item.articleNum}}</span>
         </div>
       </mu-paper>
     </div>
@@ -26,14 +26,12 @@
 </template>
 <script>
 import { randomColor } from "@/utils";
-import CategoriesAnimation from "@/components/CategoriesAnimation";
 import Header from "@/components/Header";
 import RightConfig from "@/components/RightConfig";
 
 export default {
   name: "categories",
   components: {
-    CategoriesAnimation,
     Header,
     RightConfig
   },
@@ -100,9 +98,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: #000;
-    font-weight: 500;
-    font-size: 0.42667rem;
+    font-size: 0.4rem;
   }
 }
 </style>

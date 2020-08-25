@@ -185,8 +185,8 @@ export default {
   margin: 4px 10px 0 10px;
 }
 .sub-card {
-  border-left: 1px dashed purple;
-  border-bottom: 1px dashed purple;
+  border-left: 1px dashed #00e676;
+  border-bottom: 1px dashed #00e676;
   box-shadow: none;
   border-radius: 0;
 }

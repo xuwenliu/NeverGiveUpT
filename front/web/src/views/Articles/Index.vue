@@ -1,6 +1,6 @@
 <template>
   <div class="articles">
-    <Header :light-index="1" background="#000"></Header>
+    <Header :light-index="1"></Header>
     <div class="content">
       <div class="left">
         <mu-card
@@ -15,9 +15,9 @@
           <div class="card-box">
             <div class="title" @click="goDetail(item)">{{item.title}}</div>
             <mu-card-actions class="sub-title">
-              <mu-button class="cursor-default" flat color="success">查看({{item.views}})</mu-button>
-              <mu-button class="cursor-default" flat color="primary">评论({{item.comment}})</mu-button>
-              <mu-button class="cursor-default" flat color="red">点赞({{item.like}})</mu-button>
+              <mu-button class="cursor-default" flat color="info">查看({{item.views}})</mu-button>
+              <mu-button class="cursor-default" flat color="error">评论({{item.comment}})</mu-button>
+              <mu-button class="cursor-default" flat color="primary">点赞({{item.like}})</mu-button>
               <mu-button
                 class="cursor-default"
                 flat
@@ -119,7 +119,7 @@ export default {
         margin: 0.42667rem auto 0;
         display: flex;
         flex-wrap: wrap;
-        border-radius: 0.26667rem;
+        border-radius: 5px;
         &:hover {
           animation: pulse 1s;
         }

@@ -210,7 +210,7 @@ export default {
   }
   .title {
     font-size: 20px;
-    color: purple;
+    color: #00e676;
   }
   .desc {
     font-size: 14px;

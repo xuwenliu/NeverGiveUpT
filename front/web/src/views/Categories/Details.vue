@@ -2,7 +2,6 @@
   <div class="common">
     <!-- :style="{background:`url(${info.categoriesBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
     <Header :light-index="3"></Header>
-    <CategoriesAnimation></CategoriesAnimation>
     <div v-if="isPC" class="right-box">
       <RightConfig showPosition="分类详情"></RightConfig>
     </div>
@@ -15,7 +14,7 @@
               <mu-ripple
                 @click="goArticlesDetails(item)"
                 style="width:100%;cursor:pointer"
-                color="purple"
+                color="#00e676"
                 :opacity="0.5"
               >
                 <mu-list-item-title class="item">
@@ -24,8 +23,7 @@
                 </mu-list-item-title>
               </mu-ripple>
             </mu-list-item>
-
-            <mu-divider />
+            <mu-divider v-if="index !== info.list.length-1" />
           </div>
         </mu-list>
 
@@ -71,14 +69,12 @@
   </div>
 </template>
 <script>
-import CategoriesAnimation from "@/components/CategoriesAnimation";
 import Header from "@/components/Header";
 import RightConfig from "@/components/RightConfig";
 
 export default {
   name: "categoriesDetails",
   components: {
-    CategoriesAnimation,
     Header,
     RightConfig
   },

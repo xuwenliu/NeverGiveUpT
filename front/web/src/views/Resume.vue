@@ -1,8 +1,8 @@
 <template>
   <div class="resume">
-    <mu-card style="width: 100%; max-width: 1000px; margin: 0 auto;">
+    <mu-card style="width: 100%; max-width: 1000px; margin: 0 auto; background:#fff;">
       <div class="resume-preview">
-        <div class="resume-box">
+        <div class="resume-box" :style="{'padding':isPC?'0 50px 45px':'0 20px 45px'}">
           <div class="resume-item resume-userinfo">
             <div class="item-primary">
               <!---->
@@ -26,8 +26,8 @@
                     </svg>
                   </h2>
                   <div class="info-labels">
-                    <p>
-                      <span class="prev-line no-line">
+                    <p :style="{'flex-direction':isPC?'row':'column'}">
+                      <span class="prev-line" :class="{'no-line':isPC}">
                         <i class="fz-resume fz-experience"></i>4年经验
                       </span>
                       <span class="prev-line">
@@ -37,15 +37,15 @@
                         <i class="fz-resume fz-status"></i>全职
                       </span>
                     </p>
-                    <p>
-                      <span class="prev-line no-line">
-                        <i class="fz-resume fz-tel"></i>xxxxxxxxxxx
+                    <p :style="{'flex-direction':isPC?'row':'column'}">
+                      <span class="prev-line" :class="{'no-line':isPC}">
+                        <i class="fz-resume fz-tel"></i>15892591582
                       </span>
                       <span class="prev-line">
-                        <i class="fz-resume fz-weixin"></i>xxxxxxxxxxx
+                        <i class="fz-resume fz-weixin"></i>15892591582
                       </span>
                       <span class="prev-line">
-                        <i class="fz-resume fz-mail"></i>xxxxxxxxxxx@163.com
+                        <i class="fz-resume fz-mail"></i>15892591582@163.com
                       </span>
                     </p>
                   </div>
@@ -66,15 +66,23 @@
                 <!---->
               </h3>
               <ul>
-                <li>
+                <li :style="{'padding':isPC?'8px 0 8px 15px':'8px 0'}">
                   <div class="primary-info">
-                    <div class="ui-select-inner">
-                      <span class="prev-line no-line">
-                        <span class="label-text">前端开发</span>
+                    <div class="ui-select-inner" :style="{'flex-direction':isPC?'row':'column'}">
+                      <span class="prev-line" :class="{'no-line':isPC}">
+                        <span class="label-text">
+                          <i class="fz-resume fz-job"></i>前端开发
+                        </span>
                       </span>
-                      <span class="prev-line">成都</span>
-                      <span class="prev-line">10K+</span>
-                      <span class="prev-line">全职</span>
+                      <span class="prev-line">
+                        <i class="fz-resume fz-place"></i>成都
+                      </span>
+                      <span class="prev-line">
+                        <i class="fz-resume fz-salary"></i>10K+
+                      </span>
+                      <span class="prev-line">
+                        <i class="fz-resume fz-industry"></i>全职
+                      </span>
                     </div>
                   </div>
                   <!---->
@@ -148,7 +156,7 @@
                   <div class="primary-info">
                     <!---->
                     <div class="info-text">
-                      <h4 class="name">成都云创一指网络科技有限公司</h4>
+                      <h4 class="name">成都云创一指科技有限公司</h4>
                       <span class="gray period">2018.03-2020.01</span>
                     </div>
                     <h4>
@@ -183,7 +191,7 @@
                   <div class="primary-info">
                     <!---->
                     <div class="info-text">
-                      <h4 class="name">成都鹦鹉美家网络科技有限公司</h4>
+                      <h4 class="name">成都鹦鹉美家科技有限公司</h4>
                       <span class="gray period">2016.11-2018.03</span>
                     </div>
                     <h4>
@@ -245,7 +253,12 @@
 <script>
 export default {
   name: "resume",
-  components: {}
+  components: {},
+  data() {
+    return {
+      isPC: this.isPC
+    };
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -337,7 +350,21 @@ export default {
 .fz-weixin {
   background-position: -28px -586px;
 }
+.fz-job {
+  background-position: -25px -535px;
+}
 
+.fz-salary {
+  background-position: 2px -561px;
+}
+
+.fz-industry {
+  background-position: -26px -561px;
+}
+
+.fz-place {
+  background-position: 2px -585px;
+}
 .resume-preview {
   height: 100%;
   overflow: hidden;
@@ -418,6 +445,8 @@ export default {
 
 .resume-box .item-primary .info-labels p {
   margin-top: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 .resume-box .item-primary ul {
@@ -484,7 +513,10 @@ export default {
 .resume-box .item-primary li .primary-info .keywords {
   padding: 7px 0 5px;
 }
-
+.resume-box .item-primary li .primary-info .ui-select-inner {
+  display: flex;
+  flex-direction: column;
+}
 .resume-box .item-primary li .primary-info .keywords span {
   display: inline-block;
   font-size: 12px;
@@ -494,6 +526,7 @@ export default {
   margin-right: 10px;
   border: 1px solid #cfd1d7;
   border-radius: 50px;
+  margin-bottom: 10px;
 }
 
 .resume-box .avatar-upload {
@@ -513,10 +546,6 @@ export default {
 
 .resume-box .resume-advantage .item-primary li .op {
   display: block;
-}
-
-.resume-box .expectation-form .salary-scope .ui-select .ui-select-inner {
-  padding-top: 0;
 }
 
 .resume-box .expectation-form .short {

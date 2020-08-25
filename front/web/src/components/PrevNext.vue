@@ -28,7 +28,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .prev-next {
-  color: #5e35b1;
   font-size: 0.24rem;
   .prev{
     cursor: pointer;

@@ -85,12 +85,15 @@ export default {
   methods: {
     async getList() {
       this.$progress.start();
+      const loading = this.$loading();
+
       const res = await this.$axios.get(
         `/articles?page=${this.page}&pageSize=${this.pageSize}`
       );
       if (res.data) {
         this.info = res.data;
         this.$progress.done();
+        loading.close();
       }
     },
     pageChange(page) {

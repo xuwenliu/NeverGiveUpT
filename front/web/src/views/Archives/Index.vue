@@ -68,6 +68,7 @@ export default {
   methods: {
     async getInfo() {
       this.$progress.start();
+      const loading = this.$loading();
       const res = await this.$axios.get("/archives");
 
       if (res.data) {
@@ -92,6 +93,7 @@ export default {
         }
         this.list = result.reverse();
         this.$progress.done();
+        loading.close();
       }
     },
     goDetail(item) {

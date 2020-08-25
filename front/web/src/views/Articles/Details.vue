@@ -166,6 +166,7 @@ export default {
      */
     async getInfo(views) {
       this.$progress.start();
+      const loading = this.$loading();
       const id = this.$route.query.id;
       const res = await this.$axios.get(
         `/articles/details?id=${id}&views=${views}`
@@ -180,6 +181,7 @@ export default {
           this.toc = res.toc;
         });
         this.$progress.done();
+        loading.close();
       }
     },
 

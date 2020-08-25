@@ -30,6 +30,7 @@
         <div v-if="info.totalCount > pageSize" class="pagination">
           <mu-pagination
             raised
+            circle
             :total="info.totalCount"
             :current.sync="page"
             :pageSize.sync="pageSize"
@@ -97,6 +98,8 @@ export default {
   methods: {
     async getInfo() {
       this.$progress.start();
+      const loading = this.$loading();
+
       const id = this.$route.query.id;
       const res = await this.$axios.get(
         `/tags/details?id=${id}&page=${this.page}&pageSize=${this.pageSize}`
@@ -104,6 +107,7 @@ export default {
       if (res.data) {
         this.info = res.data;
         this.$progress.done();
+        loading.close();
       }
     },
     pageChange(page) {

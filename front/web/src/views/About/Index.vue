@@ -6,7 +6,7 @@
     </div>
     <div class="content">
       <mu-card class="card" :style="{marginTop:isPC?'100px':'0'}">
-        <mu-card-header v-if="isPC && info.showResume">
+        <mu-card-header v-if="isPC || info.showResume">
           <mu-paper v-if="isPC" class="avatar-box" circle :z-depth="5">
             <img class="avatar" v-lazy="avatar" />
           </mu-paper>
@@ -16,7 +16,7 @@
           </mu-button>
         </mu-card-header>
         <mu-carousel
-          :style="{marginTop:isPC?'0.53333rem':'0'}"
+          :style="{marginTop:isPC || info.showResume?'0.53333rem':'0'}"
           hide-indicators
           hide-controls
           @change="change"
@@ -69,6 +69,8 @@ export default {
   methods: {
     async getInfo() {
       this.$progress.start();
+      const loading = this.$loading();
+
       const res = await this.$axios.get("/about");
       if (res.data) {
         this.info = res.data;
@@ -79,6 +81,7 @@ export default {
           };
         });
         this.$progress.done();
+        loading.close();
       }
     },
     createdBalls() {

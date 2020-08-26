@@ -23,7 +23,7 @@
                 </mu-list-item-title>
               </mu-ripple>
             </mu-list-item>
-            <mu-divider v-if="index !== info.list.length-1" />
+            <mu-divider v-if="info.list.length !==1" />
           </div>
         </mu-list>
 
@@ -85,8 +85,8 @@ export default {
     return {
       moreHeight: window.innerHeight - 64 + "px",
       page: 1,
-      pageSize: 10,
-      list:[],
+      pageSize: this.isPC ? 10 : 15,
+      list: [],
       isPC: this.isPC,
       info: {},
       refreshing: false,

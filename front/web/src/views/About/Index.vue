@@ -40,18 +40,21 @@
           <mu-button color="primary" v-if="info.tags && info.tags.length === 0" @click="reset">reset</mu-button>
         </div>
       </mu-card>
+      <Footer></Footer>
     </div>
   </div>
 </template>
 <script>
 import { randomColor } from "@/utils";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import RightConfig from "@/components/RightConfig";
 
 export default {
   name: "about",
   components: {
     Header,
+    Footer,
     RightConfig
   },
   data() {
@@ -111,6 +114,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   /deep/ .mu-card-header {
     display: flex;
     justify-content: flex-end;

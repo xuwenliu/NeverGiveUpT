@@ -265,6 +265,7 @@ export default {
 .resume {
   color: #414a60;
   font-size: 14px;
+  padding: 40px 0;
   ul {
     list-style: none;
     padding: 0;

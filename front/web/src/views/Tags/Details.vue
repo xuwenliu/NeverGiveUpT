@@ -67,17 +67,22 @@
       <mu-button v-show="!isPC" @click="$router.go(-1)" class="back-fab" small fab color="#fff">
         <mu-icon color="#ccc" value="arrow_back"></mu-icon>
       </mu-button>
+
+      <Footer></Footer>
+
     </div>
   </div>
 </template>
 <script>
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import RightConfig from "@/components/RightConfig";
 
 export default {
   name: "tagsDetails",
   components: {
     Header,
+    Footer,
     RightConfig
   },
   data() {
@@ -143,6 +148,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   position: absolute;
   width: 100%;
   top: 0;

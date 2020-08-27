@@ -27,6 +27,27 @@
         <mu-icon size="16" :value="item.icon"></mu-icon>
         {{item.menuName}}
       </mu-button>
+
+      <!-- 主题切换 -->
+      <mu-button flat slot="right" ref="theme" @click="openTheme = !openTheme">
+        <mu-icon value="color_lens"></mu-icon>
+      </mu-button>
+      <mu-popover :open.sync="openTheme" :trigger="triggerTheme">
+        <mu-list>
+          <mu-list-item button @click="toggleTheme('selfLight')">
+            <mu-list-item-title class="theme-title">
+              <mu-icon :color="me === 'selfLight'?'primary':''" value="brightness_7"></mu-icon>
+            </mu-list-item-title>
+          </mu-list-item>
+          <mu-list-item button @click="toggleTheme('selfDark')">
+            <mu-list-item-title class="theme-title">
+              <mu-icon :color="me === 'selfDark'?'primary':''" value="brightness_4"></mu-icon>
+            </mu-list-item-title>
+          </mu-list-item>
+        </mu-list>
+      </mu-popover>
+
+      <!-- 用户 -->
       <mu-button v-if="user" flat slot="right" ref="button" @click="openUser = !openUser">
         <div class="user">
           <span>{{user.nickName || user.email}}</span>
@@ -80,11 +101,11 @@
             v-show="showToolBtn && info.openSearch"
             @click="openSearchModal=true;showToolBtn=false;"
             fab
-            color="deepOrange600"
+            color="error"
           >搜索</mu-button>
         </mu-slide-right-transition>
 
-        <mu-button @click="showToolBtn = !showToolBtn" fab color="blue" class="search-fab">
+        <mu-button @click="showToolBtn = !showToolBtn" fab color="info" class="search-fab">
           <mu-icon value="adb"></mu-icon>
         </mu-button>
       </div>
@@ -94,7 +115,7 @@
             v-show="showToolBtn"
             @click="openRegisterModal=true;showToolBtn=false;"
             fab
-            color="success"
+            color="warning"
           >注册</mu-button>
         </mu-slide-right-transition>
       </div>
@@ -115,6 +136,7 @@
 import RegisterForm from "@/components/RegisterForm";
 import LoginForm from "@/components/LoginForm";
 import SearchForm from "@/components/SearchForm";
+
 const menus = [
   {
     name: "首页",
@@ -160,7 +182,7 @@ export default {
       default: 0
     },
     background: {
-      type: String,
+      type: String
     }
   },
   data() {
@@ -179,11 +201,15 @@ export default {
 
       openUser: false,
       trigger: null,
+      openTheme: false,
+      me: localStorage.getItem("theme") || "selfDark",
+      triggerTheme: null,
       user: JSON.parse(localStorage.getItem("user"))
     };
   },
   mounted() {
     this.getInfo();
+    this.triggerTheme = this.$refs.theme.$el;
     if (this.user) {
       this.trigger = this.$refs.button.$el;
     }
@@ -256,6 +282,12 @@ export default {
         this.$toast.success(res.msg);
         location.reload();
       }
+    },
+    toggleTheme(me) {
+      this.theme.use(me);
+      this.me = me;
+      localStorage.setItem("theme", me);
+      this.openTheme = false;
     }
   }
 };
@@ -270,6 +302,9 @@ export default {
 
 .mu-appbar {
   .mu-flat-button {
+    flex: 1;
+  }
+  /deep/ .mu-appbar-right {
     flex: 1;
   }
 }
@@ -307,5 +342,9 @@ export default {
     white-space: nowrap;
     text-align: right;
   }
+}
+.theme-title {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

@@ -28,10 +28,13 @@
         ></vue-timeline-update>
       </vue-timeline-update>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 <script>
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+
 import RightConfig from "@/components/RightConfig";
 import { randomNum } from "@/utils";
 const colors = [
@@ -54,6 +57,7 @@ export default {
   name: "archive",
   components: {
     Header,
+    Footer,
     RightConfig
   },
   data() {
@@ -121,6 +125,9 @@ export default {
         display: none;
       }
     }
+  }
+  /deep/ .gb-base-icon {
+    color: #00e676;
   }
 }
 </style>

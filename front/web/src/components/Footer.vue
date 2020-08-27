@@ -26,7 +26,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .footer {
-  color: #fff;
   text-align: center;
   font-size: 0.26667rem;
   margin: 30px 0;

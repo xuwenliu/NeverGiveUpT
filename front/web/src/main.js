@@ -43,6 +43,12 @@ import NProgress from "muse-ui-progress";
 import Helpers from "muse-ui/lib/Helpers";
 import Toast from "muse-ui-toast";
 
+import 'muse-ui-loading/dist/muse-ui-loading.css';
+import Loading from 'muse-ui-loading';
+Vue.use(Loading,{
+  overlayColor: 'transparent',        // 背景色
+});
+
 import theme from "muse-ui/lib/theme";
 
 theme.add(

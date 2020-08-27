@@ -41,6 +41,8 @@ export default {
   methods: {
     async getInfo() {
       this.$progress.start();
+      const loading = this.$loading();
+
       const res = await this.$axios.get("/tags");
       if (res.data) {
         this.tags = res.data.list
@@ -52,6 +54,7 @@ export default {
             })
           : [];
         this.$progress.done();
+        loading.close();
       }
     },
    

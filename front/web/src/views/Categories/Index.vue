@@ -47,6 +47,8 @@ export default {
   methods: {
     async getInfo() {
       this.$progress.start();
+      const loading = this.$loading();
+
       const res = await this.$axios.get("/categories");
       if (res.data) {
         this.categories = res.data.list
@@ -58,6 +60,7 @@ export default {
             })
           : [];
         this.$progress.done();
+        loading.close();
       }
     },
     goDetail(item) {

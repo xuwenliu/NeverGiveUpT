@@ -51,6 +51,7 @@
         :total="info.totalCount"
         :current.sync="page"
         :pageSize.sync="pageSize"
+        :pageCount="5"
         @change="pageChange"
       ></mu-pagination>
     </div>
@@ -68,7 +69,7 @@ export default {
   components: {
     RightConfig,
     Footer,
-    Header
+    Header,
   },
 
   data() {
@@ -76,7 +77,7 @@ export default {
       isPC: this.isPC,
       page: 1,
       pageSize: 10,
-      info: {}
+      info: {},
     };
   },
   mounted() {
@@ -85,12 +86,15 @@ export default {
   methods: {
     async getList() {
       this.$progress.start();
+      const loading = this.$loading();
+
       const res = await this.$axios.get(
         `/articles?page=${this.page}&pageSize=${this.pageSize}`
       );
       if (res.data) {
         this.info = res.data;
         this.$progress.done();
+        loading.close();
       }
     },
     pageChange(page) {
@@ -100,10 +104,10 @@ export default {
     goDetail(item) {
       this.$router.push({
         name: "articlesDetails",
-        query: { id: item._id }
+        query: { id: item._id },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

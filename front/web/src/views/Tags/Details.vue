@@ -23,13 +23,14 @@
                 </mu-list-item-title>
               </mu-ripple>
             </mu-list-item>
-            <mu-divider v-if="index !== info.list.length-1" />
+            <mu-divider v-if="info.list.length !==1" />
           </div>
         </mu-list>
 
         <div v-if="info.totalCount > pageSize" class="pagination">
           <mu-pagination
             raised
+            circle
             :total="info.totalCount"
             :current.sync="page"
             :pageSize.sync="pageSize"
@@ -43,7 +44,7 @@
         <div class="sub-title">标签-{{info.name}}({{info.totalCount}})</div>
         <mu-load-more @refresh="refresh" :refreshing="refreshing" :loading="loading" @load="load">
           <mu-list>
-            <div v-for="(item,index) in info.list" :key="index">
+            <div v-for="(item,index) in list" :key="index">
               <mu-list-item>
                 <mu-ripple
                   @click="goArticlesDetails(item)"
@@ -89,11 +90,12 @@ export default {
     return {
       moreHeight: window.innerHeight - 64 + "px",
       page: 1,
-      pageSize: 10,
+      pageSize: this.isPC ? 10 : 15,
+      list: [],
       isPC: this.isPC,
       info: {},
       refreshing: false,
-      loading: false
+      loading: false,
     };
   },
   mounted() {
@@ -102,13 +104,22 @@ export default {
   methods: {
     async getInfo() {
       this.$progress.start();
+      const loading = this.$loading();
+
       const id = this.$route.query.id;
       const res = await this.$axios.get(
         `/tags/details?id=${id}&page=${this.page}&pageSize=${this.pageSize}`
       );
       if (res.data) {
         this.info = res.data;
+        const result = res.data.list;
+        if (this.page === 1) {
+          this.list = result;
+        } else {
+          this.list = this.list.concat(result);
+        }
         this.$progress.done();
+        loading.close();
       }
     },
     pageChange(page) {
@@ -135,11 +146,11 @@ export default {
       this.$router.push({
         name: "articlesDetails",
         query: {
-          id: item.id
-        }
+          id: item.id,
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

@@ -7,15 +7,22 @@
       </mu-button>
 
       <!-- 头像 -->
-      <mu-avatar v-if="info.logo" slot="left" style="margin-left:20px" :size="50">
+      <mu-avatar
+        v-if="info.logo"
+        slot="left"
+        style="margin-left:20px;cursor:pointer;"
+        @click="go({router:'index'})"
+        :size="50"
+      >
         <img :src="info.logo" />
       </mu-avatar>
 
       <!-- title -->
-      <span v-if="info.title">{{info.title}}</span>
+      <span style="cursor:pointer;" @click="go({router:'index'})" v-if="info.title">{{info.title}}</span>
 
       <!-- 菜单 -->
       <mu-button
+        class="menu-btn"
         v-show="isPC"
         @click="go(item)"
         slot="right"
@@ -126,7 +133,7 @@
     <SearchForm :open="openSearchModal" @toggle="toggleSearchModal"></SearchForm>
 
     <mu-slide-bottom-transition>
-      <mu-button class="back-top" v-show="showBackTop" @click="scrollTop" fab color="red">
+      <mu-button class="back-top" v-show="showBackTop" @click="scrollTop" fab color="secondary">
         <mu-icon value="arrow_upward"></mu-icon>
       </mu-button>
     </mu-slide-bottom-transition>
@@ -141,45 +148,45 @@ const menus = [
   {
     name: "首页",
     router: "index",
-    icon: "home"
+    icon: "home",
   },
   {
     name: "文章",
     router: "articles",
-    icon: "note_add"
+    icon: "note_add",
   },
   {
     name: "归档",
     router: "archives",
-    icon: "drafts"
+    icon: "drafts",
   },
   {
     name: "分类",
     router: "categories",
-    icon: "dns"
+    icon: "dns",
   },
   {
     name: "标签",
     router: "tags",
-    icon: "loyalty"
+    icon: "loyalty",
   },
   {
     name: "关于",
     router: "about",
-    icon: "perm_identity"
-  }
+    icon: "perm_identity",
+  },
 ];
 export default {
   name: "App",
   components: {
     RegisterForm,
     LoginForm,
-    SearchForm
+    SearchForm,
   },
   props: {
     lightIndex: {
       type: Number,
-      default: 0
+      default: 0,
     },
     background: {
       type: String
@@ -234,8 +241,8 @@ export default {
       const res = await this.$axios.get("/header");
       if (res.data) {
         this.info = res.data.header;
-        this.info.menu.map(item => {
-          menus.forEach(sub => {
+        this.info.menu.map((item) => {
+          menus.forEach((sub) => {
             if (item.router === sub.router) {
               item.icon = sub.icon;
             }
@@ -254,7 +261,7 @@ export default {
         return;
       }
       this.$router.push({
-        name: item.router
+        name: item.router,
       });
     },
     toggleWapMenu(openWapMenu) {

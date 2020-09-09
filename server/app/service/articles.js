@@ -13,6 +13,8 @@ class ArticlesService extends Service {
       categories.forEach(async (item) => {
         const articleNum = await ctx.model.Articles.find({
           categories: item.name,
+          status: 1,
+          publishStatus: 1,
         }).countDocuments();
         await ctx.model.Categories.update(
           {
@@ -34,6 +36,8 @@ class ArticlesService extends Service {
       tags.forEach(async (item) => {
         const articleNum = await ctx.model.Articles.find({
           tags: { $elemMatch: { $eq: item.name } },
+          status: 1,
+          publishStatus: 1,
         }).countDocuments();
         await ctx.model.Tags.update(
           {
@@ -179,7 +183,7 @@ class ArticlesService extends Service {
 
     const updateData = {
       ...params,
-      createTime:  params.createTime || oldIdArticles.createTime,
+      createTime: params.createTime || oldIdArticles.createTime,
       updateTime: ctx.helper.moment().unix(),
     };
     await ctx.model.Articles.updateOne(

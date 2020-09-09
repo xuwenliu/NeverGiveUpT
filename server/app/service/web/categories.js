@@ -30,6 +30,8 @@ class CategoriesService extends Service {
 
     const queryCon = {
       categories: data.name,
+      status: 1,
+      publishStatus: 1,
     };
     const totalCount = await ctx.model.Articles.find(queryCon).countDocuments();
 

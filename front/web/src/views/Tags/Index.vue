@@ -7,13 +7,15 @@
     </div>
     <div class="content">
       <div class="tags-wap" :style="{width:isPC?'70%':'100%'}">
-        <mu-chip
-          class="tag"
-          v-for="(item,index) in tags"
-          :key="index"
-          :color="item.color"
-          @click="goDetail(item)"
-        >{{item.name}}({{item.articleNum}})</mu-chip>
+        <span v-if="item.articleNum > 0">
+          <mu-chip
+            class="tag"
+            v-for="(item,index) in tags"
+            :key="index"
+            :color="item.color"
+            @click="goDetail(item)"
+          >{{item.name}}({{item.articleNum}})</mu-chip>
+        </span>
       </div>
     </div>
   </div>
@@ -57,7 +59,7 @@ export default {
         loading.close();
       }
     },
-   
+
     goDetail(item) {
       this.$router.push({
         name: "tagsDetails",

@@ -43,10 +43,10 @@ import NProgress from "muse-ui-progress";
 import Helpers from "muse-ui/lib/Helpers";
 import Toast from "muse-ui-toast";
 
-import 'muse-ui-loading/dist/muse-ui-loading.css';
-import Loading from 'muse-ui-loading';
-Vue.use(Loading,{
-  overlayColor: 'transparent',        // 背景色
+import "muse-ui-loading/dist/muse-ui-loading.css";
+import Loading from "muse-ui-loading";
+Vue.use(Loading, {
+  overlayColor: "transparent", // 背景色
 });
 
 import theme from "muse-ui/lib/theme";
@@ -105,7 +105,14 @@ theme.add(
   },
   "light"
 );
-const selfTheme = localStorage.getItem("theme") || "selfDark";
+const hours = new Date().getHours();
+let defaultTheme = "";
+if (hours >= 8 && hours <= 18) {
+  defaultTheme = "selfLight";
+} else {
+  defaultTheme = "selfDark";
+}
+const selfTheme = localStorage.getItem("theme") || defaultTheme;
 theme.use(selfTheme);
 Vue.prototype.theme = theme;
 

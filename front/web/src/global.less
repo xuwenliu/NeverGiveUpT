@@ -458,7 +458,7 @@ html {
 /*对 markdown 样式的补充*/
 pre {
   display: block;
-  padding: 10px;
+  padding: 40px 10px 20px;
   margin: 0 0 10px;
   font-size: 14px;
   line-height: 1.42857143;
@@ -468,6 +468,38 @@ pre {
   word-wrap: break-word;
   overflow: auto;
   border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.55) 0px 2px 10px;
+  position: relative;
+}
+pre::before {
+  height: 30px;
+  width: 100%;
+  margin-bottom: -7px;
+  border-radius: 5px 5px 0 0;
+  display: block;
+  content: "";
+  background: #fff;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+}
+pre::after {
+  height: 15px;
+  width: 100px;
+  margin-bottom: -7px;
+  border-radius: 5px 5px 0 0;
+  display: block;
+  content: "";
+  background: url(https://mmbiz.qpic.cn/mmbiz_png/OQmPiaEUnhd41zssVddpqwhyJ2q2uE0TaNZVkTPgIMNN4JwyeIt60XVU1yicNc9BD3TbiahBcS5mh3rdLAFuRqErA/640?wx_fmt=png)
+  10px center no-repeat;
+  background-size: contain;
+  position: absolute;
+  top: 7px;
+  left: 0;
+  box-sizing: border-box;
+  z-index: 1;
 }
 
 h1,
@@ -481,6 +513,7 @@ h6 {
 strong {
   font-weight: bold;
 }
+
 
 p > code:not([class]) {
   padding: 2px 4px;
@@ -541,7 +574,10 @@ img {
   margin: 0 0 1em;
   background-color: rgb(220, 230, 240);
   padding: 1em 0 0.5em 0.5em;
-  border-left: 6px solid rgb(181, 204, 226);
+  border-left: 6px solid #52c41a;
+}
+.article-detail tr:nth-child(2n){
+  background: rgb(71, 193, 168);
 }
 
 .common {
@@ -614,7 +650,7 @@ img {
     position: fixed;
     top: 80px;
     right: 70px;
-    z-index:3;
+    z-index: 3;
   }
 }
 
@@ -625,7 +661,7 @@ img {
   .common .right-box {
     display: none !important;
   }
-  .header .mu-appbar .mu-appbar-right .menu-btn{
+  .header .mu-appbar .mu-appbar-right .menu-btn {
     display: none !important;
   }
 }

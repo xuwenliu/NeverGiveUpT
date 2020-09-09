@@ -148,45 +148,45 @@ const menus = [
   {
     name: "首页",
     router: "index",
-    icon: "home",
+    icon: "home"
   },
   {
     name: "文章",
     router: "articles",
-    icon: "note_add",
+    icon: "note_add"
   },
   {
     name: "归档",
     router: "archives",
-    icon: "drafts",
+    icon: "drafts"
   },
   {
     name: "分类",
     router: "categories",
-    icon: "dns",
+    icon: "dns"
   },
   {
     name: "标签",
     router: "tags",
-    icon: "loyalty",
+    icon: "loyalty"
   },
   {
     name: "关于",
     router: "about",
-    icon: "perm_identity",
-  },
+    icon: "perm_identity"
+  }
 ];
 export default {
   name: "App",
   components: {
     RegisterForm,
     LoginForm,
-    SearchForm,
+    SearchForm
   },
   props: {
     lightIndex: {
       type: Number,
-      default: 0,
+      default: 0
     },
     background: {
       type: String
@@ -209,12 +209,20 @@ export default {
       openUser: false,
       trigger: null,
       openTheme: false,
-      me: localStorage.getItem("theme") || "selfDark",
+      me: "",
       triggerTheme: null,
       user: JSON.parse(localStorage.getItem("user"))
     };
   },
   mounted() {
+    const hours = new Date().getHours();
+    let defaultTheme = "";
+    if (hours >= 8 && hours <= 18) {
+      defaultTheme = "selfLight";
+    } else {
+      defaultTheme = "selfDark";
+    }
+    this.me = localStorage.getItem("theme") || defaultTheme;
     this.getInfo();
     this.triggerTheme = this.$refs.theme.$el;
     if (this.user) {
@@ -241,8 +249,8 @@ export default {
       const res = await this.$axios.get("/header");
       if (res.data) {
         this.info = res.data.header;
-        this.info.menu.map((item) => {
-          menus.forEach((sub) => {
+        this.info.menu.map(item => {
+          menus.forEach(sub => {
             if (item.router === sub.router) {
               item.icon = sub.icon;
             }
@@ -261,7 +269,7 @@ export default {
         return;
       }
       this.$router.push({
-        name: item.router,
+        name: item.router
       });
     },
     toggleWapMenu(openWapMenu) {

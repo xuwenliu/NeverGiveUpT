@@ -7,11 +7,10 @@
     </div>
     <div class="content">
       <div class="tags-wap" :style="{width:isPC?'70%':'100%'}">
-        <span v-if="item.articleNum > 0">
+        <span v-for="(item,index) in tags" :key="index">
           <mu-chip
+            v-if="item.articleNum > 0"
             class="tag"
-            v-for="(item,index) in tags"
-            :key="index"
             :color="item.color"
             @click="goDetail(item)"
           >{{item.name}}({{item.articleNum}})</mu-chip>

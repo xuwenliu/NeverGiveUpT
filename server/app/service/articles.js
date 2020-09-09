@@ -218,6 +218,8 @@ class ArticlesService extends Service {
       },
       updateData
     );
+    await this.updateCategoriesArticleNum();
+    await this.updateTagsArticleNum();
     return {
       msg: `文章${params.status === 1 ? "启用" : "停用"}成功`,
     };
@@ -245,6 +247,8 @@ class ArticlesService extends Service {
       },
       updateData
     );
+    await this.updateCategoriesArticleNum();
+    await this.updateTagsArticleNum();
     return {
       msg: `文章${params.publishStatus === 1 ? "发布" : "取消发布"}成功`,
     };

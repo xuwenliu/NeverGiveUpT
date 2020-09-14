@@ -22,8 +22,8 @@ const Login = (props) => {
           className="form"
           initialValues={{
             remember: true,
-            userName: 'admin',
-            password: '123456',
+            userName: '',
+            password: '',
           }}
           onFinish={onFinish}
         >

@@ -36,6 +36,12 @@ const Login = (props) => {
                   id: 'login.p_userName',
                 }),
               },
+              {
+                pattern: /^[\u4E00-\u9FA5A-Za-z0-9_]{5,20}$/,
+                message: intl.formatMessage({
+                  id: 'login.p_userName_pattern',
+                }),
+              },
             ]}
           >
             <Input
@@ -55,6 +61,12 @@ const Login = (props) => {
                 required: true,
                 message: intl.formatMessage({
                   id: 'login.p_password',
+                }),
+              },
+              {
+                pattern: /^[A-Za-z0-9_]{6,20}$/,
+                message: intl.formatMessage({
+                  id: 'login.p_password_pattern',
                 }),
               },
             ]}

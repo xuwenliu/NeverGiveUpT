@@ -1,6 +1,8 @@
 <template>
   <div class="footer">
-    <div>{{footer.copyright}}</div>
+    <div class="copyright">
+      <a target="_blank" href="http://beian.miit.gov.cn">{{footer.copyright}}</a>
+    </div>
     <div>{{footer.extra}}</div>
   </div>
 </template>
@@ -29,5 +31,10 @@ export default {
   text-align: center;
   font-size: 0.26667rem;
   margin: 30px 0;
+  .copyright{
+    a{
+      color: inherit;
+    }
+  }
 }
 </style>

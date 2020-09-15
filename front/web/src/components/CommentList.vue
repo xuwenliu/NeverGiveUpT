@@ -9,7 +9,7 @@
       >
         <mu-card-header :title="item.nickName" :sub-title="item.commentTime | filterDate">
           <mu-avatar slot="avatar">
-            <img src="../assets/img/user_avatar.png" />
+            <img src="http://www.nevergiveupt.top/user_avatar.png" />
           </mu-avatar>
         </mu-card-header>
         <mu-card-text>

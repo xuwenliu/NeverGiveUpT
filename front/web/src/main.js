@@ -117,12 +117,11 @@ theme.use(selfTheme);
 Vue.prototype.theme = theme;
 
 import VueLazyload from "vue-lazyload";
-import loadingImg from "./assets/img/loading.gif";
 
 Vue.use(VueLazyload, {
   preLoad: 1.3,
-  error: loadingImg,
-  loading: loadingImg,
+  error: "http://www.nevergiveupt.top/loading.gif",
+  loading: "http://www.nevergiveupt.top/loading.gif",
   attempt: 1,
 });
 

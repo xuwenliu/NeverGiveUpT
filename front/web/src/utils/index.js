@@ -827,11 +827,9 @@ export const animateScroll = (element, speed, offset) => {
   window.requestAnimationFrame(step);
 };
 
-import github from "@/assets/img/github.png";
-import sf from "@/assets/img/sf.jpeg";
-import zhihu from "@/assets/img/zhihu.jpg";
+
 export const Icon = {
-  github,
-  sf,
-  zhihu,
+  github: "http://www.nevergiveupt.top/github.png",
+  sf: "http://www.nevergiveupt.top/sf.jpeg",
+  zhihu: "http://www.nevergiveupt.top/zhihu.jpg",
 };

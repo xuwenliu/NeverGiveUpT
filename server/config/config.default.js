@@ -54,7 +54,7 @@ module.exports = (appInfo) => {
     PAGE_SIZE: 10,
     // 七牛云配置
     bucket: "nevergiveupt-blog", //要上传的空间名
-    cdn: "http://nevergiveupt.top/", // 空间绑定的域名
+    cdn: "http://img.nevergiveupt.top/", // 空间绑定的域名
     accessKey: "9qMN42CxUM0zrWrLtbd6DnTvEgDZFneWOlCR0HC-", //Access Key
     secretKey: "CvWnHFlY9iZOaFdMG4jgYMVtmhzCXN3bVAv5NLZ3", //Secret Key
   };

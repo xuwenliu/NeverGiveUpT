@@ -4,7 +4,7 @@
       scrollable
       title="注册"
       width="500"
-      max-width="80%"
+      max-width="90%"
       :esc-press-close="false"
       :overlay-close="false"
       :open.sync="open"
@@ -35,6 +35,13 @@
             prop="confirmPassword"
           ></mu-text-field>
         </mu-form-item>
+
+        <mu-form-item label="验证码" prop="captcha" :rules="captchaRules">
+          <mu-text-field v-model.trim="validateForm.captcha" prop="captcha">
+            <div @click="getCaptcha" class="captcha" v-html="captcha"></div>
+          </mu-text-field>
+        </mu-form-item>
+
         <mu-form-item label="个人简介" prop="introduction" :rules="introductionRules">
           <mu-text-field
             v-model="validateForm.introduction"
@@ -68,6 +75,7 @@ export default {
   data() {
     return {
       visibility: false,
+      captcha: "",
       emailRules: [
         { validate: val => !!val, message: "邮箱必填！" },
         {
@@ -100,6 +108,7 @@ export default {
           message: "密码不一致，请重新输入！"
         }
       ],
+      captchaRules: [{ validate: val => !!val, message: "请输入验证码" }],
       introductionRules: [
         {
           validate: val => val.length <= 1000,
@@ -111,11 +120,18 @@ export default {
         nickName: "",
         password: "",
         confirmPassword: "",
-        introduction: ""
+        introduction: "",
+        captcha: ""
       }
     };
   },
   methods: {
+    async getCaptcha() {
+      const res = await this.$axios.get("/captcha");
+      if (res) {
+        this.captcha = res.data;
+      }
+    },
     submit() {
       this.$refs.form.validate().then(async result => {
         if (result) {
@@ -127,6 +143,7 @@ export default {
             this.$emit("toggle", false);
           } else {
             this.$toast.error(res.msg);
+            this.getCaptcha();
           }
         }
       });
@@ -138,12 +155,27 @@ export default {
         nickName: "",
         password: "",
         confirmPassword: "",
-        introduction: ""
+        introduction: "",
+        captcha: ""
       };
       this.$emit("toggle", false);
+    }
+  },
+  watch: {
+    open(newVal) {
+      if (newVal) {
+        this.getCaptcha();
+      }
     }
   }
 };
 </script>
 <style lang="less" scoped>
+.captcha {
+  background: #00e676;
+  cursor: pointer;
+  /deep/ svg {
+    vertical-align: middle;
+  }
+}
 </style>

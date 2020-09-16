@@ -1,4 +1,5 @@
 const Controller = require("egg").Controller;
+const svgCaptcha = require("svg-captcha");
 
 class UserController extends Controller {
   constructor(ctx) {
@@ -28,6 +29,15 @@ class UserController extends Controller {
     const { ctx, service } = this;
     const data = ctx.request.body;
     ctx.validate(this.createRule, data);
+    if (ctx.session.captcha !== data.captcha) {
+      ctx.helper.success({
+        ctx,
+        res: {
+          msg: "验证码错误",
+        },
+      });
+      return;
+    }
     const res = await service.web.user.register(data);
     ctx.helper.success({
       ctx,
@@ -38,6 +48,15 @@ class UserController extends Controller {
   async login() {
     const { ctx, service } = this;
     const data = ctx.request.body;
+    if (ctx.session.captcha !== data.captcha) {
+      ctx.helper.success({
+        ctx,
+        res: {
+          msg: "验证码错误",
+        },
+      });
+      return;
+    }
     const res = await service.web.user.login(data);
     ctx.helper.success({
       ctx,
@@ -52,6 +71,14 @@ class UserController extends Controller {
       ctx,
       res,
     });
+  }
+
+  async captcha() {
+    const { ctx } = this;
+    const captchaObj = svgCaptcha.create();
+    ctx.session.captcha = captchaObj.text;
+    ctx.set("Content-Type", "image/svg+xml");
+    ctx.body = captchaObj.data;
   }
 }
 

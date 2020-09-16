@@ -3,7 +3,7 @@
     <mu-dialog
       title="登录"
       width="500"
-      max-width="80%"
+      max-width="90%"
       :esc-press-close="false"
       :overlay-close="false"
       :open.sync="open"
@@ -15,6 +15,12 @@
 
         <mu-form-item label="密码" prop="password" :rules="passwordRules">
           <mu-text-field v-model.trim="validateForm.password" type="password" prop="password"></mu-text-field>
+        </mu-form-item>
+
+        <mu-form-item label="验证码" prop="captcha" :rules="captchaRules">
+          <mu-text-field v-model.trim="validateForm.captcha" prop="captcha">
+            <div @click="getCaptcha" class="captcha" v-html="captcha"></div>
+          </mu-text-field>
         </mu-form-item>
       </mu-form>
 
@@ -39,8 +45,10 @@ export default {
   },
   data() {
     return {
+      captcha: "",
       emailRules: [{ validate: val => !!val, message: "邮箱/昵称必填！" }],
       passwordRules: [{ validate: val => !!val, message: "密码必填！" }],
+      captchaRules: [{ validate: val => !!val, message: "请输入验证码" }],
       validateForm: {
         email: "",
         password: ""
@@ -48,6 +56,12 @@ export default {
     };
   },
   methods: {
+    async getCaptcha() {
+      const res = await this.$axios.get("/captcha");
+      if (res) {
+        this.captcha = res.data;
+      }
+    },
     submit() {
       this.$refs.form.validate().then(async result => {
         if (result) {
@@ -59,6 +73,7 @@ export default {
             this.$emit("toggle", false);
           } else {
             this.$toast.error(res.msg);
+            this.getCaptcha();
           }
         }
       });
@@ -70,12 +85,27 @@ export default {
         nickName: "",
         password: "",
         confirmPassword: "",
-        introduction: ""
+        introduction: "",
+        captcha: ""
       };
       this.$emit("toggle", false);
+    }
+  },
+  watch: {
+    open(newVal) {
+      if (newVal) {
+        this.getCaptcha();
+      }
     }
   }
 };
 </script>
 <style lang="less" scoped>
+.captcha {
+  background: #00e676;
+  cursor: pointer;
+  /deep/ svg {
+    vertical-align: middle;
+  }
+}
 </style>

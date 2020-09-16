@@ -57,6 +57,7 @@ module.exports = (app) => {
   router.post(webRouter + "/register", controller.web.user.register); //注册
   router.post(webRouter + "/login", controller.web.user.login); //登录
   router.post(webRouter + "/logout", controller.web.user.logout); //退出登录
+  router.get(webRouter + "/captcha", controller.web.user.captcha); // 生成验证码
 
 
   router.post(webRouter + "/comment",jwt, controller.web.comment.submit); //提交评论

@@ -2,6 +2,9 @@
   <div>
     <IndexAnimation></IndexAnimation>
     <Header background="transparent"></Header>
+    <div class="custom-footer">
+      <Footer></Footer>
+    </div>
     <div class="common">
       <div class="home">
         <p>{{info.introduction}}</p>
@@ -17,6 +20,8 @@ let timer = 0;
 let i = 0;
 import IndexAnimation from "@/components/IndexAnimation";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+
 import RightConfig from "@/components/RightConfig";
 
 export default {
@@ -24,6 +29,7 @@ export default {
   components: {
     IndexAnimation,
     Header,
+    Footer,
     RightConfig
   },
   data() {
@@ -77,5 +83,4 @@ export default {
   color: #fff;
   font-weight: 500;
 }
-
 </style>

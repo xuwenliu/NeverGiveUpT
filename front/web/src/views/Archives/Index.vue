@@ -1,6 +1,12 @@
 <template>
-  <div class="common">
-    <Header :light-index="2"></Header>
+  <div
+    class="common"
+    :style="{background:`url(https://xuwenliu.github.io/img/archive.jpg) center center no-repeat`,backgroundSize:'cover'}"
+  >
+    <Header :light-index="2" background="transparent"></Header>
+    <div class="custom-footer">
+      <Footer></Footer>
+    </div>
     <div v-if="isPC" class="right-box">
       <RightConfig showPosition="归档"></RightConfig>
     </div>
@@ -27,8 +33,29 @@
           :is-last="idx === item.list.length - 1"
         ></vue-timeline-update>
       </vue-timeline-update>
+      <vue-timeline-update
+        v-for="(item,index) in list"
+        :key="item.year"
+        :date="new Date(item.createTime * 1000)"
+        :title="item.year"
+        :description="item.title"
+        icon="alarm"
+        color="green"
+        :is-last="index === list.length - 1"
+      >
+        <vue-timeline-update
+          v-for="(sub,idx) in item.list"
+          :key="sub._id"
+          :title="sub.createTime | filterDate('MM-DD')"
+          :date="new Date(sub.createTime * 1000)"
+          :description="sub.title"
+          :icon="sub.icon"
+          @click="goDetail(sub)"
+          :color="sub.color"
+          :is-last="idx === item.list.length - 1"
+        ></vue-timeline-update>
+      </vue-timeline-update>
     </div>
-    <Footer></Footer>
   </div>
 </template>
 <script>

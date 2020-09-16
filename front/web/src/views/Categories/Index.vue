@@ -1,7 +1,12 @@
 <template>
-  <div class="common">
-    <!-- :style="{background:`url(${info.categoriesBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
-    <Header :light-index="3"></Header>
+  <div
+    class="common"
+    :style="{background:`url(https://xuwenliu.github.io/img/archive.jpg) center center no-repeat`,backgroundSize:'cover'}"
+  >
+    <Header :light-index="3" background="transparent"></Header>
+    <div class="custom-footer">
+      <Footer></Footer>
+    </div>
     <div v-if="isPC" class="right-box">
       <RightConfig showPosition="分类"></RightConfig>
     </div>
@@ -27,12 +32,14 @@
 <script>
 import { randomColor } from "@/utils";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import RightConfig from "@/components/RightConfig";
 
 export default {
   name: "categories",
   components: {
     Header,
+    Footer,
     RightConfig
   },
   data() {

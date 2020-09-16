@@ -1,7 +1,12 @@
 <template>
-  <div class="common">
-    <!-- :style="{background:`url(${info.categoriesBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
-    <Header :light-index="3"></Header>
+  <div
+    class="common"
+    :style="{background:`url(https://xuwenliu.github.io/img/archive.jpg) center center no-repeat`,backgroundSize:'cover'}"
+  >
+    <Header :light-index="3" background="transparent"></Header>
+    <div class="custom-footer">
+      <Footer></Footer>
+    </div>
     <div v-if="isPC" class="right-box">
       <RightConfig showPosition="分类详情"></RightConfig>
     </div>
@@ -23,7 +28,7 @@
                 </mu-list-item-title>
               </mu-ripple>
             </mu-list-item>
-            <mu-divider v-if="info.list.length !==1" />
+            <mu-divider v-if="info.list.length !==1 && index !== info.list.length-1" />
           </div>
         </mu-list>
 
@@ -66,8 +71,6 @@
       <mu-button v-show="!isPC" @click="$router.go(-1)" class="back-fab" small fab color="#fff">
         <mu-icon color="#ccc" value="arrow_back"></mu-icon>
       </mu-button>
-
-      <Footer></Footer>
     </div>
   </div>
 </template>
@@ -92,7 +95,7 @@ export default {
       isPC: this.isPC,
       info: {},
       refreshing: false,
-      loading: false,
+      loading: false
     };
   },
   mounted() {
@@ -143,11 +146,11 @@ export default {
       this.$router.push({
         name: "articlesDetails",
         query: {
-          id: item.id,
-        },
+          id: item.id
+        }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="less" scoped>

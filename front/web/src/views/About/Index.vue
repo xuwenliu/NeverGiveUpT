@@ -1,6 +1,12 @@
 <template>
-  <div class="common">
-    <Header :light-index="5"></Header>
+  <div
+    class="common"
+    :style="{background:`url(https://xuwenliu.github.io/img/archive.jpg) center center no-repeat`,backgroundSize:'cover'}"
+  >
+    <Header :light-index="5" background="transparent"></Header>
+    <div class="custom-footer">
+      <Footer></Footer>
+    </div>
     <div v-if="isPC" class="right-box">
       <RightConfig showPosition="关于"></RightConfig>
     </div>
@@ -15,7 +21,7 @@
             <mu-icon right value="arrow_forward"></mu-icon>
           </mu-button>
         </mu-card-header>
-        <mu-carousel
+        <!-- <mu-carousel
           :style="{marginTop:isPC || info.showResume?'0.53333rem':'0'}"
           hide-indicators
           hide-controls
@@ -24,7 +30,7 @@
           <mu-carousel-item v-for="item in info.imgs" :key="item._id">
             <img v-lazy="item.imgUrl" />
           </mu-carousel-item>
-        </mu-carousel>
+        </mu-carousel> -->
         <mu-card-text>
           <div v-html="info.desc"></div>
         </mu-card-text>
@@ -40,7 +46,6 @@
           <mu-button color="primary" v-if="info.tags && info.tags.length === 0" @click="reset">reset</mu-button>
         </div>
       </mu-card>
-      <Footer></Footer>
     </div>
   </div>
 </template>

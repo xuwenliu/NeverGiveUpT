@@ -189,7 +189,7 @@ export default {
       default: 0
     },
     background: {
-      type: String
+      type: String,
     }
   },
   data() {

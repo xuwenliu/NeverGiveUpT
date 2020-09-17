@@ -8,8 +8,6 @@ import "highlight.js/styles/vs2015.css";
 import "muse-ui/lib/styles/base.less";
 import "./global.less";
 import "lib-flexible";
-import vuetimeline from "@growthbunker/vuetimeline";
-Vue.use(vuetimeline);
 import {
   Button,
   Select,

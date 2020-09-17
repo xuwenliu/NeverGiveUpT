@@ -1,7 +1,7 @@
 <template>
   <div
     class="common"
-    :style="{background:`url(https://xuwenliu.github.io/img/archive.jpg) center center no-repeat`,backgroundSize:'cover'}"
+    :style="{background:`url(${archiveBgImg}) center center no-repeat`,backgroundSize:'cover'}"
   >
     <Header :light-index="2" background="transparent"></Header>
     <div v-if="isPC" class="right-box">
@@ -17,7 +17,12 @@
               <h2 class="timeline-title">{{item.year}}</h2>
             </div>
           </li>
-          <li v-for="(sub) in item.list" :key="sub._id" class="timeline-item">
+          <li
+            @click="goDetail(sub)"
+            v-for="(sub) in item.list"
+            :key="sub._id"
+            class="timeline-item"
+          >
             <div class="timeline-info">
               <span>{{sub.createTime | filterDate('MM-DD')}}</span>
             </div>
@@ -27,71 +32,9 @@
               <p>{{sub.introduction}}</p>
             </div>
           </li>
-          <!-- <li class="timeline-item">
-            <div class="timeline-info">
-              <span>March 23, 2016</span>
-            </div>
-            <div class="timeline-marker"></div>
-            <div class="timeline-content">
-              <h3 class="timeline-title">Event Title</h3>
-              <p>
-                Nullam vel sem. Nullam vel sem. Integer ante arcu, accumsan a, consectetuer eget, posuere ut, mauris. Donec orci lectus, aliquam ut, faucibus non, euismod id, nulla. Donec vitae sapien ut libero venenatis faucibus. ullam dictum felis
-                eu pede mollis pretium. Pellentesque ut neque.
-              </p>
-            </div>
-          </li>-->
-
-          <!-- <li class="timeline-item">
-            <div class="timeline-info">
-              <span>April 02, 2016</span>
-            </div>
-            <div class="timeline-marker"></div>
-            <div class="timeline-content">
-              <h3 class="timeline-title">Event Title</h3>
-              <p>
-                Nullam vel sem. Nullam vel sem. Integer ante arcu, accumsan a, consectetuer eget, posuere ut, mauris. Donec orci lectus, aliquam ut, faucibus non, euismod id, nulla. Donec vitae sapien ut libero venenatis faucibus. ullam dictum felis
-                eu pede mollis pretium. Pellentesque ut neque.
-              </p>
-            </div>
-          </li>-->
-          <!-- <li class="timeline-item">
-            <div class="timeline-info">
-              <span>April 28, 2016</span>
-            </div>
-            <div class="timeline-marker"></div>
-            <div class="timeline-content">
-              <h3 class="timeline-title">Event Title</h3>
-              <p>
-                Nullam vel sem. Nullam vel sem. Integer ante arcu, accumsan a, consectetuer eget, posuere ut, mauris. Donec orci lectus, aliquam ut, faucibus non, euismod id, nulla. Donec vitae sapien ut libero venenatis faucibus. ullam dictum felis
-                eu pede mollis pretium. Pellentesque ut neque.
-              </p>
-            </div>
-          </li>-->
         </ul>
       </div>
       <Footer></Footer>
-      <!-- <vue-timeline-update
-        v-for="(item,index) in list"
-        :key="item.year"
-        :date="new Date(item.createTime * 1000)"
-        :title="item.year"
-        :description="item.title"
-        icon="alarm"
-        color="green"
-        :is-last="index === list.length - 1"
-      >
-        <vue-timeline-update
-          v-for="(sub,idx) in item.list"
-          :key="sub._id"
-          :title="sub.createTime | filterDate('MM-DD')"
-          :date="new Date(sub.createTime * 1000)"
-          :description="sub.title"
-          :icon="sub.icon"
-          @click="goDetail(sub)"
-          :color="sub.color"
-          :is-last="idx === item.list.length - 1"
-        ></vue-timeline-update>
-      </vue-timeline-update>-->
     </div>
   </div>
 </template>
@@ -100,23 +43,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 import RightConfig from "@/components/RightConfig";
-import { randomNum } from "@/utils";
-const colors = [
-  "black",
-  "blue",
-  "green",
-  "orange",
-  "purple",
-  "red",
-  "turquoise",
-  "white"
-];
-const icons = {
-  技术: "code",
-  生活: "local_cafe",
-  照片: "photo",
-  其他: "more"
-};
+
 export default {
   name: "archive",
   components: {
@@ -127,7 +54,8 @@ export default {
   data() {
     return {
       isPC: this.isPC,
-      list: {}
+      list: {},
+      archiveBgImg: ""
     };
   },
   mounted() {
@@ -140,12 +68,10 @@ export default {
       const res = await this.$axios.get("/archives");
 
       if (res.data) {
-        const list = res.data;
-
+        const list = res.data.list;
+        this.archiveBgImg = res.data.archiveBgImg;
         list.map(item => {
           item.year = new Date(item.createTime * 1000).getFullYear();
-          item.color = colors[randomNum(1, 8)];
-          item.icon = icons[item.categories];
           return item;
         });
         const couponInstance = list.reduce((all, cur) => {
@@ -160,6 +86,7 @@ export default {
           });
         }
         this.list = result.reverse();
+
         this.$progress.done();
         loading.close();
       }
@@ -221,6 +148,7 @@ export default {
 .timeline-item {
   padding-left: 40px;
   position: relative;
+  cursor: pointer;
   &:last-child {
     padding-bottom: 0;
   }
@@ -245,7 +173,7 @@ export default {
   left: 0;
   width: 15px;
   &:before {
-    background: #ff6b6b;
+    background: #00e676;
     border: 3px solid transparent;
     border-radius: 100%;
     content: "";
@@ -273,7 +201,7 @@ export default {
 }
 .timeline-item:not(.period):hover .timeline-marker:before {
   background: transparent;
-  border: 3px solid #ff6b6b;
+  border: 3px solid #00e676;
 }
 
 /*----- TIMELINE CONTENT -----*/

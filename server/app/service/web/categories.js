@@ -9,9 +9,12 @@ class CategoriesService extends Service {
   async index() {
     const { ctx } = this;
     const data = await ctx.model.Categories.find().sort({ createTime: 1 });
+    const bg = await ctx.model.Config.Home.findOne();
+
     return {
       data: {
         list: data,
+        categoriesBgImg: bg.categoriesBgImg,
       },
       msg: "分类列表获取成功",
     };
@@ -34,6 +37,7 @@ class CategoriesService extends Service {
       publishStatus: 1,
     };
     const totalCount = await ctx.model.Articles.find(queryCon).countDocuments();
+    const bg = await ctx.model.Config.Home.findOne();
 
     let list = await ctx.model.Articles.find(queryCon)
       .sort({
@@ -59,6 +63,7 @@ class CategoriesService extends Service {
         totalCount,
         name: data.name,
         list,
+        categoriesDetailBgImg: bg.categoriesDetailBgImg,
       },
       msg: "分类-文章列表获取成功",
     };

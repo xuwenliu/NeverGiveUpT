@@ -1,8 +1,6 @@
 <template>
-  <div
-    class="common"
-    :style="{background:`url(https://xuwenliu.github.io/img/archive.jpg) center center no-repeat`,backgroundSize:'cover'}"
-  >
+  <div class="common">
+    <!-- :style="{background:`url(https://xuwenliu.github.io/img/archive.jpg) center center no-repeat`,backgroundSize:'cover'}" -->
     <Header :light-index="5" background="transparent"></Header>
     <div class="custom-footer">
       <Footer></Footer>
@@ -10,7 +8,18 @@
     <div v-if="isPC" class="right-box">
       <RightConfig showPosition="关于"></RightConfig>
     </div>
-    <div class="content">
+    <mu-carousel
+      hide-indicators
+      hide-controls
+      @change="change"
+      style="position:fixed;height:100%;margin-top:0;"
+    >
+      <mu-carousel-item v-for="item in info.imgs" :key="item._id">
+        <img :src="item.imgUrl" />
+      </mu-carousel-item>
+    </mu-carousel>
+
+    <div class="content" :style="{paddingTop:isPC?'64px':'56px'}">
       <mu-card class="card" :style="{marginTop:isPC?'100px':'0'}">
         <mu-card-header v-if="isPC || info.showResume">
           <mu-paper v-if="isPC" class="avatar-box" circle :z-depth="5">
@@ -30,7 +39,7 @@
           <mu-carousel-item v-for="item in info.imgs" :key="item._id">
             <img v-lazy="item.imgUrl" />
           </mu-carousel-item>
-        </mu-carousel> -->
+        </mu-carousel>-->
         <mu-card-text>
           <div v-html="info.desc"></div>
         </mu-card-text>

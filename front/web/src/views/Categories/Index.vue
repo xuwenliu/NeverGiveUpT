@@ -1,7 +1,7 @@
 <template>
   <div
     class="common"
-    :style="{background:`url(https://xuwenliu.github.io/img/archive.jpg) center center no-repeat`,backgroundSize:'cover'}"
+    :style="{background:`url(${categoriesBgImg}) 0px center no-repeat`,backgroundSize:'cover'}"
   >
     <Header :light-index="3" background="transparent"></Header>
     <div class="custom-footer">
@@ -45,7 +45,8 @@ export default {
   data() {
     return {
       randomColor: randomColor(),
-      categories: []
+      categories: [],
+      categoriesBgImg: ""
     };
   },
   mounted() {
@@ -66,6 +67,7 @@ export default {
               };
             })
           : [];
+        this.categoriesBgImg = res.data.categoriesBgImg;
         this.$progress.done();
         loading.close();
       }

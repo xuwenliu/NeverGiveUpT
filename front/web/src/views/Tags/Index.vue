@@ -1,7 +1,7 @@
 <template>
   <div
     class="common"
-    :style="{background:`url(https://xuwenliu.github.io/img/archive.jpg) center center no-repeat`,backgroundSize:'cover'}"
+    :style="{background:`url(${tagsBgImg}) center center no-repeat`,backgroundSize:'cover'}"
   >
     <Header :light-index="4" background="transparent"></Header>
     <div class="custom-footer">
@@ -12,15 +12,15 @@
       <RightConfig showPosition="标签"></RightConfig>
     </div>
     <div class="content">
-      <div class="tags-wap" :style="{width:isPC?'70%':'100%'}">
-        <span v-for="(item,index) in tags" :key="index">
+      <div class="tags-wap tagcloud" :style="{width:isPC?'70%':'100%'}">
+        <a v-for="(item,index) in tags" :key="index">
           <mu-chip
             v-if="item.articleNum > 0"
             class="tag"
             :color="item.color"
             @click="goDetail(item)"
           >{{item.name}}({{item.articleNum}})</mu-chip>
-        </span>
+        </a>
       </div>
     </div>
   </div>
@@ -32,6 +32,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 import RightConfig from "@/components/RightConfig";
+
 export default {
   name: "tags",
   components: {
@@ -42,7 +43,8 @@ export default {
   data() {
     return {
       isPC: this.isPC,
-      tags: []
+      tags: [],
+      tagsBgImg: ""
     };
   },
   mounted() {
@@ -63,6 +65,19 @@ export default {
               };
             })
           : [];
+        this.$nextTick(() => {
+          window.tagcloud({
+            selector: ".tagcloud", //元素选择器
+            fontsize: 16, //基本字体大小, 单位px
+            radius: 100, //滚动半径, 单位px
+            mspeed: "normal", //滚动最大速度, 取值: slow, normal(默认), fast
+            ispeed: "normal", //滚动初速度, 取值: slow, normal(默认), fast
+            direction: 135, //初始滚动方向, 取值角度(顺时针360): 0对应top, 90对应left, 135对应right-bottom(默认)...
+            keep: false //鼠标移出组件后是否继续随鼠标滚动, 取值: false, true(默认) 对应 减速至初速度滚动, 随鼠标滚动
+          });
+        });
+
+        this.tagsBgImg = res.data.tagsBgImg;
         this.$progress.done();
         loading.close();
       }
@@ -104,5 +119,4 @@ export default {
     cursor: pointer;
   }
 }
-
 </style>

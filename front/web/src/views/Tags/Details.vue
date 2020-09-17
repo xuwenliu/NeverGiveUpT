@@ -1,7 +1,7 @@
 <template>
   <div
     class="common"
-    :style="{background:`url(https://xuwenliu.github.io/img/archive.jpg) center center no-repeat`,backgroundSize:'cover'}"
+    :style="{background:`url(${tagsDetailBgImg}) center center no-repeat`,backgroundSize:'cover'}"
   >
     <Header :light-index="4" background="transparent"></Header>
     <div class="custom-footer">
@@ -98,7 +98,8 @@ export default {
       isPC: this.isPC,
       info: {},
       refreshing: false,
-      loading: false
+      loading: false,
+      tagsDetailBgImg: ""
     };
   },
   mounted() {
@@ -121,6 +122,7 @@ export default {
         } else {
           this.list = this.list.concat(result);
         }
+        this.tagsDetailBgImg = this.info.tagsDetailBgImg;
         this.$progress.done();
         loading.close();
       }

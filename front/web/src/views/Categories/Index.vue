@@ -4,14 +4,14 @@
     :style="{background:`url(${categoriesBgImg}) 0px center no-repeat`,backgroundSize:'cover'}"
   >
     <Header :light-index="3" background="transparent"></Header>
-    <div class="custom-footer">
+    <div v-if="isPC" class="custom-footer">
       <Footer></Footer>
     </div>
     <div v-if="isPC" class="right-box">
       <RightConfig showPosition="分类"></RightConfig>
     </div>
 
-    <div class="content" :style="{position: isPC?'absolute':'static'}">
+    <div :class="isPC?'content':'wap-content'">
       <div class="cols">
         <div class="cols-item" @click="goDetail(item)" v-for="item in categories" :key="item.name">
           <div class="container">
@@ -29,8 +29,8 @@
             </div>
           </div>
         </div>
- 
       </div>
+      <Footer v-if="!isPC"></Footer>
     </div>
   </div>
 </template>
@@ -69,8 +69,8 @@ export default {
               return {
                 ...item,
 
-                background: `https://www.jq22.com/demo/csshover3dfz202005112340/img/${index +
-                  1}.png`,
+                background: `http://img.nevergiveupt.top/${index +
+                  2}.png`,
                 color: randomColor()
               };
             })
@@ -103,6 +103,15 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+.wap-content {
+  position: absolute;
+  top: 56px;
+  bottom: 0;
+  overflow: auto;
+  width: 100%;
+  padding-top: 20px;
 }
 
 .cols {
@@ -153,7 +162,6 @@ export default {
   background: -o-linear-gradient(45deg, #cedce7 0%, #596a72 100%);
   background: linear-gradient(45deg, #cedce7 0%, #596a72 100%);
   background-repeat: no-repeat;
-
 }
 .front:after {
   position: absolute;

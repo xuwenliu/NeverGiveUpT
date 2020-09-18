@@ -14,23 +14,18 @@
     <div class="content">
       <mu-paper v-if="isPC" :z-depth="5" class="pc-box">
         <mu-list>
-          <mu-sub-header class="header">标签-{{info.name}}({{info.totalCount}})</mu-sub-header>
-          <div v-for="(item,index) in info.list" :key="index">
-            <mu-list-item>
-              <mu-ripple
-                @click="goArticlesDetails(item)"
-                style="width:100%;cursor:pointer"
-                color="#00e676"
-                :opacity="0.5"
-              >
-                <mu-list-item-title class="item">
-                  <span class="title">{{item.title}}</span>
-                  <span>{{item.createTime | filterDate}}</span>
-                </mu-list-item-title>
-              </mu-ripple>
-            </mu-list-item>
-            <mu-divider v-if="info.list.length !==1 && index !== info.list.length-1" />
-          </div>
+          <div class="sub-title">标签-{{info.name}}({{info.totalCount}})</div>
+          <mu-list-item
+            button
+            v-for="(item,index) in info.list"
+            :key="index"
+            @click="goArticlesDetails(item)"
+          >
+            <mu-list-item-title class="item">
+              <span class="title">{{item.title}}</span>
+              <span>{{item.createTime | filterDate}}</span>
+            </mu-list-item-title>
+          </mu-list-item>
         </mu-list>
 
         <div v-if="info.totalCount > pageSize" class="pagination">
@@ -50,22 +45,17 @@
         <div class="sub-title">标签-{{info.name}}({{info.totalCount}})</div>
         <mu-load-more @refresh="refresh" :refreshing="refreshing" :loading="loading" @load="load">
           <mu-list>
-            <div v-for="(item,index) in list" :key="index">
-              <mu-list-item>
-                <mu-ripple
-                  @click="goArticlesDetails(item)"
-                  style="width:100%;cursor:pointer"
-                  color="rgb(156, 39, 176)"
-                  :opacity="0.5"
-                >
-                  <mu-list-item-title class="item">
-                    <span class="title">{{item.title}}</span>
-                    <span>{{item.createTime | filterDate}}</span>
-                  </mu-list-item-title>
-                </mu-ripple>
-              </mu-list-item>
-              <mu-divider />
-            </div>
+            <mu-list-item
+              button
+              v-for="(item,index) in list"
+              :key="index"
+              @click="goArticlesDetails(item)"
+            >
+              <mu-list-item-title class="item">
+                <span class="title">{{item.title}}</span>
+                <span>{{item.createTime | filterDate}}</span>
+              </mu-list-item-title>
+            </mu-list-item>
           </mu-list>
         </mu-load-more>
       </div>

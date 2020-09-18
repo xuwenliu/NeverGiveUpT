@@ -493,7 +493,7 @@ pre::after {
   display: block;
   content: "";
   background: url(https://mmbiz.qpic.cn/mmbiz_png/OQmPiaEUnhd41zssVddpqwhyJ2q2uE0TaNZVkTPgIMNN4JwyeIt60XVU1yicNc9BD3TbiahBcS5mh3rdLAFuRqErA/640?wx_fmt=png)
-  10px center no-repeat;
+    10px center no-repeat;
   background-size: contain;
   position: absolute;
   top: 7px;
@@ -513,7 +513,6 @@ h6 {
 strong {
   font-weight: bold;
 }
-
 
 p > code:not([class]) {
   padding: 2px 4px;
@@ -576,7 +575,7 @@ img {
   padding: 1em 0 0.5em 0.5em;
   border-left: 6px solid #52c41a;
 }
-.article-detail tr:nth-child(2n){
+.article-detail tr:nth-child(2n) {
   background: rgb(71, 193, 168);
 }
 
@@ -593,7 +592,14 @@ img {
 .mu-paper.pc-box {
   width: 50%;
   .header {
-    font-size: 0.48rem;
+    font-size: 0.4rem;
+  }
+  /deep/ .mu-item {
+    height: 40px;
+  }
+  .sub-title {
+    font-size: 0.4rem;
+    padding-left: 16px;
   }
   .item {
     display: flex;
@@ -668,7 +674,6 @@ img {
     display: none !important;
   }
 }
-
 
 .custom-footer {
   position: fixed;

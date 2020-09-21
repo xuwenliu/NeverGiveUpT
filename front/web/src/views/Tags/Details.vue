@@ -4,10 +4,10 @@
     :style="{background:`url(${tagsDetailBgImg}) center center no-repeat`,backgroundSize:'cover'}"
   >
     <Header :light-index="4" background="transparent"></Header>
-    <div v-if="isPC" class="custom-footer">
+    <div v-if="isPC || list.length <=10" class="custom-footer">
       <Footer></Footer>
     </div>
-    <div v-if="isPC || list.length <=10" class="right-box">
+    <div v-if="isPC" class="right-box">
       <RightConfig showPosition="标签详情"></RightConfig>
     </div>
     <div class="content">

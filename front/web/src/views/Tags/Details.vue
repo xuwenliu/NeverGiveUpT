@@ -4,13 +4,12 @@
     :style="{background:`url(${tagsDetailBgImg}) center center no-repeat`,backgroundSize:'cover'}"
   >
     <Header :light-index="4" background="transparent"></Header>
-    <div class="custom-footer">
+    <div v-if="isPC" class="custom-footer">
       <Footer></Footer>
     </div>
-    <div v-if="isPC" class="right-box">
+    <div v-if="isPC || list.length <=10" class="right-box">
       <RightConfig showPosition="标签详情"></RightConfig>
     </div>
-    <!-- :style="{background:`url(${info.tagsBgImg}) center center no-repeat`,backgroundSize:'cover'}" -->
     <div class="content">
       <mu-paper v-if="isPC" :z-depth="5" class="pc-box">
         <mu-list>
@@ -59,6 +58,7 @@
           </mu-list>
         </mu-load-more>
       </div>
+      <Footer v-if="list.length >10"></Footer>
 
       <!-- wap-展示返回按钮 -->
       <mu-button v-show="!isPC" @click="$router.go(-1)" class="back-fab" small fab color="#fff">

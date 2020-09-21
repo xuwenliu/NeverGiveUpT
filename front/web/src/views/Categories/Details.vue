@@ -4,7 +4,7 @@
     :style="{background:`url(${categoriesDetailBgImg}) 0px center no-repeat`,backgroundSize:'cover'}"
   >
     <Header :light-index="3" background="transparent"></Header>
-    <div class="custom-footer">
+    <div v-if="isPC || list.length <=10" class="custom-footer">
       <Footer></Footer>
     </div>
     <div v-if="isPC" class="right-box">
@@ -56,6 +56,7 @@
             </mu-list-item>
           </mu-list>
         </mu-load-more>
+        <Footer v-if="list.length >10"></Footer>
       </div>
 
       <mu-button v-show="!isPC" @click="$router.go(-1)" class="back-fab" small fab color="#fff">

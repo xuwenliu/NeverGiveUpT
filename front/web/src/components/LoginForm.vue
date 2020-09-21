@@ -102,7 +102,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .captcha {
-  background: #00e676;
   cursor: pointer;
   /deep/ svg {
     vertical-align: middle;

@@ -75,7 +75,13 @@ class UserController extends Controller {
 
   async captcha() {
     const { ctx } = this;
-    const captchaObj = svgCaptcha.create();
+    const captchaObj = svgCaptcha.create({
+      size: 4,
+      fontSize: 50,
+      width: 100,
+      height: 40,
+      background: "#cc9966",
+    });
     ctx.session.captcha = captchaObj.text;
     ctx.set("Content-Type", "image/svg+xml");
     ctx.body = captchaObj.data;

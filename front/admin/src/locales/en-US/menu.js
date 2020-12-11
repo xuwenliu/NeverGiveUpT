@@ -11,6 +11,8 @@ export default {
   'menu.list.site.site-home': 'Home Config',
   'menu.list.site.site-header-footer': 'Header/Footer Config',
   'menu.list.site.site-right': 'Right Config',
+  'menu.list.site.site-resume': 'Resume',
+  'menu.list.site.site-resume-edit': 'Edit resume',
   'menu.welcome': 'Welcome',
   'menu.home': 'Home',
   'menu.exception.403': '403',

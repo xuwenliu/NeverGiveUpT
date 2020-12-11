@@ -124,6 +124,19 @@ export default defineConfig({
                   path: '/site/right',
                   component: './Site/Right',
                 },
+                {
+                  name: 'site-resume',
+                  icon: 'book',
+                  path: '/site/resume',
+                  component: './Site/Resume',
+                },
+                {
+                  name: 'site-resume-edit',
+                  icon: 'edit',
+                  path: '/site/resume/edit',
+                  component: './Site/Resume/Edit',
+                  hideInMenu: true,
+                },
               ],
             },
             {

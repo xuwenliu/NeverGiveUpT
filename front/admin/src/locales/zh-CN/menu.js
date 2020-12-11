@@ -11,6 +11,8 @@ export default {
   'menu.list.site.site-home': '首页配置',
   'menu.list.site.site-header-footer': 'Header/Footer配置',
   'menu.list.site.site-right': '右侧配置',
+  'menu.list.site.site-resume': '简历管理',
+  'menu.list.site.site-resume-edit': '编辑简历',
   'menu.welcome': '欢迎',
   'menu.home': '首页',
   'menu.exception.403': '403',

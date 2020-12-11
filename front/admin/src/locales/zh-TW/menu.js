@@ -11,6 +11,8 @@ export default {
   'menu.list.site.site-home': '首頁配寘',
   'menu.list.site.site-header-footer': 'Header/Footer配寘',
   'menu.list.site.site-right': '右側配寘',
+  'menu.list.site.site-resume': '簡歷管理',
+  'menu.list.site.site-resume-edit': '編輯簡歷',
   'menu.welcome': '歡迎',
   'menu.home': '首頁',
   'menu.exception.403': '403',

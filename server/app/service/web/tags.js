@@ -8,7 +8,9 @@ class TagsService extends Service {
   // 标签列表
   async index() {
     const { ctx } = this;
-    const data = await ctx.model.Tags.find().sort({ createTime: 1 });
+    const data = await ctx.model.Tags.find({
+      status: true,
+    }).sort({ createTime: 1 });
     const bg = await ctx.model.Config.Home.findOne();
     return {
       data: {
@@ -37,7 +39,6 @@ class TagsService extends Service {
     };
     const totalCount = await ctx.model.Articles.find(queryCon).countDocuments();
     const bg = await ctx.model.Config.Home.findOne();
-
 
     let list = await ctx.model.Articles.find(queryCon)
       .sort({

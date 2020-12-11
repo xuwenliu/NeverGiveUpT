@@ -1,4 +1,5 @@
 import request from '@/utils/request';
+import { replacePage } from '@/utils/utils';
 
 export async function queryHomeConfig(data) {
   return request('/api/config/home', {
@@ -141,3 +142,70 @@ export const fetchRight = {
   ad,
   recommend,
 };
+
+export async function queryResume(params) {
+  const res = await request('/api/resume', {
+    params: replacePage(params),
+  });
+  return new Promise((resolve, reject) => {
+    if (res.code === 0) {
+      res.data &&
+        resolve({
+          data: res.data.list,
+          current: res.data.page,
+          total: res.data.totalCount,
+          success: true,
+          pageSize: res.data.pageSize,
+        });
+    } else {
+      resolve({
+        data: [],
+        current: params.current,
+        total: 0,
+        success: false,
+        pageSize: params.pageSize,
+      });
+    }
+  });
+}
+
+export async function removeResume(params) {
+  return request('/api/resume', {
+    method: 'delete',
+    data: {
+      ...params,
+    },
+  });
+}
+
+export async function createResume(params) {
+  return request('/api/resume', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function updateResume(params) {
+  return request('/api/resume', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
+
+export async function queryResumeEdit(params) {
+  return request(`/api/resume/${params.id}/edit`, {
+    method: 'GET',
+  });
+}
+
+export async function updateResumeStatus(params) {
+  return request('/api/resume/status', {
+    method: 'put',
+    data: {
+      ...params,
+    },
+  });
+}

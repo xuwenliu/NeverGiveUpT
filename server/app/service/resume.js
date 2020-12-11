@@ -40,6 +40,12 @@ class ResumeService extends Service {
         msg: "该简历已存在",
       };
     }
+    if (params.experiences) {
+      params.experiences.sort((a, b) => b.startTime - a.startTime);
+    }
+    if (params.projectExp) {
+      params.projectExp.sort((a, b) => b.startTime - a.startTime);
+    }
     const data = {
       ...params,
       createTime: ctx.helper.moment().unix(),
@@ -83,6 +89,12 @@ class ResumeService extends Service {
         msg: "简历不存在",
       };
     }
+    if (params.experiences) {
+      params.experiences.sort((a, b) => b.startTime - a.startTime);
+    }
+    if (params.projectExp) {
+      params.projectExp.sort((a, b) => b.startTime - a.startTime);
+    }
     const updateData = {
       ...params,
       createTime: oldIdResume.createTime,
@@ -109,6 +121,7 @@ class ResumeService extends Service {
         msg: "简历不存在",
       };
     }
+
     return {
       msg: "简历详情获取成功",
       data: oldResume,

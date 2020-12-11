@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Tooltip, message, Popconfirm, Button, Switch } from 'antd';
+import { Tooltip, message, Popconfirm, Button, Switch, Avatar } from 'antd';
 import {
   DeleteOutlined,
   PlusOutlined,
@@ -71,6 +71,15 @@ const Resume = () => {
   };
 
   let columns = [
+    {
+      title: intl.formatMessage({
+        id: 'common.avatar',
+      }),
+      dataIndex: 'avatar',
+      render: (_, record) => {
+        return record.avatar ? <Avatar src={record.avatar} /> : '';
+      },
+    },
     {
       title: intl.formatMessage({
         id: 'site.resume.name',

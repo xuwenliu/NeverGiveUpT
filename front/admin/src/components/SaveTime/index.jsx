@@ -19,7 +19,7 @@ const SaveTime = (props) => {
         id: 'component.saveTime.noAction',
       });
   return (
-    <Affix offsetTop={10} style={{ position: 'relative', width: '100%', zIndex: 10 }}>
+    <Affix offsetTop={64} style={{ position: 'relative', width: '100%', zIndex: 10 }}>
       <div className="save-time">
         <Alert type="success" message={message} />
         {onRefresh && (

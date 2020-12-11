@@ -153,7 +153,7 @@ export default {
       return 0;
     },
     commentTitle() {
-      return `评论（${this.info.comment}）`;
+      return this.info.comment ? `评论（${this.info.comment}）` : null;
     }
   },
   mounted() {

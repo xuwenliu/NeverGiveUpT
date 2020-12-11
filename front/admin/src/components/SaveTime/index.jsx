@@ -48,7 +48,7 @@ const SaveTime = (props) => {
         {onBack && (
           <Button
             onClick={onBack}
-            className="save-time-btn"
+            className="save-back-btn"
             size="small"
             type="primary"
             danger

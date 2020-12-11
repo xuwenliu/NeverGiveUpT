@@ -51,7 +51,6 @@ export default {
   'site.right.introduction': '个人简介',
   'site.right.nickName': '昵称',
 
-
   'site.right.p_choose_tags': '请选择标签',
   'site.right.p_choose_tags_multiple': '请选择标签(多选)',
 
@@ -75,4 +74,16 @@ export default {
   'site.right.isVip': '是否需要VIP',
   'site.right.cover_link': '封面/链接',
   'site.right.p_cover_link': '请上传封面和链接',
+
+  'site.resume.name': '姓名',
+  'site.resume.p_name': '请输入姓名',
+  'site.resume.experience': '经验',
+  'site.resume.jobName': '职位名称',
+  'site.resume.summary': '个人总结',
+  'site.resume.add': '添加简历',
+  'site.resume.update_error_tip': '修改简历失败请重试！',
+  'site.resume.remove_tip': '确定删除【{name}】吗？',
+  'site.resume.create_success': '操作成功！',
+  'site.resume.year': '年',
+  'site.resume.enable_error_tip': '启用/停用简历失败！',
 };

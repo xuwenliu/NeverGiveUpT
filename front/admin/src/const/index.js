@@ -34,9 +34,9 @@ export const showPositionsColorObj = {
   归档: '#f50',
   分类: 'gold',
   分类详情: 'lime',
-  标签:  '#108ee9',
+  标签: '#108ee9',
   标签详情: 'cyan',
-  关于:  '#2db7f5',
+  关于: '#2db7f5',
 };
 
 export const projects = [
@@ -52,4 +52,38 @@ export const projects = [
     key: '3',
     value: '音乐',
   },
+];
+
+export const genderList = [
+  {
+    label: '男',
+    value: '男',
+  },
+  {
+    label: '女',
+    value: '女',
+  },
+];
+export const jobStatusList = [
+  '离职-随时到岗',
+  '在职-暂不考虑',
+  '在职-考虑机会',
+  '在职-周内到岗',
+  '在职-月内到岗',
+];
+
+export const educationList = ['初中', '高中', '大专', '本科', '博士', '研究生'];
+export const jobTypeList = ['全职', '兼职'];
+export const tagsList = [
+  'Vue',
+  'AngularJs',
+  'React',
+  'Umi',
+  'Ant Design',
+  'eCharts',
+  'WebSocket',
+  'LayUi',
+  'Hybrid-Bridge',
+  '小程序',
+  '微信公众号',
 ];

@@ -139,20 +139,7 @@ const User = () => {
   ];
   columns = columns.map((col) => {
     col.align = 'center';
-    if (!col.editable) {
-      return col;
-    }
-
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        editable: col.editable,
-        dataIndex: col.dataIndex,
-        title: col.title,
-        handleUpdate,
-      }),
-    };
+    return col;
   });
 
   return (
@@ -161,7 +148,6 @@ const User = () => {
         rowKey="_id"
         request={(params, sorter, filter) => queryUser({ ...params })}
         columns={columns}
-        rowClassName={() => 'editable-row'}
       />
     </PageHeaderWrapper>
   );

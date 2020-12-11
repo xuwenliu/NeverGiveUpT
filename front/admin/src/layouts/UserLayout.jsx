@@ -34,11 +34,11 @@ const UserLayout = (props) => {
       </Helmet>
 
       <div className={styles.container}>
-        <div className={styles.lang}>
+        {/* <div className={styles.lang}>
           <SelectLang />
-        </div>
+        </div> */}
         <div className={styles.content}>{children}</div>
-        <DefaultFooter
+        {/* <DefaultFooter
           copyright={`${new Date().getFullYear()} NeverGiveUpT`}
           links={[
             {
@@ -46,7 +46,7 @@ const UserLayout = (props) => {
               title: <FormattedMessage id="component.layout.footer" />,
             },
           ]}
-        />
+        /> */}
       </div>
     </HelmetProvider>
   );

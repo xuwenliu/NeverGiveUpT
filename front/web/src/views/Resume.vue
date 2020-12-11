@@ -1,9 +1,13 @@
 <template>
   <div class="resume">
     <mu-date-picker v-if="isPC" class="pc-date-picker"></mu-date-picker>
+
     <mu-card raised :class="isPC?'card':'wap-card'">
       <mu-date-picker v-if="!isPC" class="date-picker"></mu-date-picker>
-      <div class="resume-preview">
+      <mu-alert v-if="!resume" color="error">
+        <div class="no-resume">暂无简历</div>
+      </mu-alert>
+      <div v-else class="resume-preview">
         <div class="resume-box" :style="{'padding':isPC?'0 50px 45px':'0 20px'}">
           <div class="resume-item resume-userinfo">
             <div class="item-primary">
@@ -104,7 +108,7 @@
               </ul>
             </div>
           </div>
-          <div class="resume-item resume-project">
+          <div v-if="resume.experiences" class="resume-item resume-project">
             <div class="item-primary">
               <h3 class="title">工作经历 (Experience)</h3>
               <ul>
@@ -126,7 +130,7 @@
               </ul>
             </div>
           </div>
-          <div class="resume-item resume-history">
+          <div v-if="resume.projectExp" class="resume-item resume-history">
             <div class="item-primary">
               <h3 class="title">项目经历 (Project exp)</h3>
               <ul>
@@ -179,20 +183,30 @@ export default {
   data() {
     return {
       isPC: this.isPC,
-      resume: {}
+      resume: null
     };
   },
   mounted() {
-    this.getList();
+    this.getResume();
   },
+
   methods: {
+    async getResume() {
+      const res = await this.$axios.get("/about");
+      if (res.data) {
+        if (res.data.showResume) {
+          this.getList();
+        }else {
+          this.$router.push('/')
+        }
+      }
+    },
     async getList() {
       this.$progress.start();
       const loading = this.$loading();
       const res = await this.$axios.get("/resume");
       if (res.data) {
-        console.log(res.data);
-        this.resume = res.data.list ? res.data.list[0] : {};
+        this.resume = res.data.list ? res.data.list[0] : null;
         this.$progress.done();
         loading.close();
       }
@@ -201,6 +215,10 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.no-resume {
+  text-align: center;
+  width: 100%;
+}
 .resume {
   color: #414a60;
   font-size: 14px;

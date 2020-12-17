@@ -146,6 +146,7 @@
                         class="gray period"
                       >{{item.startTime | filterDate('YYYY-MM-DD')}}至{{item.endTime | filterDate('YYYY-MM-DD')}}</span>
                       <mu-button
+                        v-if="item.pictures && item.pictures[0].imgUrl"
                         @click="handleView(item)"
                         flat
                         small
@@ -583,7 +584,7 @@ export default {
   display: block;
   padding-top: 40px;
   background: #ccc;
-  img{
+  img {
     vertical-align: middle;
   }
 }

@@ -134,13 +134,31 @@
             <div class="item-primary">
               <h3 class="title">项目经历 (Project exp)</h3>
               <ul>
-                <li v-for="(item,index) in resume.projectExp" :key="index">
+                <li
+                  v-for="(item,index) in resume.projectExp"
+                  :key="index"
+                  :class="{'active':item.open}"
+                >
                   <div class="primary-info">
                     <div class="info-text">
                       <h4 class="name">{{item.projectName}}</h4>
                       <span
                         class="gray period"
                       >{{item.startTime | filterDate('YYYY-MM-DD')}}至{{item.endTime | filterDate('YYYY-MM-DD')}}</span>
+                      <mu-button
+                        @click="handleView(item)"
+                        flat
+                        small
+                        style="float:right"
+                        color="primary"
+                      >项目预览</mu-button>
+                      <mu-drawer width="25%" :open.sync="item.open" :docked="false">
+                        <mu-grid-list :cols="1">
+                          <div class="modal-img" v-for="item in pictures" :key="item.imgUrl">
+                            <img :src="item.imgUrl" />
+                          </div>
+                        </mu-grid-list>
+                      </mu-drawer>
                     </div>
                     <h4>
                       <span class="prev-line no-line">{{item.department}}</span>
@@ -183,7 +201,9 @@ export default {
   data() {
     return {
       isPC: this.isPC,
-      resume: null
+      resume: null,
+      open: false,
+      pictures: []
     };
   },
   mounted() {
@@ -191,13 +211,21 @@ export default {
   },
 
   methods: {
+    handleView(item) {
+      this.pictures = item.pictures;
+      if (item.open === undefined) {
+        this.$set(item, "open", true);
+      } else {
+        this.$set(item, "open", !item.open);
+      }
+    },
     async getResume() {
       const res = await this.$axios.get("/about");
       if (res.data) {
         if (res.data.showResume) {
           this.getList();
-        }else {
-          this.$router.push('/')
+        } else {
+          this.$router.push("/");
         }
       }
     },
@@ -439,7 +467,10 @@ export default {
 
 .resume-box .item-primary li:hover {
   background-color: #f2f5f9;
-  cursor: pointer;
+  transition: all 0.15s linear;
+}
+.resume-box .item-primary li.active {
+  background-color: #f2f5f9;
   transition: all 0.15s linear;
 }
 
@@ -546,6 +577,14 @@ export default {
   position: relative;
   .header-img {
     border-radius: 50%;
+  }
+}
+.modal-img {
+  display: block;
+  padding-top: 40px;
+  background: #ccc;
+  img{
+    vertical-align: middle;
   }
 }
 </style>

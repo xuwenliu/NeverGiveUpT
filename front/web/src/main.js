@@ -36,6 +36,8 @@ import {
   Snackbar,
   Picker,
   Alert,
+  Drawer,
+  GridList,
 } from "muse-ui";
 import "muse-ui/lib/styles/theme.less";
 import "muse-ui-progress/dist/muse-ui-progress.css";
@@ -164,6 +166,8 @@ Vue.use(Badge);
 Vue.use(Snackbar);
 Vue.use(Picker);
 Vue.use(Alert);
+Vue.use(Drawer);
+Vue.use(GridList);
 
 const isPC = (() => {
   var userAgentInfo = navigator.userAgent;

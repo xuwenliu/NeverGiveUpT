@@ -245,7 +245,7 @@ const About = () => {
                     <FormattedMessage id="about.img_num" />
                   </span>
                 </div>
-                <UploadImage imgs={params.imgs} max={3} onChange={onChange} />
+                <UploadImage value={params.imgs} max={3} onChange={onChange} />
               </div>
             </Col>
             <Col offset={2} span={10}>

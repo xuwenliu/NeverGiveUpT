@@ -475,7 +475,7 @@ const HeaderFooter = () => {
               {params.header.type === 1 && (
                 <div className="field-item">
                   <UploadImage
-                    imgs={params.header.logoImgs}
+                    value={params.header.logoImgs}
                     showLink={false}
                     showAction={false}
                     onChange={onUploadImageChange}

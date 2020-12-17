@@ -38,7 +38,6 @@ const ArticlesEdit = (props) => {
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
   const [params, setParams] = useState({
-    imgs: null,
     content: '',
     disabled: false,
   });
@@ -61,15 +60,15 @@ const ArticlesEdit = (props) => {
   const loadArticlesInfo = async (type, id, isRefresh) => {
     const res = await queryArticlesEdit({ id });
     if (res.data) {
-      const data = res.data;
+      let data = res.data;
+      data.cover = [
+        {
+          imgUrl: data.cover,
+        },
+      ];
       setParams({
         ...data,
         content: data.content,
-        imgs: [
-          {
-            imgUrl: data.cover,
-          },
-        ],
         disabled: type === '3',
       });
       form.setFieldsValue({ ...data });
@@ -114,6 +113,7 @@ const ArticlesEdit = (props) => {
         createTime: getValues.createTime * 1,
         publishStatus,
         status: 1,
+        cover: getValues.cover[0].imgUrl,
       };
       const callFunc = postData._id ? updateArticles : addArticles;
       const res = await callFunc(postData);
@@ -122,11 +122,11 @@ const ArticlesEdit = (props) => {
         message.success(
           publishStatus === 1
             ? intl.formatMessage({
-              id: 'articles.publish_success',
-            })
+                id: 'articles.publish_success',
+              })
             : intl.formatMessage({
-              id: 'articles.save_draft_success',
-            }),
+                id: 'articles.save_draft_success',
+              }),
         );
       } else {
         message.error(res.msg);
@@ -189,14 +189,8 @@ const ArticlesEdit = (props) => {
           />
         </Form.Item>
 
-        <Form.Item
-          {...layout}
-          label='创建时间'
-          name="createTime"
-        >
-          <Input
-            disabled={params.disabled}
-          />
+        <Form.Item {...layout} label="创建时间" name="createTime">
+          <Input disabled={params.disabled} />
         </Form.Item>
 
         <Form.Item
@@ -245,11 +239,8 @@ const ArticlesEdit = (props) => {
                   }),
                 },
               ]}
-              normalize={(value, prevValue, prevValues) => {
-                return value && value[0] ? value[0].imgUrl : '';
-              }}
             >
-              <UploadImage imgs={params.imgs} showAction={false} showLink={false} />
+              <UploadImage showAction={false} showLink={false} />
             </Form.Item>
 
             <Form.Item

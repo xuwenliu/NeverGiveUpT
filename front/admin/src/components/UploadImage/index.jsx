@@ -16,18 +16,19 @@ const UploadImage = (props) => {
     showLink = true,
     showIcon = false,
     showAction = true,
-    imgs,
+    value,
     onChange,
+    customClass = '',
   } = props;
   const [imgsArr, setImgsArr] = useState(() => {
-    return imgs ? imgs : initImgs;
+    return value ? value : initImgs;
   });
 
   useEffect(() => {
-    if (!imgs) return;
-    const length = imgs.length;
+    if (!value) return;
+    const length = value.length;
     // 从后台获取到数据后，第一次渲染，是否显示添加和减少按钮
-    imgs.map((item, idx) => {
+    value.map((item, idx) => {
       if (length < max) {
         item.showReduce = length !== 1;
         item.showAdd = idx === length - 1;
@@ -36,8 +37,8 @@ const UploadImage = (props) => {
         item.showAdd = false;
       }
     });
-    setImgsArr(imgs);
-  }, [imgs]);
+    setImgsArr(value);
+  }, [value]);
 
   const onItemChange = ({ index, field, value }) => {
     setImgsArr((preImgs) => {
@@ -122,6 +123,7 @@ const UploadImage = (props) => {
     ? imgsArr.map((item, index) => (
         <UploadImageItem
           key={index}
+          customClass={customClass}
           {...item}
           index={index}
           showImg={showImg}

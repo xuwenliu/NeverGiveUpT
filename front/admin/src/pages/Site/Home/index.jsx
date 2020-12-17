@@ -208,7 +208,7 @@ const Home = () => {
                       <Badge status="error" text={item.name + ':'} />
                     </div>
                     <UploadImage
-                      imgs={item.imgs}
+                      value={item.imgs}
                       showLink={false}
                       showAction={false}
                       onChange={(imgs) => onChange(imgs, index)}

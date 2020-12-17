@@ -44,7 +44,6 @@ const Edit = (props) => {
   const intl = useIntl();
   const [form] = Form.useForm();
   const [updateTime, setUpdateTime] = useState(null);
-  const [imgs, setImgs] = useState(null);
 
   const getResumeEdit = async (id, isRefresh) => {
     const res = await queryResumeEdit({ id });
@@ -56,15 +55,14 @@ const Edit = (props) => {
       data.projectExp?.map((item) => {
         item.time = [moment(item.startTime * 1000), moment(item.endTime * 1000)];
       });
-      setUpdateTime(data.updateTime);
       if (data.avatar) {
-        setImgs([
+        data.avatar = [
           {
             imgUrl: data.avatar,
           },
-        ]);
+        ];
       }
-
+      setUpdateTime(data.updateTime);
       form.setFieldsValue(data);
       if (isRefresh) {
         message.success(
@@ -90,7 +88,6 @@ const Edit = (props) => {
   }, []);
 
   const onSave = async () => {
-    console.log('imgs', imgs);
     const { id } = props.location.query;
     const result = await form.validateFields();
     if (result) {
@@ -109,7 +106,7 @@ const Edit = (props) => {
         id,
         ...values,
         education: values.education || '',
-        avatar: imgs ? imgs[0].imgUrl : '',
+        avatar: values.avatar ? values.avatar[0].imgUrl : '',
       };
       const callFunc = postData.id ? updateResume : createResume;
       const res = await callFunc(postData);
@@ -266,13 +263,8 @@ const Edit = (props) => {
           </Row>
           <Row>
             <Col span={6}>
-              <Form.Item {...baseInfoLayout} label="头像">
-                <UploadImage
-                  imgs={imgs}
-                  showLink={false}
-                  showAction={false}
-                  onChange={(val) => setImgs(val)}
-                />
+              <Form.Item {...baseInfoLayout} label="头像" name="avatar">
+                <UploadImage showLink={false} showAction={false} />
               </Form.Item>
             </Col>
           </Row>
@@ -492,6 +484,28 @@ const Edit = (props) => {
                         ))}
                       </Select>
                     </Form.Item>
+                    <Form.Item
+                      label="作品图片"
+                      {...experiencesLayout}
+                      {...field}
+                      name={[field.name, 'pictures']}
+                      fieldKey={[field.fieldKey, 'pictures']}
+                      rules={[
+                        ({ getFieldValue }) => ({
+                          validator(rule, value) {
+                            if (value && value.length > 1) {
+                              const required = value.every((item) => {
+                                return item.imgUrl;
+                              });
+                              return required ? Promise.resolve() : Promise.reject('请上传图片');
+                            }
+                            return Promise.resolve();
+                          },
+                        }),
+                      ]}
+                    >
+                      <UploadImage customClass="inline-upload" showLink={false} max={10} />
+                    </Form.Item>
                     <Form.Item wrapperCol={{ offset: 2 }}>
                       <Button
                         type="dashed"
@@ -514,6 +528,7 @@ const Edit = (props) => {
             )}
           </Form.List>
         </Card>
+
         <Card title="个人总结" style={{ marginTop: 20 }}>
           <Form.Item name="summary">
             <Editor height="auto" />

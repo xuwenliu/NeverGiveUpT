@@ -809,7 +809,7 @@ const Right = () => {
                     <UploadImage
                       showImg={false}
                       showIcon={true}
-                      imgs={params.imgs}
+                      value={params.imgs}
                       max={4}
                       onChange={onUploadImageChange}
                     />
@@ -839,7 +839,7 @@ const Right = () => {
                       <FormattedMessage id="site.right.ad_image_num" />
                     </span>
                   </div>
-                  <UploadImage imgs={params2.imgs} max={3} onChange={onUploadImageChange2} />
+                  <UploadImage value={params2.imgs} max={3} onChange={onUploadImageChange2} />
                 </div>
               </Col>
               <Col offset={2} span={12}>
@@ -1123,7 +1123,7 @@ const Right = () => {
                     },
                   ]}
                 >
-                  <UploadImage imgs={paramsEdit.imgs} showAction={false} />
+                  <UploadImage value={paramsEdit.imgs} showAction={false} />
                 </Form.Item>
               </Form>
             </Modal>

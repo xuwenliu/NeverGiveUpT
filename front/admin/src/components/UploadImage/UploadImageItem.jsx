@@ -32,6 +32,7 @@ const UploadImageItem = (props) => {
 
     showReduce = false,
     showAdd = true,
+    customClass,
   } = props;
 
   const [loading, setLoading] = useState(false);
@@ -40,6 +41,12 @@ const UploadImageItem = (props) => {
   const [form] = Form.useForm();
   useEffect(() => {
     setImageUrl(imgUrl);
+    form.setFields([
+      {
+        name: 'imgUrl',
+        value: imgUrl,
+      },
+    ]);
   }, [imgUrl]);
 
   const beforeUpload = async (file) => {
@@ -129,7 +136,7 @@ const UploadImageItem = (props) => {
   };
 
   return (
-    <div>
+    <div className={customClass}>
       <Row style={{ marginBottom: 20 }}>
         {showImg && (
           <Col style={{ display: 'flex', flexDirection: 'column' }}>
@@ -208,12 +215,12 @@ const UploadImageItem = (props) => {
           <Form.Item
             name="imgUrl"
             rules={[
-              {
-                required: true,
-                message: intl.formatMessage({
-                  id: 'component.uploadImage.p_file_link',
-                }),
-              },
+              // {
+              //   required: true,
+              //   message: intl.formatMessage({
+              //     id: 'component.uploadImage.p_file_link',
+              //   }),
+              // },
               {
                 type: 'url',
                 message: intl.formatMessage({

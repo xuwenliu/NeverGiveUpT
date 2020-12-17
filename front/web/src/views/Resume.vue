@@ -161,9 +161,9 @@
                         </mu-grid-list>
                       </mu-drawer>
                     </div>
-                    <h4>
-                      <span class="prev-line no-line">{{item.department}}</span>
-                      <span class="prev-line">{{item.job}}</span>
+                    <h4 v-if="item.department || item.department">
+                      <span v-if="item.department" class="prev-line no-line">{{item.department}}</span>
+                      <span v-if="item.job" :class="{'prev-line':item.department}">{{item.job}}</span>
                     </h4>
                     <div class="info-text">
                       <p class="text-type">项目内容：</p>

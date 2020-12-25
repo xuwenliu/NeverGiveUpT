@@ -4,8 +4,6 @@
 module.exports = (app) => {
   const { router, controller, jwt } = app;
 
-  router.get('/auth',controller.auth.index); // 微信公众号验证token
-
   // 后台接口
   const baseRouter = app.config.baseRouter; // /api/v1
   router.post(baseRouter + "/admin/login", controller.admin.adminLogin); // 管理员登录
@@ -91,6 +89,7 @@ module.exports = (app) => {
 
   // 前台接口
   const webRouter = baseRouter + "/web";
+  router.get(webRouter + "/auth", controller.auth.index); // 微信公众号验证token
   router.get(webRouter + "/home", controller.web.home.index); //首页信息获取
   router.get(webRouter + "/header", controller.web.header.index); //导航栏信息获取
 

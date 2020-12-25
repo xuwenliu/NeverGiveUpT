@@ -47,10 +47,6 @@ module.exports = (appInfo) => {
   config.jwt = {
     secret: "NeverGiveUpT",
   };
-  // 正式环境开启日志
-  config.logger = {
-    disableConsoleAfterReady: false,
-  };
 
   // add your user config here
   const userConfig = {

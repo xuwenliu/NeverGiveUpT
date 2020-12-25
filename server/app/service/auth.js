@@ -9,6 +9,7 @@ class AuthService extends Service {
   async index(params) {
     const { ctx, app } = this;
     console.log("params", params);
+    ctx.logger.info("params", params);
     const { signature, timestamp, nonce, echostr } = params; // 微信会下发这4个参数
     /**
      * 开发者通过检验signature对请求进行校验（下面有校验方式）。
@@ -24,6 +25,7 @@ class AuthService extends Service {
     let str = array.join(""); // 串拼接成一个字符串
     let sha1Str = sha1(str); //进行sha1加密
     console.log("sha1Str", sha1Str);
+    ctx.logger.info("sha1Str", sha1Str);
     if (signature === sha1Str) {
       ctx.set({
         "content-type": "text/plain",

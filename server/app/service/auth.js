@@ -8,7 +8,6 @@ class AuthService extends Service {
 
   async index(params) {
     const { ctx, app } = this;
-    console.log('params',params)
     const { signature, timestamp, nonce, echostr } = params; // 微信会下发这4个参数
     /**
      * 开发者通过检验signature对请求进行校验（下面有校验方式）。
@@ -19,8 +18,9 @@ class AuthService extends Service {
         3）开发者获得加密后的字符串可与signature对比，标识该请求来源于微信
      */
     let token = "testauth"; // 你自己填写的token
-    let array = [token, timestamp, nonce].sort(); // 字典序排序
-    let str = array.join(); // 串拼接成一个字符串
+    let array = [token, timestamp, nonce];
+    array.sort(); // 字典序排序
+    let str = array.join(''); // 串拼接成一个字符串
     let sha1Str = sha1(str); //进行sha1加密
     if (signature === sha1Str) {
       ctx.set({

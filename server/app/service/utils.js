@@ -1,6 +1,7 @@
 const path = require("path");
 const qiniu = require("qiniu");
 const md5 = require("md5");
+const sha1 = require("sha1");
 const Service = require("egg").Service;
 
 class UtilsService extends Service {
@@ -71,6 +72,67 @@ class UtilsService extends Service {
     } catch (err) {
       return false;
     }
+  }
+
+  // 生成随机字符串 nonceStr
+  createNonceStr() {
+    return Math.random().toString(36).substr(2, 15);
+  }
+
+  // 生成时间戳 timeStamp
+  createTimeStamp() {
+    return parseInt(new Date().getTime() / 1000) + "";
+  }
+
+  getKeyValueString(obj) {
+    let keys = Object.keys(obj);
+    keys = keys.sort(); // 1.字典排序
+    let newObj = {};
+    keys.forEach((item) => {
+      newObj[item.toLowerCase()] = obj[item];
+    });
+    let str = ""; // 2.字符串拼接
+    for (let i in newObj) {
+      str += `&${i}=${newObj[i]}`;
+    }
+    str = str.substr(1);
+    return str;
+  }
+
+  async getTicket() {
+    const { ctx, app } = this;
+    const url = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${app.config.appId}&secret=${app.config.AppSecret}`;
+    const res_token = await ctx.curl(url, { dataType: "json" });
+    const access_token = res_token.data.access_token;
+    const ticket_url = `https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=${access_token}&type=jsapi`;
+    const res_ticket = await ctx.curl(ticket_url, { dataType: "json" });
+    return res_ticket.data.ticket;
+  }
+
+  async sign(url) {
+    const { ctx, app } = this;
+    /**
+      参与签名的字段包括noncestr（随机字符串）, 有效的jsapi_ticket, timestamp（时间戳）, url（当前网页的URL，不包含#及其后面部分） 。
+      1.对所有待签名参数按照字段名的ASCII 码从小到大排序（字典序）后，
+      2.使用URL键值对的格式（即key1=value1&key2=value2…）拼接成字符串string1。
+      3.这里需要注意的是所有参数名均为小写字符。
+      4.对string1作sha1加密，字段名和字段值都采用原始值，不进行URL 转义。
+     * 
+     */
+
+    const jsapi_ticket = await this.getTicket();
+    let obj = {
+      url,
+      jsapi_ticket,
+      nonceStr: this.createNonceStr(),
+      timestamp: this.createTimeStamp(),
+    };
+
+    const str = this.getKeyValueString(obj);
+    const signature = sha1(str); // 4.sha1加密
+    obj.signature = signature;
+    obj.appId = app.config.appId;
+    return obj;
   }
 }
 

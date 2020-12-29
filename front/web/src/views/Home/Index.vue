@@ -7,7 +7,7 @@
     </div>
     <div class="common">
       <div class="home">
-        <p>{{info.introduction}}</p>
+        <p @click="scan">{{info.introduction}}</p>
       </div>
       <div v-if="isPC" class="right-box">
         <RightConfig showPosition="首页"></RightConfig>
@@ -23,7 +23,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 import RightConfig from "@/components/RightConfig";
-
+import { wxHelper } from "@/utils";
 export default {
   name: "index",
   components: {
@@ -42,6 +42,14 @@ export default {
     this.getInfo();
   },
   methods: {
+    scan() {
+      wxHelper.call("scanQRCode", {
+        needResult: 1,
+        success: function(res) {
+          console.log('scanQRCode',res.resultStr); // 扫码结果
+        }
+      });
+    },
     async getInfo() {
       this.$progress.start();
       const res = await this.$axios.get("/home");

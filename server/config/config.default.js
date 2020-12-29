@@ -59,6 +59,10 @@ module.exports = (appInfo) => {
     cdn: "http://img.nevergiveupt.top/", // 空间绑定的域名
     accessKey: "9qMN42CxUM0zrWrLtbd6DnTvEgDZFneWOlCR0HC-", //Access Key
     secretKey: "CvWnHFlY9iZOaFdMG4jgYMVtmhzCXN3bVAv5NLZ3", //Secret Key
+
+    // 微信公众号-前端小客栈配置参数
+    appId: "wxd73a250032bb07e9",
+    AppSecret: "574da49c62c5fa9a9870390868f1a612",
   };
 
   return {

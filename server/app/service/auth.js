@@ -31,6 +31,17 @@ class AuthService extends Service {
       ctx.body = "Error";
     }
   }
+
+  async signature(params) {
+    const { ctx, app, service } = this;
+    let { url } = params; // 前端会传递url给后端
+    url = decodeURIComponent(url);
+    const res = await service.utils.sign(url);
+    return {
+      data: res,
+      msg: "获取签名参数成功",
+    };
+  }
 }
 
 module.exports = AuthService;

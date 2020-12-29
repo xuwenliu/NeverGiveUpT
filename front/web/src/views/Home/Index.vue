@@ -6,8 +6,8 @@
       <Footer></Footer>
     </div>
     <div class="common">
-      <div class="home">
-        <p @click="scan">{{info.introduction}}</p>
+      <div class="home" @click="scan">
+        <p>{{info.introduction}}</p>
       </div>
       <div v-if="isPC" class="right-box">
         <RightConfig showPosition="首页"></RightConfig>
@@ -44,7 +44,7 @@ export default {
   methods: {
     scan() {
       wxHelper.call("scanQRCode", {
-        needResult: 1,
+        needResult: 0,
         success: function(res) {
           console.log('scanQRCode',res.resultStr); // 扫码结果
         }

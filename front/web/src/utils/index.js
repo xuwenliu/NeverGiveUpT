@@ -839,8 +839,8 @@ import axios from "@/utils/axios";
 const JS_API = ["scanQRCode", "chooseImage", "getLocation"];
 export const wxHelper = {
   setConfig() {
-    // const pageUrl = encodeURIComponent(location.href.split("#")[0]);
-    const pageUrl = encodeURIComponent('http://nevergiveupt.top');
+    const pageUrl = encodeURIComponent(location.href.split("#")[0]);
+    // const pageUrl = encodeURIComponent('http://www.nevergiveupt.top');
     return axios.get(`/signature?&url=${pageUrl}`)
       .then((res) => {
         return new Promise((resolve, reject) => {

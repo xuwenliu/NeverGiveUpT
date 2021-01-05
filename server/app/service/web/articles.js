@@ -62,16 +62,16 @@ class ArticlesService extends Service {
     let prev = null;
     let next = null;
     if (index === 0) {
-      // 没有上一篇文章
-      prev = null;
-      next = allArticles[index + 1];
-    } else if (index === allArticles.length - 1) {
       // 没有下一篇文章
-      prev = allArticles[index - 1];
       next = null;
+      prev = allArticles[index + 1];
+    } else if (index === allArticles.length - 1) {
+      // 没有上一篇文章
+      next = allArticles[index - 1];
+      prev = null;
     } else {
-      prev = allArticles[index - 1];
-      next = allArticles[index + 1];
+      next = allArticles[index - 1];
+      prev = allArticles[index + 1];
     }
 
     const data = {

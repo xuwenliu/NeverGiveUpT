@@ -101,12 +101,53 @@ class UtilsService extends Service {
 
   async getTicket() {
     const { ctx, app } = this;
-    const url = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${app.config.appId}&secret=${app.config.AppSecret}`;
-    const res_token = await ctx.curl(url, { dataType: "json" });
-    const access_token = res_token.data.access_token;
-    const ticket_url = `https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=${access_token}&type=jsapi`;
-    const res_ticket = await ctx.curl(ticket_url, { dataType: "json" });
-    return res_ticket.data.ticket;
+    let access_token = "";
+    let ticket = "";
+    const ticket_data = await ctx.model.Ticket.findOne();
+
+    const getTicketByWeiXin = async () => {
+      const url = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${app.config.appId}&secret=${app.config.AppSecret}`;
+      const res_token = await ctx.curl(url, { dataType: "json" });
+      access_token = res_token.data.access_token;
+      const ticket_url = `https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=${access_token}&type=jsapi`;
+      const res_ticket = await ctx.curl(ticket_url, { dataType: "json" });
+      ticket = res_ticket.data.ticket;
+    };
+
+    if (ticket_data) {
+      // 判断数据库是否存储过
+      let time = new Date().getTime() - ticket_data.accessTokenTime;
+      if (time > 7000000) {
+        // 是否过期
+        // 重新获取并更新
+        await getTicketByWeiXin();
+        let time = new Date().getTime();
+        await ctx.model.Ticket.updateOne(
+          {
+            _id: ticket_data._id,
+          },
+          {
+            accessToken: access_token,
+            accessTokenTime: time,
+            jsApiTicket: ticket,
+            jsApiTicketTime: time,
+          }
+        );
+      } else {
+        access_token = ticket_data.accessToken;
+        ticket = ticket_data.jsApiTicket;
+      }
+    } else {
+      await getTicketByWeiXin(); // 获取然后再存储
+      let time = new Date().getTime();
+      await ctx.model.Ticket.create({
+        accessToken: access_token,
+        accessTokenTime: time,
+        jsApiTicket: ticket,
+        jsApiTicketTime: time,
+      });
+    }
+    return ticket;
   }
 
   async sign(url) {

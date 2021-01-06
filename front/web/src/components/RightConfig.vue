@@ -92,6 +92,11 @@
         </div>
       </div>
     </mu-card>
+
+    <mu-card class="slider-card card-ad">
+      <img src="http://www.nevergiveupt.top/qianduanxiaokezhan.png" alt="">
+    </mu-card>
+
   </div>
 </template>
 <script>

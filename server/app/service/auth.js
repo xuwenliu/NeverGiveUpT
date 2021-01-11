@@ -30,6 +30,8 @@ class AuthService extends Service {
     } else {
       ctx.body = "Error";
     }
+    // 返回这个结果用于微信获取用户发送的消息时验证是否来自微信服务器
+    return signature === sha1Str;
   }
 
   async signature(params) {

@@ -12,7 +12,7 @@ module.exports = (appInfo) => {
   config.keys = appInfo.name + "_1592223477170_7907";
 
   // add your middleware config here
-  config.middleware = ["errorHandler"];
+  config.middleware = ["errorHandler", "weChatAuth"];
 
   config.cluster = {
     listen: {
@@ -61,8 +61,8 @@ module.exports = (appInfo) => {
     secretKey: "CvWnHFlY9iZOaFdMG4jgYMVtmhzCXN3bVAv5NLZ3", //Secret Key
 
     // 微信公众号-前端小客栈配置参数
-    appId: "wxd73a250032bb07e9",
-    AppSecret: "574da49c62c5fa9a9870390868f1a612",
+    appId: "wx1bd84655acaf0a1d", // wxd73a250032bb07e9
+    AppSecret: "3561d879a1e0495f47401fb45ea9dac4", // 574da49c62c5fa9a9870390868f1a612
   };
 
   return {

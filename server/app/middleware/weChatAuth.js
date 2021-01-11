@@ -3,6 +3,8 @@ const {
   parserXMLDataAsync,
   formatData,
 } = require("../utils");
+const messageTemplate = require("../utils/messageTemplate");
+const replayMessage = require("../utils/replayMessage");
 const moment = require("moment");
 
 module.exports = (options, app) => {
@@ -39,30 +41,10 @@ module.exports = (options, app) => {
         MsgId: '23054581672430359'
       }
       */
-      let content = "NeverGiveUpT";
-      if (message.MsgType === "text") {
-        if (message.Content === "1") {
-          //全匹配
-          content = "我叫NeverGiveUpT-1";
-        } else if (message.Content === "2") {
-          content = "我叫NeverGiveUpT-2";
-        } else if (message.Content.match("TA")) {
-          //半匹配
-          content = "我叫NeverGiveUpT-半匹配";
-        }
-      }
-
-      const replyMessage = `<xml>
-      <ToUserName><![CDATA[${message.FromUserName}]]></ToUserName>
-      <FromUserName><![CDATA[${message.ToUserName}]]></FromUserName>
-      <CreateTime>${moment.unix()}</CreateTime>
-      <MsgType><![CDATA[text]]></MsgType>
-      <Content><![CDATA[${content}]]></Content>
-      </xml>`;
+      const options = replayMessage(message);
+      const replyMessage = messageTemplate(options); // 回复给用户的消息
       console.log(replyMessage);
       ctx.body = replyMessage;
-    } else {
-      ctx.body = "";
     }
   };
 };

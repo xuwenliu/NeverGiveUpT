@@ -18,6 +18,15 @@ class AuthController extends Controller {
       res,
     });
   }
+
+  async replay() {
+    const { ctx, service } = this;
+    const res = await service.auth.replay();
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
 }
 
 module.exports = AuthController;

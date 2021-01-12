@@ -7,7 +7,7 @@ module.exports = {
       req
         .on("data", (data) => {
           //数据传递时 触发事件注入到回调函数中
-          console.log(data);
+          // console.log(data);
           //将 bufer 转换为字符串
           xmlData += data.toString();
         })

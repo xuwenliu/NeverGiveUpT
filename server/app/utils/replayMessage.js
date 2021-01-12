@@ -20,7 +20,7 @@ module.exports = (message) => {
       content = "我叫NeverGiveUpT-2";
     } else if (message.Content.match("TA")) {
       //半匹配
-      content = "我叫NeverGiveUpT-半匹配";
+      content = "我叫NeverGiveUpT-TA";
     }
   }
 

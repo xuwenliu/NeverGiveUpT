@@ -89,7 +89,10 @@ module.exports = (app) => {
 
   // 前台接口
   const webRouter = baseRouter + "/web";
+  
   router.get(webRouter + "/auth", controller.auth.index); // 微信公众号验证token
+  router.post(webRouter + "/auth", controller.auth.replay); // 微信公众号-自动回复消息
+
   router.get(webRouter + "/signature", controller.auth.signature); // 微信公众号获取signature
 
   router.get(webRouter + "/home", controller.web.home.index); //首页信息获取

@@ -1,5 +1,12 @@
 const Service = require("egg").Service;
 const sha1 = require("sha1");
+const {
+  getUserDataAsync,
+  parserXMLDataAsync,
+  formatData,
+} = require("../utils");
+const messageTemplate = require("../utils/messageTemplate");
+const replayMessage = require("../utils/replayMessage");
 
 class AuthService extends Service {
   constructor(ctx) {
@@ -27,6 +34,8 @@ class AuthService extends Service {
         "content-type": "text/plain",
       });
       ctx.body = echostr; // 原样返回echostr参数内容
+    } else {
+      ctx.body = "";
     }
     // 返回这个结果用于微信获取用户发送的消息时验证是否来自微信服务器
     return signature === sha1Str;
@@ -41,6 +50,50 @@ class AuthService extends Service {
       data: res,
       msg: "获取签名参数成功",
     };
+  }
+
+  async replay() {
+    const { ctx, app } = this;
+    const isFromWeChat = await ctx.service.auth.index(ctx.request.query);
+    if (isFromWeChat) {
+      //接收请求体数据
+      const xmlData = await getUserDataAsync(ctx.req); // 使用ctx.req来获取流式数据
+      /* {
+        开发者id <xml><ToUserName><![CDATA[gh_944b3ad2b600]]></ToUserName>
+        用户id   <FromUserName><![CDATA[o3Ce86i0MRKT8H0s3zCTPLkMTr44]]></FromUserName>
+        时间戳   <CreateTime>1610343689</CreateTime>
+        消息类型  <MsgType><![CDATA[text]]></MsgType>
+        内容      <Content><![CDATA[1]]></Content>
+        微信消息id <MsgId>23054578540298560</MsgId>
+                </xml>
+      }
+      */
+
+      //将 xml解析为js对象
+      const jsData = await parserXMLDataAsync(xmlData);
+      console.log(jsData);
+      /*
+        {
+          xml: {
+            ToUserName: [ 'gh_944b3ad2b600' ],
+            FromUserName: [ 'o3Ce86i0MRKT8H0s3zCTPLkMTr44' ],
+            CreateTime: [ '1610420442' ],
+            MsgType: [ 'text' ],
+            Content: [ '1' ],
+            MsgId: [ '23055680208911290' ]
+          }
+        }
+        */
+
+      //格式化数据
+      const message = formatData(jsData);
+      const options = replayMessage(message);
+      const replyMessage = messageTemplate(options); // 回复给用户的消息
+      console.log(replyMessage);
+      return {
+        data: replyMessage,
+      };
+    }
   }
 }
 

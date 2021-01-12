@@ -71,7 +71,7 @@ class AuthService extends Service {
 
       //将 xml解析为js对象
       const jsData = await parserXMLDataAsync(xmlData);
-      console.log(jsData);
+      // console.log(jsData);
       /*
         {
           xml: {

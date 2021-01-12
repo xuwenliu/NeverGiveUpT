@@ -24,7 +24,7 @@ class AuthService extends Service {
         2）将三个参数字符串拼接成一个字符串进行sha1加密 
         3）开发者获得加密后的字符串可与signature对比，标识该请求来源于微信
      */
-    let token = "testauth"; // 你自己填写的token
+    let token = app.config.token; // 你自己填写的token
     let array = [timestamp, nonce, token];
     array.sort(); // 字典序排序
     let str = array.join(""); // 串拼接成一个字符串
@@ -52,47 +52,35 @@ class AuthService extends Service {
     };
   }
 
-  async replay() {
-    const { ctx, app } = this;
-    const isFromWeChat = await ctx.service.auth.index(ctx.request.query);
-    if (isFromWeChat) {
-      //接收请求体数据
-      const xmlData = await getUserDataAsync(ctx.req); // 使用ctx.req来获取流式数据
-      /* {
-        开发者id <xml><ToUserName><![CDATA[gh_944b3ad2b600]]></ToUserName>
-        用户id   <FromUserName><![CDATA[o3Ce86i0MRKT8H0s3zCTPLkMTr44]]></FromUserName>
-        时间戳   <CreateTime>1610343689</CreateTime>
-        消息类型  <MsgType><![CDATA[text]]></MsgType>
-        内容      <Content><![CDATA[1]]></Content>
-        微信消息id <MsgId>23054578540298560</MsgId>
-                </xml>
-      }
-      */
-
-      //将 xml解析为js对象
-      const jsData = await parserXMLDataAsync(xmlData);
-      // console.log(jsData);
-      /*
-        {
-          xml: {
-            ToUserName: [ 'gh_944b3ad2b600' ],
-            FromUserName: [ 'o3Ce86i0MRKT8H0s3zCTPLkMTr44' ],
-            CreateTime: [ '1610420442' ],
-            MsgType: [ 'text' ],
-            Content: [ '1' ],
-            MsgId: [ '23055680208911290' ]
-          }
+  async replay(message) {
+    if (message) {
+      // https://github.com/node-webot/co-wechat
+      let content = "NeverGiveUpT";
+      if (message.MsgType === "text") {
+        if (message.Content === "1") {
+          //全匹配
+          content = "我叫NeverGiveUpT-1";
+        } else if (message.Content === "2") {
+          content = "我叫NeverGiveUpT-2";
+        } else if (message.Content.match("TA")) {
+          //半匹配
+          content = "我叫NeverGiveUpT-TA";
         }
-        */
-
-      //格式化数据
-      const message = formatData(jsData);
-      const options = replayMessage(message);
-      const replyMessage = messageTemplate(options); // 回复给用户的消息
-      console.log(replyMessage);
-      return {
-        data: replyMessage,
-      };
+      }
+      return content;
+    } else {
+      const { ctx, app } = this;
+      const isFromWeChat = await ctx.service.auth.index(ctx.request.query);
+      if (isFromWeChat) {
+        const xmlData = await getUserDataAsync(ctx.req);
+        const jsData = await parserXMLDataAsync(xmlData);
+        const message = formatData(jsData);
+        const options = replayMessage(message);
+        const replyMessage = messageTemplate(options);
+        return {
+          data: replyMessage,
+        };
+      }
     }
   }
 }

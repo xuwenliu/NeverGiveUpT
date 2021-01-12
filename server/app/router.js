@@ -89,9 +89,10 @@ module.exports = (app) => {
 
   // 前台接口
   const webRouter = baseRouter + "/web";
-  
+
   router.get(webRouter + "/auth", controller.auth.index); // 微信公众号验证token
-  router.post(webRouter + "/auth", controller.auth.replay); // 微信公众号-自动回复消息
+  router.post(webRouter + "/auth", controller.auth.replay); // 微信公众号-自动回复消息-自己处理
+  // router.post(webRouter + "/auth", controller.auth.weChat); // 微信公众号-自动回复消息-co-wechat库来处理
 
   router.get(webRouter + "/signature", controller.auth.signature); // 微信公众号获取signature
 

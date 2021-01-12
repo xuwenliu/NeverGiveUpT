@@ -1,5 +1,6 @@
 const Controller = require("egg").Controller;
-
+const coWeChat = require("co-wechat");
+const config = require("../../config/config.user");
 class AuthController extends Controller {
   constructor(ctx) {
     super(ctx);
@@ -28,5 +29,12 @@ class AuthController extends Controller {
     });
   }
 }
-
+// 使用co-wechat来回复消息
+AuthController.prototype.weChat = coWeChat({
+  token: config.token,
+  appid: config.appId,
+  encodingAESKey: "",
+}).middleware(async (message, ctx) => {
+  return await ctx.service.auth.replay(message);
+});
 module.exports = AuthController;

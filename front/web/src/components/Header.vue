@@ -189,7 +189,7 @@ export default {
       default: 0
     },
     background: {
-      type: String,
+      type: String
     }
   },
   data() {
@@ -343,6 +343,7 @@ export default {
   position: fixed;
   right: 0.26667rem;
   bottom: 0.4rem;
+  background: #595959;
 }
 .user {
   display: flex;

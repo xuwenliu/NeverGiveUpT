@@ -90,11 +90,21 @@ module.exports = (app) => {
   // 前台接口
   const webRouter = baseRouter + "/web";
 
+
+  
   router.get(webRouter + "/auth", controller.auth.index); // 微信公众号验证token
   router.post(webRouter + "/auth", controller.auth.replay); // 微信公众号-自动回复消息-自己处理
   // router.post(webRouter + "/auth", controller.auth.weChat); // 微信公众号-自动回复消息-co-wechat库来处理
 
+
+  router.post(webRouter + "/weChat/createMenu", controller.auth.createMenu); // 微信公众号-创建自定义菜单
+  router.get(webRouter + "/weChat/removeMenu", controller.auth.removeMenu); // 微信公众号-删除自定义菜单
+
+
   router.get(webRouter + "/signature", controller.auth.signature); // 微信公众号获取signature
+
+
+
 
   router.get(webRouter + "/home", controller.web.home.index); //首页信息获取
   router.get(webRouter + "/header", controller.web.header.index); //导航栏信息获取

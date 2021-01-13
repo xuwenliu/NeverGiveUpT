@@ -2,7 +2,7 @@
 const highlight = require("highlight.js");
 const marked = require("marked");
 const tocObj = {
-  add: function (text, level) {
+  add: function(text, level) {
     var anchor = `toc${level}${++this.index}`;
     this.toc.push({ anchor: anchor, level: level, text: text });
     return anchor;
@@ -15,11 +15,12 @@ const tocObj = {
   //   </ul>
   //   <li></li>
   // </ul>
-  toHTML: function () {
+  toHTML: function() {
     let levelStack = [];
     let result = "";
     const addStartUL = () => {
-      result += '<ul class="anchor-ul" style="padding-left:16px;" id="anchor-fix">';
+      result +=
+        '<ul class="anchor-ul" style="padding-left:16px;" id="anchor-fix">';
     };
     const addEndUL = () => {
       result += "</ul>\n";
@@ -29,7 +30,7 @@ const tocObj = {
         '<li><a class="toc-link" href="#' + anchor + '">' + text + "<a></li>\n";
     };
 
-    this.toc.forEach(function (item) {
+    this.toc.forEach(function(item) {
       let levelIndex = levelStack.indexOf(item.level);
       // 没有找到相应level的ul标签，则将li放入新增的ul中
       if (levelIndex === -1) {
@@ -59,19 +60,30 @@ const tocObj = {
     return result;
   },
   toc: [],
-  index: 0
+  index: 0,
 };
 
 class MarkUtils {
   constructor() {
     this.rendererMD = new marked.Renderer();
-    this.rendererMD.heading = function (text, level) {
+    const linkRenderer = this.rendererMD.link;
+    this.rendererMD.link = (href, title, text) => {
+      const html = linkRenderer.call(this.rendererMD, href, title, text);
+      return html.replace(/^<a /, '<a target="_blank" ');
+    };
+
+    this.rendererMD.heading = function(text, level) {
       var anchor = tocObj.add(text, level);
       return `<h${level} id=${anchor}>${text}</h${level}>\n`;
     };
-    this.rendererMD.table = function (header, body) {
-      return '<table class="table" border="0" cellspacing="0" cellpadding="0">' + header + body + '</table>'
-    }
+    this.rendererMD.table = function(header, body) {
+      return (
+        '<table class="table" border="0" cellspacing="0" cellpadding="0">' +
+        header +
+        body +
+        "</table>"
+      );
+    };
     highlight.configure({ useBR: true });
     marked.setOptions({
       renderer: this.rendererMD,
@@ -83,9 +95,9 @@ class MarkUtils {
       sanitize: false,
       smartLists: true,
       smartypants: false,
-      highlight: function (code) {
+      highlight: function(code) {
         return highlight.highlightAuto(code).value;
-      }
+      },
     });
   }
 

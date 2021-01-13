@@ -147,7 +147,7 @@ class UtilsService extends Service {
         jsApiTicketTime: time,
       });
     }
-    return ticket;
+    return { access_token, ticket };
   }
 
   async sign(url) {
@@ -161,10 +161,10 @@ class UtilsService extends Service {
      * 
      */
 
-    const jsapi_ticket = await this.getTicket();
+    const ticketData = await this.getTicket();
     let obj = {
       url,
-      jsapi_ticket,
+      jsapi_ticket: ticketData.ticket,
       nonceStr: this.createNonceStr(),
       timestamp: this.createTimeStamp(),
     };

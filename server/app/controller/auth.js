@@ -28,6 +28,24 @@ class AuthController extends Controller {
       res,
     });
   }
+
+  async createMenu() {
+    const { ctx, service } = this;
+    const res = await service.auth.createMenu();
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
+
+  async removeMenu() {
+    const { ctx, service } = this;
+    const res = await service.auth.removeMenu();
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
 }
 // 使用co-wechat来回复消息
 AuthController.prototype.weChat = coWeChat({

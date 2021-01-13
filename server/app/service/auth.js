@@ -8,9 +8,12 @@ const {
 const messageTemplate = require("../utils/messageTemplate");
 const replayMessage = require("../utils/replayMessage");
 
+const WeChatAPI = require("co-wechat-api");
+
 class AuthService extends Service {
   constructor(ctx) {
     super(ctx);
+    this.api = new WeChatAPI(ctx.app.config.appId, ctx.app.config.AppSecret);
   }
 
   async index(params) {
@@ -82,6 +85,63 @@ class AuthService extends Service {
         };
       }
     }
+  }
+
+  async createMenu() {
+    const { ctx, app, service } = this;
+    const menu = {
+      button: [
+        {
+          type: "click",
+          name: "今日歌曲",
+          key: "V1001_TODAY_MUSIC",
+        },
+        {
+          name: "菜单",
+          sub_button: [
+            {
+              type: "view",
+              name: "搜索",
+              url: "http://www.soso.com/",
+            },
+            {
+              type: "click",
+              name: "赞一下我们",
+              key: "V1001_GOOD",
+            },
+          ],
+        },
+      ],
+    };
+
+    // const data = await service.utils.getTicket();
+    // const url = `https://api.weixin.qq.com/cgi-bin/menu/create?access_token=${data.access_token}`;
+    // const result = await ctx.curl(url, {
+    //   method: "POST",
+    //   contentType: "json",
+    //   dataType: "json",
+    //   data: menu,
+    // });
+
+    const result = await this.api.createMenu(menu);
+    return {
+      data: result,
+      msg: "创建菜单成功",
+    };
+  }
+
+  async removeMenu() {
+    // const { ctx, app, service } = this;
+    // const data = await service.utils.getTicket();
+    // const url = `https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=${data.access_token}`;
+    // const result = await ctx.curl(url, {
+    //   dataType: "json",
+    // });
+    const result = await this.api.removeMenu();
+    return {
+      data: result,
+      msg: "删除菜单成功",
+    };
   }
 }
 

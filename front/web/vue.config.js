@@ -22,6 +22,13 @@ module.exports = {
             from: "node_modules/mavon-editor/dist/katex", // 插件将会把文件导出
             to: path.resolve(__dirname, "./dist/katex"),
           },
+          {
+            from: "src/MP_verify_rSYP52iYaMJYj6av.txt", // 插件将会把文件导出
+            to: path.resolve(
+              __dirname,
+              "./dist/MP_verify_rSYP52iYaMJYj6av.txt"
+            ),
+          },
         ],
       }),
     ],

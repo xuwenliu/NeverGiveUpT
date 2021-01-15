@@ -100,6 +100,12 @@ module.exports = (app) => {
   router.post(webRouter + "/weChat/createMenu", controller.auth.createMenu); // 微信公众号-创建自定义菜单
   router.get(webRouter + "/weChat/removeMenu", controller.auth.removeMenu); // 微信公众号-删除自定义菜单
 
+  router.post(webRouter + "/weChat/uploadMedia", controller.auth.uploadMedia); // 微信公众号-上传临时素材
+  router.get(webRouter + "/weChat/getMedia", controller.auth.getMedia); // 微信公众号-获取临时素材
+
+
+  
+
 
   router.get(webRouter + "/signature", controller.auth.signature); // 微信公众号获取signature
 

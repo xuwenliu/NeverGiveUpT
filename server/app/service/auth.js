@@ -1,5 +1,10 @@
 const Service = require("egg").Service;
 const sha1 = require("sha1");
+const toArray = require("stream-to-array");
+const WeChatAPI = require("co-wechat-api");
+const fs = require("fs");
+const path = require("path");
+
 const {
   getUserDataAsync,
   parserXMLDataAsync,
@@ -7,8 +12,6 @@ const {
 } = require("../utils");
 const messageTemplate = require("../utils/messageTemplate");
 const replayMessage = require("../utils/replayMessage");
-
-const WeChatAPI = require("co-wechat-api");
 
 class AuthService extends Service {
   constructor(ctx) {
@@ -141,6 +144,82 @@ class AuthService extends Service {
     return {
       data: result,
       msg: "删除菜单成功",
+    };
+  }
+
+  async uploadMedia(params) {
+    const { ctx, app, service } = this;
+    params = params || {
+      type: "image",
+    };
+    // 前端传递参数用formData数据
+    // const formData = new FormData();
+    // formData.append(file); // file即选择的文件 将formData发生到后台
+
+    // 后台通过文件流获取数据
+    const stream = await ctx.getFileStream();
+    const parts = await toArray(stream);
+    const buf = Buffer.concat(parts);
+    
+    // co-wechat-api 的uploadMedia方法要求我们传递文件路径/文件Buffer数据​
+    const result = await this.api.uploadMedia(
+      buf,
+      params.type,
+      stream.filename
+    );
+    /* 正常情况下需要往自己的数据库存储以下4个字段:
+      type: 可取值 image,video,voice,thumb
+      fileName, 文件名称 可从stream.filename获取【2.png】
+      media_id, 媒体id 由微信返回result.media_id - 用于获取上传的临时素材
+      mimeType, 文件后缀名 可从stream.mimeType获取 - 如果是图片【image/png】用于返回前端base64格式做拼接
+    */
+    return {
+      data: result,
+      msg: params.type + "类型的临时素材上传成功",
+    };
+  }
+
+  async getMedia(params) {
+    params = {
+      ...params,
+      type: params.type || "image",
+    };
+    const result = await this.api.getMedia(params.mediaId);
+    const fileName = Date.now() + ".png"; // 文件名称 -正常情况是通过mediaId去数据库查询获取
+    const pathFile = path.resolve(__dirname, "../../media", fileName); // 文件存储的路径
+
+    let data = null;
+
+    // 图片和缩略图
+    if (params.type === "image" || params.type === "thumb") {
+      const base64 = result.toString("base64");
+      data = `data:image/png;base64,` + base64; // 这里的拼接的【image/png】也是需要通过mediaId去数据库查询获取mimeType字段
+
+      // 将文件下载到服务端-也可以不下载-直接返回给前端base64的图片
+      fs.writeFile(pathFile, base64, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+      // 如果将文件上传到其他地方（七牛云）可以在这里操作
+    }
+
+    // 视频
+    if (params.type === "video") {
+      data = result.video_url;
+    }
+
+    // 语音
+    if (params.type === "voice") {
+      // 语音和图片类似。需要上传到自己的文件存储的地方（七牛云）
+    }
+
+    return {
+      data: {
+        ...params,
+        data,
+      },
+      msg: params.type + "临时素材获取成功",
     };
   }
 }

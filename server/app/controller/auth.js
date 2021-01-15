@@ -46,6 +46,26 @@ class AuthController extends Controller {
       res,
     });
   }
+
+  async uploadMedia() {
+    const { ctx, service } = this;
+    const data = ctx.request.query;
+    const res = await service.auth.uploadMedia(data);
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
+
+  async getMedia() {
+    const { ctx, service } = this;
+    const data = ctx.request.query;
+    const res = await service.auth.getMedia(data);
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
 }
 // 使用co-wechat来回复消息
 AuthController.prototype.weChat = coWeChat({

@@ -103,6 +103,19 @@ module.exports = (app) => {
   router.post(webRouter + "/weChat/uploadMedia", controller.auth.uploadMedia); // 微信公众号-上传临时素材
   router.get(webRouter + "/weChat/getMedia", controller.auth.getMedia); // 微信公众号-获取临时素材
 
+  router.post(webRouter + "/weChat/uploadMaterial", controller.auth.uploadMaterial); // 微信公众号-上传永久素材-图片，语音，缩略图
+  router.post(webRouter + "/weChat/uploadVideoMaterial", controller.auth.uploadVideoMaterial); // 微信公众号-上传永久素材-视频
+  router.post(webRouter + "/weChat/uploadNewsMaterial", controller.auth.uploadNewsMaterial); // 微信公众号-上传永久素材-图文
+
+  router.post(webRouter + "/weChat/uploadPermanentMaterial", controller.auth.uploadPermanentMaterial); // 微信公众号-上传永久素材-上面三个的合体
+
+  
+
+  router.post(webRouter + "/weChat/updateNewsMaterial", controller.auth.updateNewsMaterial); // 微信公众号-上传永久素材-图文修改
+  router.get(webRouter + "/weChat/getMaterial", controller.auth.getMaterial); // 微信公众号-获取永久素材
+  
+  
+
 
   
 

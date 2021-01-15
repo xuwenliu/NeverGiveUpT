@@ -149,8 +149,9 @@ class AuthService extends Service {
 
   async uploadMedia(params) {
     const { ctx, app, service } = this;
-    params = params || {
-      type: "image",
+    params = {
+      ...params,
+      type: params.type || "image",
     };
     // 前端传递参数用formData数据
     // const formData = new FormData();
@@ -160,7 +161,7 @@ class AuthService extends Service {
     const stream = await ctx.getFileStream();
     const parts = await toArray(stream);
     const buf = Buffer.concat(parts);
-    
+
     // co-wechat-api 的uploadMedia方法要求我们传递文件路径/文件Buffer数据​
     const result = await this.api.uploadMedia(
       buf,
@@ -186,7 +187,7 @@ class AuthService extends Service {
     };
     const result = await this.api.getMedia(params.mediaId);
     const fileName = Date.now() + ".png"; // 文件名称 -正常情况是通过mediaId去数据库查询获取
-    const pathFile = path.resolve(__dirname, "../../media", fileName); // 文件存储的路径
+    const filePath = path.resolve(__dirname, "../../media", fileName); // 文件存储的路径
 
     let data = null;
 
@@ -196,7 +197,7 @@ class AuthService extends Service {
       data = `data:image/png;base64,` + base64; // 这里的拼接的【image/png】也是需要通过mediaId去数据库查询获取mimeType字段
 
       // 将文件下载到服务端-也可以不下载-直接返回给前端base64的图片
-      fs.writeFile(pathFile, base64, (err) => {
+      fs.writeFile(filePath, base64, (err) => {
         if (err) {
           console.log(err);
         }
@@ -220,6 +221,180 @@ class AuthService extends Service {
         data,
       },
       msg: params.type + "临时素材获取成功",
+    };
+  }
+
+  // 上传永久素材有图片（image）、语音（voice）、和缩略图（thumb）
+  async uploadMaterial(params) {
+    const { ctx, app, service } = this;
+    params = {
+      ...params,
+      type: params.type || "image",
+    };
+    // 前端传递参数用formData数据
+    // const formData = new FormData();
+    // formData.append(file); // file即选择的文件 将formData发生到后台
+
+    // 后台通过文件流获取数据
+    const stream = await ctx.getFileStream();
+    const parts = await toArray(stream);
+    const buf = Buffer.concat(parts);
+    const fileName = stream.filename;
+    const filePath = path.resolve(__dirname, "../../media", fileName); // 文件存储的路径
+    // 将文件保存到服务端-必须要保存
+    // co-wechat-api 库要求我们传递文件的路径。所以这个文件路径必须要有这个文件才能上传成功
+    fs.writeFile(filePath, buf, async (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    const result = await this.api.uploadMaterial(filePath, params.type);
+    /* 正常情况下需要往自己的数据库存储以下4个字段:
+      type: 可取值 image,voice,thumb
+      fileName, 文件名称 可从stream.filename获取【2.png】
+      media_id, 媒体id 由微信返回result.media_id - 用于获取上传的永久素材
+      mimeType, 文件后缀名 可从stream.mimeType获取 - 如果是图片【image/png】用于返回前端base64格式做拼接
+    */
+    return {
+      data: result,
+      msg: params.type + "永久素材上传成功",
+    };
+  }
+
+  // 上传永久素材-video
+  // params 包含 title 和 introduction 两个字段
+  async uploadVideoMaterial(params) {
+    const { ctx, app, service } = this;
+    // 前端传递参数用formData数据
+    // const formData = new FormData();
+    // formData.append(file); // file即选择的文件 将formData发生到后台
+
+    // 后台通过文件流获取数据
+    const stream = await ctx.getFileStream();
+    const parts = await toArray(stream);
+    const buf = Buffer.concat(parts);
+    const fileName = stream.filename;
+    const filePath = path.resolve(__dirname, "../../media", fileName); // 文件存储的路径
+    // 将文件保存到服务端-必须要保存
+    // co-wechat-api 库要求我们传递文件的路径。所以这个文件路径必须要有这个文件才能上传成功
+    fs.writeFile(filePath, buf, async (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    const result = await this.api.uploadVideoMaterial(filePath, params);
+    return {
+      data: result,
+      msg: "视频永久素材上传成功",
+    };
+  }
+
+  // 上传永久素材-图文
+  async uploadNewsMaterial(news) {
+    // {
+    //   "articles": [
+    //     {
+    //       "title": TITLE, // 标题
+    //       "thumb_media_id": THUMB_MEDIA_ID, // 图文消息的封面图片素材id（必须是永久mediaID）
+    //       "author": AUTHOR, // 作者
+    //       "digest": DIGEST, // 图文消息的摘要，仅有单图文消息才有摘要，多图文此处为空。如果本字段为没有填写，则默认抓取正文前64个字。
+    //       "show_cover_pic": SHOW_COVER_PIC(0 / 1), // 是否显示封面，0为false，即不显示，1为true，即显示
+    //       "content": CONTENT, // 图文内容
+    //       "content_source_url": CONTENT_SOURCE_URL // 图文消息的原文地址，即点击“阅读原文”后的URL
+    //     },
+    //     //若新增的是多图文素材，则此处应还有几段articles结构
+    //   ]
+    //  }
+    const result = await this.api.uploadNewsMaterial(news);
+    return {
+      data: result,
+      msg: "图文永久素材上传成功",
+    };
+  }
+
+  async uploadPermanentMaterial(params, body) {
+    const { ctx } = this;
+    let result = null;
+    const writeMaterial = async () => {
+      if (params.type === "news") return;
+      const stream = await ctx.getFileStream();
+      const parts = await toArray(stream);
+      const buf = Buffer.concat(parts);
+      const fileName = stream.filename;
+      const filePath = path.resolve(__dirname, "../../media", fileName); // 文件存储的路径
+      fs.writeFile(filePath, buf, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+      return filePath;
+    };
+
+    const filePath = await writeMaterial();
+    switch (params.type) {
+      case "news":
+        result = await this.api.uploadNewsMaterial(body);
+        break;
+      case "video":
+        result = await this.api.uploadVideoMaterial(filePath, {
+          title: params.title,
+          introduction: params.introduction,
+        });
+        break;
+      case "image":
+      case "voice":
+      case "thumb":
+        result = await this.api.uploadMaterial(filePath, params.type);
+        break;
+    }
+
+    return {
+      data: result,
+      msg: params.type + "永久素材上传成功",
+    };
+  }
+
+  // 更新图文素材
+  async updateNewsMaterial(news) {
+    const result = await this.api.updateNewsMaterial(news);
+    return {
+      data: result,
+      msg: "图文永久素材修改成功",
+    };
+  }
+
+  // 获取永久素材
+  // type 和 mediaId
+  async getMaterial(params) {
+    let result = await this.api.getMaterial(params.mediaId);
+    let data = null;
+
+    switch (params.type) {
+      case "image":
+      case "voice":
+      case "thumb":
+        // 图片,语音,缩略图
+        const fileName = Date.now() + ".png"; // 文件名称 -正常情况是通过mediaId去数据库查询获取
+        const filePath = path.resolve(__dirname, "../../media", fileName); // 文件存储的路径
+        const base64 = result.toString("base64");
+        data = `data:image/png;base64,` + base64; // 这里的拼接的【image/png】也是需要通过mediaId去数据库查询获取mimeType字段
+
+        // 将文件下载到服务端-也可以不下载-直接返回给前端base64的图片
+        fs.writeFile(filePath, base64, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+        // 如果将文件上传到其他地方（七牛云）可以在这里操作
+
+        break;
+      default:
+        data = result; // news 和 video
+    }
+
+    return {
+      data,
+      msg: params.type + "永久素材获取成功",
     };
   }
 }

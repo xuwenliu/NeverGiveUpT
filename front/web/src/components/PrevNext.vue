@@ -1,7 +1,7 @@
 <template>
   <div class="prev-next">
-    <div class="prev" @click="goDetails(prev)" v-if="prev">上一篇： {{prev.title}}</div>
-    <div class="next" @click="goDetails(next)" v-if="next">下一篇： {{next.title}}</div>
+    <mu-button v-if="prev" flat color="primary" @click="goDetails(prev)">上一篇： {{prev.title}}</mu-button>
+    <mu-button v-if="next" flat color="info" @click="goDetails(next)">下一篇： {{next.title}}</mu-button>
   </div>
 </template>
 <script>
@@ -29,13 +29,8 @@ export default {
 <style lang="less" scoped>
 .prev-next {
   font-size: 0.24rem;
-  .prev{
-    cursor: pointer;
-    padding: 5px 0;
-  }
-  .next {
-    cursor: pointer;
-    padding: 5px 0;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 </style>

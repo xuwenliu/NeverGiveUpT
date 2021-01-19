@@ -33,7 +33,7 @@
         <div class="left-box" :style="{width:isPC?'70%':'100%'}">
           <mu-card class="card">
             <mu-card-title :title="info.title" :sub-title="info.introduction"></mu-card-title>
-            <mu-card-media style="height:400px;">
+            <mu-card-media :style="{height:isPC?'400px':'auto'}">
               <img v-lazy="info.cover" style="height:100%" />
             </mu-card-media>
             <mu-card-actions class="sub-title">
@@ -157,17 +157,17 @@ export default {
     }
   },
   mounted() {
-    this.getInfo(1);
-    this.getCommentList();
+    const id = this.$route.query.id;
+    this.getInfo(id, 1);
+    this.getCommentList(id);
   },
   methods: {
     /**
      * views 统计预览次数，这里统计第一次进入页面的次数
      */
-    async getInfo(views) {
+    async getInfo(id, views) {
       this.$progress.start();
       const loading = this.$loading();
-      const id = this.$route.query.id;
       const res = await this.$axios.get(
         `/articles/details?id=${id}&views=${views}`
       );
@@ -185,9 +185,8 @@ export default {
       }
     },
 
-    async getCommentList() {
-      const articleId = this.$route.query.id;
-      const res = await this.$axios.get(`/comment/list?articleId=${articleId}`);
+    async getCommentList(id) {
+      const res = await this.$axios.get(`/comment/list?articleId=${id}`);
       if (res.data) {
         this.commentList = this.listToTree(res.data);
       }
@@ -248,6 +247,12 @@ export default {
         sessionStorage.setItem("like", JSON.stringify(save));
       }
     }
+  },
+  beforeRouteUpdate(to, from, next) {
+    const id = to.query.id;
+    this.getInfo(id, 1);
+    this.getCommentList(id);
+    next();
   }
 };
 </script>

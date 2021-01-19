@@ -8,14 +8,16 @@
 
 <script>
 export default {
-  // mounted() {
-  //   window.onresize = () => {
-  //     if (window.innerWidth <= 800) {
-  //       this.isPC = false;
-  //     } else {
-  //       this.isPC = true;
-  //     }
-  //   };
-  // }
+  methods: {
+    resize() {
+      window.location.reload();
+    }
+  },
+  mounted() {
+    window.addEventListener("resize", this.resize);
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.resize);
+  }
 };
 </script>

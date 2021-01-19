@@ -22,6 +22,16 @@ class ArticlesController extends Controller {
       res,
     });
   }
+
+  async keyword() {
+    const { ctx, service } = this;
+    const data = ctx.request.body;
+    const res = await service.web.articles.keyword(data);
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
 }
 
 module.exports = ArticlesController;

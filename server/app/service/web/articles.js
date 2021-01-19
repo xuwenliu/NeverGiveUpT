@@ -58,7 +58,7 @@ class ArticlesService extends Service {
       createTime: -1,
     });
     const index = allArticles.findIndex((item) => item._id == id);
-    
+
     let prev = null;
     let next = null;
     if (index === 0) {
@@ -83,6 +83,42 @@ class ArticlesService extends Service {
     return {
       data,
       msg: "文章详情获取成功",
+    };
+  }
+
+  // 关键字搜索
+  async keyword(params) {
+    const { ctx } = this;
+    // 从文章标题，简介，内容中去搜索
+    const queryCon = {
+      status: 1,
+      publishStatus: 1,
+      $or: [
+        {
+          title: {
+            $regex: new RegExp(params.keyword, "i"),
+          },
+        },
+        {
+          introduction: {
+            $regex: new RegExp(params.keyword, "i"),
+          },
+        },
+        {
+          content: {
+            $regex: new RegExp(params.keyword, "i"),
+          },
+        },
+      ],
+    };
+    let list = await ctx.model.Articles.find(queryCon).sort({
+      createTime: -1,
+    });
+    return {
+      data: {
+        list,
+      },
+      msg: "文章关键字搜索成功",
     };
   }
 }

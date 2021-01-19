@@ -142,6 +142,7 @@ module.exports = (app) => {
 
   router.get(webRouter + "/articles", controller.web.articles.index); //文章列表获取
   router.get(webRouter + "/articles/details", controller.web.articles.details); //文章详情获取
+  router.post(webRouter + "/articles/keyword", controller.web.articles.keyword); //搜索文章
 
   router.get(webRouter + "/rightConfig", controller.web.rightConfig.index); //右侧广告，推荐获取
 
@@ -155,4 +156,6 @@ module.exports = (app) => {
   router.post(webRouter + "/like", jwt, controller.web.like.submit); //点赞
 
   router.get(webRouter + "/resume", controller.web.resume.index); //简历列表获取
+
+  
 };

@@ -106,7 +106,7 @@
         <mu-slide-right-transition>
           <mu-button
             v-show="showToolBtn && info.openSearch"
-            @click="openSearchModal=true;showToolBtn=false;"
+            @click="handleSearch"
             fab
             color="error"
           >搜索</mu-button>
@@ -228,13 +228,6 @@ export default {
     if (this.user) {
       this.trigger = this.$refs.button.$el;
     }
-    window.onresize = () => {
-      if (window.innerWidth <= 750) {
-        this.isPC = false;
-      } else {
-        this.isPC = true;
-      }
-    };
     window.onscroll = () => {
       if (document.documentElement.scrollTop + document.body.scrollTop > 100) {
         this.showBackTop = true;
@@ -285,7 +278,7 @@ export default {
       this.openSearchModal = openSearchModal;
     },
     scrollTop() {
-      document.body.scrollIntoView();
+      document.body.scrollIntoView({ block: "start", behavior: "smooth" });
     },
     async logout() {
       const res = await this.$axios.post("/logout");
@@ -303,6 +296,10 @@ export default {
       this.me = me;
       localStorage.setItem("theme", me);
       this.openTheme = false;
+    },
+    handleSearch() {
+      this.openSearchModal = true;
+      this.showToolBtn = false;
     }
   }
 };

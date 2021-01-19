@@ -187,7 +187,7 @@ const isPC = (() => {
       break;
     }
   }
-  return flag && window.innerWidth > 800;
+  return flag && window.innerWidth > 750;
 })();
 Vue.prototype.isPC = isPC;
 

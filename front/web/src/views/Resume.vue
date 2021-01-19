@@ -153,7 +153,7 @@
                         style="float:right"
                         color="primary"
                       >项目预览</mu-button>
-                      <mu-drawer width="25%" :open.sync="item.open" :docked="false">
+                      <mu-drawer :width="isPC?'25%':'75%'" :open.sync="item.open" :docked="false">
                         <mu-grid-list :cols="1">
                           <div class="modal-img" v-for="item in pictures" :key="item.imgUrl">
                             <img :src="item.imgUrl" />

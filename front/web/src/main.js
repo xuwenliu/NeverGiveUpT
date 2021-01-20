@@ -3,11 +3,11 @@ import App from "./App.vue";
 
 Vue.config.productionTip = false;
 import router from "./router";
-import "highlight.js/styles/vs2015.css";
 
 import "muse-ui/lib/styles/base.less";
 import "./global.less";
 import "lib-flexible";
+import { isPC } from "@/utils";
 import {
   Button,
   Select,
@@ -169,26 +169,6 @@ Vue.use(Alert);
 Vue.use(Drawer);
 Vue.use(GridList);
 
-const isPC = (() => {
-  var userAgentInfo = navigator.userAgent;
-  var Agents = [
-    "Android",
-    "iPhone",
-    "SymbianOS",
-    "Windows Phone",
-    "iPad",
-    "iPod",
-    "XiaoMi/MiuiBrowser",
-  ];
-  var flag = true;
-  for (var v = 0; v < Agents.length; v++) {
-    if (userAgentInfo.indexOf(Agents[v]) > 0) {
-      flag = false;
-      break;
-    }
-  }
-  return flag && window.innerWidth > 750;
-})();
 Vue.prototype.isPC = isPC;
 
 import axios from "@/utils/axios";

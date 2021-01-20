@@ -3,7 +3,7 @@
     <Header :light-index="1"></Header>
 
     <div v-if="isPC" class="toc-fixed">
-      <mu-card class="card">
+      <!-- <mu-card class="card">
         <div class="toc">
           <div v-if="toc.length > 0">
             <div class="title">目录</div>
@@ -12,7 +12,7 @@
             </mu-card-text>
           </div>
         </div>
-      </mu-card>
+      </mu-card>-->
       <div class="action" :class="toc.length>0?'':'noMulu'">
         <mu-button @click="like" v-if="info.isLike" fab color="primary">
           <mu-icon value="thumb_up"></mu-icon>
@@ -54,7 +54,15 @@
               >{{info.createTime | filterDate}}</mu-button>
             </mu-card-actions>
 
-            <div class="article-detail" v-html="content"></div>
+            <mavonEditor
+              v-model="content"
+              :ishljs="true"
+              :toolbarsFlag="false"
+              :subfield="false"
+              defaultOpen="preview"
+              codeStyle="tomorrow-night-eighties"
+              :navigation="isPC"
+            />
 
             <mu-card-actions>
               <mu-button class="cursor-default" flat color="primary">
@@ -107,7 +115,6 @@
 </template>
 <script>
 import RightConfig from "@/components/RightConfig";
-import markdown from "@/utils/markdown";
 import Comment from "@/components/Comment";
 import CommentList from "@/components/CommentList";
 import Footer from "@/components/Footer";
@@ -115,6 +122,10 @@ import Header from "@/components/Header";
 import PrevNext from "@/components/PrevNext";
 
 import { animateScroll } from "@/utils";
+import Clipboard from "clipboard";
+import { mavonEditor } from "mavon-editor";
+import "mavon-editor/dist/css/index.css";
+import { markdown } from "@/utils/markdown";
 
 export default {
   name: "articlesDetails",
@@ -124,7 +135,8 @@ export default {
     CommentList,
     Footer,
     Header,
-    PrevNext
+    PrevNext,
+    mavonEditor
   },
   data() {
     return {
@@ -160,6 +172,17 @@ export default {
     const id = this.$route.query.id;
     this.getInfo(id, 1);
     this.getCommentList(id);
+
+    this.$nextTick(() => {
+      this.clipboard = new Clipboard(".copy-btn");
+      // 复制成功失败的提示
+      this.clipboard.on("success", () => {
+        this.$toast.success("复制成功");
+      });
+      this.clipboard.on("error", () => {
+        this.$toast.error("复制失败");
+      });
+    });
   },
   methods: {
     /**
@@ -175,11 +198,8 @@ export default {
         this.info = res.data.current;
         this.prev = res.data.prev;
         this.next = res.data.next;
-        const article = markdown.marked(this.info.content);
-        article.then(res => {
-          this.content = res.content;
-          this.toc = res.toc;
-        });
+        this.content = markdown(mavonEditor, this.info.content);
+
         this.$progress.done();
         loading.close();
       }
@@ -265,7 +285,7 @@ export default {
   position: fixed;
   width: 14%;
   left: 20px;
-  top: 80px;
+  top: 380px;
   .toc {
     width: 100%;
     max-height: 400px;

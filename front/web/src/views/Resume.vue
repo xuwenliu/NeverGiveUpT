@@ -120,7 +120,7 @@
                         class="gray period"
                       >{{item.startTime | filterDate('YYYY-MM-DD')}}至{{item.endTime | filterDate('YYYY-MM-DD')}}</span>
                     </div>
-                    <div class="info-text">{{item.projectContent}}</div>
+                    <div class="info-text" v-html="item.projectContent"></div>
                     <div class="info-text">
                       <span class="text-type">技术栈：</span>
                       {{item.technologyStack}}
@@ -167,7 +167,7 @@
                     </h4>
                     <div class="info-text">
                       <p class="text-type">项目内容：</p>
-                      {{item.projectDesc}}
+                      <div v-html="item.projectDesc"></div>
                     </div>
                     <div class="keywords">
                       <span v-for="sub in item.projectTags" :key="sub">{{sub}}</span>

@@ -7,17 +7,17 @@
 </template>
 
 <script>
-export default {
-  methods: {
-    resize() {
-      window.location.reload();
-    }
-  },
-  mounted() {
-    window.addEventListener("resize", this.resize);
-  },
-  unmounted() {
-    window.removeEventListener("resize", this.resize);
-  }
-};
+// export default {
+//   methods: {
+//     resize() {
+//       window.location.reload();
+//     }
+//   },
+//   mounted() {
+//     window.addEventListener("resize", this.resize);
+//   },
+//   unmounted() {
+//     window.removeEventListener("resize", this.resize);
+//   }
+// };
 </script>

@@ -78,5 +78,11 @@ export default new Router({
       component: () =>
         import(/* webpackChunkName: "resume" */ "./views/Resume.vue"),
     },
+    {
+      path: "*",
+      name: "notFound",
+      component: () =>
+        import(/* webpackChunkName: "notFound" */ "./views/NotFound.vue"),
+    },
   ],
 });

@@ -12,6 +12,7 @@
     "clipboard": "^2.0.6",
     "core-js": "^3.6.5",
     "highlight.js": "^10.1.2",
+    "jquery": "^3.5.1",
     "lib-flexible": "^0.3.2",
     "mavon-editor": "^2.9.0",
     "muse-ui": "^3.0.2",

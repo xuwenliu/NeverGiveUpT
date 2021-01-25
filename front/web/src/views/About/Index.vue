@@ -26,7 +26,7 @@
             <img class="avatar" v-lazy="avatar" />
           </mu-paper>
           <mu-button @click="goResume" v-if="info.showResume" :color="randomColor">
-            个人简历
+            简历
             <mu-icon right value="arrow_forward"></mu-icon>
           </mu-button>
         </mu-card-header>

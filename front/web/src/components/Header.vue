@@ -93,38 +93,40 @@
     <!-- 搜索按钮 -->
     <div class="tool" v-if="isShowAction">
       <div v-if="info.login && !user" class="tool-row">
-        <mu-slide-right-transition>
+        <mu-slide-left-transition>
           <mu-button
             v-show="showToolBtn"
             @click="openLoginModal=true;showToolBtn=false;"
             fab
             color="primary"
           >登录</mu-button>
-        </mu-slide-right-transition>
+        </mu-slide-left-transition>
       </div>
       <div class="tool-row">
-        <mu-slide-right-transition>
+        <mu-tooltip placement="right-start" content="登录/注册/搜索">
+          <mu-button @click="showToolBtn = !showToolBtn" fab color="info" class="search-fab">
+            <mu-icon value="adb"></mu-icon>
+          </mu-button>
+        </mu-tooltip>
+
+        <mu-slide-left-transition>
           <mu-button
             v-show="showToolBtn && info.openSearch"
             @click="handleSearch"
             fab
             color="error"
           >搜索</mu-button>
-        </mu-slide-right-transition>
-
-        <mu-button @click="showToolBtn = !showToolBtn" fab color="info" class="search-fab">
-          <mu-icon value="adb"></mu-icon>
-        </mu-button>
+        </mu-slide-left-transition>
       </div>
       <div v-if="info.register && !user" class="tool-row">
-        <mu-slide-right-transition>
+        <mu-slide-left-transition>
           <mu-button
             v-show="showToolBtn"
             @click="openRegisterModal=true;showToolBtn=false;"
             fab
             color="warning"
           >注册</mu-button>
-        </mu-slide-right-transition>
+        </mu-slide-left-transition>
       </div>
     </div>
 
@@ -133,9 +135,11 @@
     <SearchForm :open="openSearchModal" @toggle="toggleSearchModal"></SearchForm>
 
     <mu-slide-bottom-transition>
-      <mu-button class="back-top" v-show="showBackTop" @click="scrollTop" fab color="secondary">
-        <mu-icon value="arrow_upward"></mu-icon>
-      </mu-button>
+      <mu-tooltip placement="top" content="Top">
+        <mu-button class="back-top" v-show="showBackTop" @click="scrollTop" fab color="secondary">
+          <mu-icon value="arrow_upward"></mu-icon>
+        </mu-button>
+      </mu-tooltip>
     </mu-slide-bottom-transition>
   </div>
 </template>
@@ -323,15 +327,14 @@ export default {
 
 .tool {
   position: fixed;
-  right: 0;
+  left: 0;
   bottom: 2.66667rem;
   .tool-row {
-    text-align: right;
     margin-top: 20px;
     height: 56px;
     .search-fab {
-      margin-left: 20px;
-      margin-right: -28px;
+      margin-left: -28px;
+      margin-right: 20px;
     }
   }
 }

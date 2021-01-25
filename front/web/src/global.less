@@ -455,8 +455,6 @@ html {
   }
 }
 
- 
-
 h1,
 h2,
 h3,
@@ -601,7 +599,7 @@ img {
   .right-box {
     position: fixed;
     top: 80px;
-    right: 70px;
+    left: 70px;
     z-index: 3;
   }
 }
@@ -739,9 +737,21 @@ pre.hljs::after {
 .v-note-wrapper .v-note-panel .v-note-navigation-wrapper.transition {
   height: 300px;
   position: fixed;
-  left: 25px;
+  right: 25px;
   top: 80px;
+  border-radius: 5px;
+  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14),
+    0 1px 8px 0 rgba(0, 0, 0, 0.12);
+  display: none;
 }
+.v-note-wrapper
+  .v-note-panel
+  .v-note-navigation-wrapper
+  .v-note-navigation-content
+  h3 {
+  padding-left: 20px !important;
+}
+
 .v-note-wrapper
   .v-note-panel
   .v-note-navigation-wrapper

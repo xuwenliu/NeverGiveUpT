@@ -38,6 +38,7 @@ import {
   Alert,
   Drawer,
   GridList,
+  Tooltip,
 } from "muse-ui";
 import "muse-ui/lib/styles/theme.less";
 import "muse-ui-progress/dist/muse-ui-progress.css";
@@ -168,6 +169,7 @@ Vue.use(Picker);
 Vue.use(Alert);
 Vue.use(Drawer);
 Vue.use(GridList);
+Vue.use(Tooltip);
 
 Vue.prototype.isPC = isPC;
 
@@ -179,7 +181,8 @@ import * as filters from "./filter";
 Object.keys(filters).forEach((k) => Vue.filter(k, filters[k])); //注册过滤器
 Vue.prototype.filterDate = filters.filterDate; //时间过滤方法
 
-Vue.prototype.avatar = "https://xuwenliu.github.io/img/avatar.jpg";
+Vue.prototype.avatar =
+  "http://img.nevergiveupt.top/d962de99454167348513dd191fe20698.jpeg";
 
 new Vue({
   router,

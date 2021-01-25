@@ -3,32 +3,39 @@
     <Header :light-index="1"></Header>
 
     <div v-if="isPC" class="toc-fixed">
-      <!-- <mu-card class="card">
+      <mu-card v-if="toc.length > 0" class="card">
         <div class="toc">
-          <div v-if="toc.length > 0">
-            <div class="title">目录</div>
-            <mu-card-text>
-              <div v-html="toc"></div>
-            </mu-card-text>
+          <div class="title">文章目录</div>
+          <div v-for="item in toc" :key="item.name">
+            <a @click="scrollToPosition(item.href)" v-html="item.name"></a>
           </div>
         </div>
-      </mu-card>-->
+      </mu-card>
       <div class="action" :class="toc.length>0?'':'noMulu'">
-        <mu-button @click="like" v-if="info.isLike" fab color="primary">
-          <mu-icon value="thumb_up"></mu-icon>
-        </mu-button>
+        <mu-tooltip v-if="info.isLike" placement="top" content="点赞">
+          <mu-button @click="like" fab color="primary">
+            <mu-icon value="thumb_up"></mu-icon>
+          </mu-button>
+        </mu-tooltip>
 
-        <mu-button v-if="info.isCollect" fab color="greenA700">
-          <mu-icon value="grade"></mu-icon>
-        </mu-button>
+        <mu-tooltip v-if="info.isCollect" placement="top" content="收藏">
+          <mu-button fab color="purple500">
+            <mu-icon value="grade"></mu-icon>
+          </mu-button>
+        </mu-tooltip>
 
-        <mu-button v-if="info.isComment" @click="scrollComment" fab color="red">
-          <mu-icon value="chat"></mu-icon>
-        </mu-button>
+        <mu-tooltip v-if="info.isComment" placement="top" content="评论">
+          <mu-button @click="scrollComment" fab color="red">
+            <mu-icon value="chat"></mu-icon>
+          </mu-button>
+        </mu-tooltip>
       </div>
     </div>
 
     <div class="content">
+      <div v-if="isPC" class="right">
+        <RightConfig showPosition="文章详情"></RightConfig>
+      </div>
       <div class="left" :style="{marginTop:isPC?'16px':0}">
         <div class="left-box" :style="{width:isPC?'70%':'100%'}">
           <mu-card class="card">
@@ -78,13 +85,17 @@
           </mu-card>
 
           <div class="action-list">
-            <mu-button @click="like" v-if="info.isLike" fab color="primary">
-              <mu-icon value="thumb_up"></mu-icon>
-            </mu-button>
+            <mu-tooltip v-if="info.isLike" placement="top" content="点赞">
+              <mu-button @click="like" fab color="primary">
+                <mu-icon value="thumb_up"></mu-icon>
+              </mu-button>
+            </mu-tooltip>
 
-            <mu-button v-if="info.isCollect" fab color="greenA700">
-              <mu-icon value="grade"></mu-icon>
-            </mu-button>
+            <mu-tooltip v-if="info.isCollect" placement="top" content="收藏">
+              <mu-button fab color="purple500">
+                <mu-icon value="grade"></mu-icon>
+              </mu-button>
+            </mu-tooltip>
           </div>
 
           <mu-card id="comment" class="card">
@@ -105,9 +116,6 @@
           <prev-next :prev="prev" :next="next"></prev-next>
         </div>
       </div>
-      <div v-if="isPC" class="right">
-        <RightConfig showPosition="文章详情"></RightConfig>
-      </div>
     </div>
 
     <Footer></Footer>
@@ -121,11 +129,12 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import PrevNext from "@/components/PrevNext";
 
-import { animateScroll } from "@/utils";
+// import { animateScroll } from "@/utils";
 import Clipboard from "clipboard";
 import { mavonEditor } from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
 import { markdown } from "@/utils/markdown";
+import $ from "jquery";
 
 export default {
   name: "articlesDetails",
@@ -144,7 +153,7 @@ export default {
       prev: {},
       next: {},
       content: "",
-      toc: "",
+      toc: [],
       commentSuccess: false,
       commentList: []
     };
@@ -202,7 +211,31 @@ export default {
 
         this.$progress.done();
         loading.close();
+        this.$nextTick(() => {
+          const aArr = $(
+            ".v-note-wrapper .v-note-panel .v-note-navigation-wrapper .v-note-navigation-content a"
+          ).toArray();
+          let toc = [];
+          aArr.forEach(item => {
+            let href = $(item).attr("id");
+            let name = $(item)
+              .parent()
+              .text();
+            if (href) {
+              toc.push({
+                href: "#" + href,
+                name
+              });
+            }
+          });
+          this.toc = toc;
+        });
       }
+    },
+    scrollToPosition(id) {
+      var position = $(id).offset();
+      position.top = position.top - 80;
+      $("html,body").animate({ scrollTop: position.top }, 1000);
     },
 
     async getCommentList(id) {
@@ -225,8 +258,9 @@ export default {
     },
 
     scrollComment() {
-      let target = document.getElementById("comment");
-      animateScroll(target, 500, -50);
+      // let target = document.getElementById("comment");
+      // animateScroll(target, 500, -50);
+      this.scrollToPosition("#comment");
     },
     async comment(data) {
       const postData = {
@@ -283,20 +317,25 @@ export default {
 
 .toc-fixed {
   position: fixed;
-  width: 14%;
-  left: 20px;
-  top: 380px;
+  width: 20%;
+  right: 20px;
+  top: 80px;
   .toc {
     width: 100%;
     max-height: 400px;
     overflow-y: auto;
     word-break: break-all;
+    padding: 0.2rem 0 0.2rem 0.2rem;
     .title {
-      font-size: 0.64rem;
-      padding: 0.42667rem 0 0 0.42667rem;
+      font-size: 0.4rem;
+      margin-bottom: 10px;
     }
-    /deep/ a {
+    a {
+      display: inline-block;
       color: #2196f3;
+      font-size: 0.32rem;
+      cursor: pointer;
+      padding: 5px 0;
       &:hover {
         color: #00e676;
       }
@@ -327,11 +366,8 @@ export default {
   .left {
     flex: 9;
     margin-top: 16px;
-    .left-box {
-      float: right;
-    }
     .card {
-      border-radius: 0;
+      border-radius: 5px;
       margin-bottom: 0.48rem;
       .article-detail {
         width: 100%;

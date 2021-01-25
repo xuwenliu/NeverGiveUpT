@@ -2,6 +2,9 @@
   <div class="articles">
     <Header :light-index="1"></Header>
     <div class="content">
+      <div v-if="isPC" class="right">
+        <RightConfig showPosition="文章"></RightConfig>
+      </div>
       <div class="left">
         <mu-card
           :style="{width:isPC?'80%':'90%'}"
@@ -39,9 +42,6 @@
           </div>
         </mu-card>
       </div>
-      <div v-if="isPC" class="right">
-        <RightConfig showPosition="文章"></RightConfig>
-      </div>
     </div>
 
     <div v-if="info.totalCount > pageSize" class="pagination">
@@ -69,7 +69,7 @@ export default {
   components: {
     RightConfig,
     Footer,
-    Header,
+    Header
   },
 
   data() {
@@ -77,7 +77,7 @@ export default {
       isPC: this.isPC,
       page: 1,
       pageSize: 10,
-      info: {},
+      info: {}
     };
   },
   mounted() {
@@ -104,10 +104,10 @@ export default {
     goDetail(item) {
       this.$router.push({
         name: "articlesDetails",
-        query: { id: item._id },
+        query: { id: item._id }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="less" scoped>

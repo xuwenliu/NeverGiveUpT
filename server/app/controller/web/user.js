@@ -86,6 +86,26 @@ class UserController extends Controller {
     ctx.set("Content-Type", "image/svg+xml");
     ctx.body = captchaObj.data;
   }
+
+  async info() {
+    const { ctx, service } = this;
+    const params = ctx.request.query;
+    const res = await service.web.user.info(params);
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
+
+  async update() {
+    const { ctx, service } = this;
+    const data = ctx.request.body;
+    const res = await service.web.user.update(data);
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
 }
 
 module.exports = UserController;

@@ -13,18 +13,20 @@ class UserService extends Service {
     });
     if (emailRes) {
       return {
-        msg: "email已经存在",
+        msg: "该Email已经存在",
       };
     }
 
-    const nickNameRes = await ctx.model.User.findOne({
-      nickName,
-    });
+    if (nickName) {
+      const nickNameRes = await ctx.model.User.findOne({
+        nickName,
+      });
 
-    if (nickNameRes) {
-      return {
-        msg: "该昵称已经存在",
-      };
+      if (nickNameRes) {
+        return {
+          msg: "该昵称已经存在",
+        };
+      }
     }
 
     const data = {
@@ -62,13 +64,19 @@ class UserService extends Service {
     const { ctx, app } = this;
     const { email, password } = params;
     // 这里是昵称或email搜索，前端传递字段为email
+    // const queryCon = {
+    //   $or: [{ nickName: email }, { email: email }],
+    // };
+
+    // 2021-1-26修改为只能用email登录
     const queryCon = {
-      $or: [{ nickName: email }, { email: email }],
+      email,
     };
+
     const queryRes = await ctx.model.User.findOne(queryCon);
     if (!queryRes) {
       return {
-        msg: "email或昵称不存在",
+        msg: "Email不存在",
       };
     }
 
@@ -78,7 +86,7 @@ class UserService extends Service {
     });
     if (!passwordRes) {
       return {
-        msg: "email或昵称或密码错误",
+        msg: "Email或密码错误",
       };
     }
 
@@ -101,6 +109,7 @@ class UserService extends Service {
       data: {
         email,
         token,
+        nickName: passwordRes.nickName,
       },
     };
   }
@@ -111,6 +120,61 @@ class UserService extends Service {
     });
     return {
       msg: "退出登录成功",
+    };
+  }
+
+  async info(params) {
+    const { ctx, app } = this;
+    const { email } = params;
+    const queryRes = await ctx.model.User.findOne({
+      email,
+    });
+    if (!queryRes) {
+      return {
+        status: 402,
+        msg: "不存在该用户",
+      };
+    }
+    return {
+      data: {
+        avatar:
+          queryRes.avatar || "http://www.nevergiveupt.top/user_avatar.png",
+        email: queryRes.email,
+        introduction: queryRes.introduction,
+        nickName: queryRes.nickName,
+      },
+      msg: "查询用户成功",
+    };
+  }
+
+  async update(params) {
+    const { ctx } = this;
+
+    const oldUser = await ctx.model.User.findOne({
+      email: params.email,
+    });
+
+    if (!oldUser) {
+      return {
+        status: 402,
+        msg: "不存在该用户",
+      };
+    }
+    const updateData = {
+      nickName: params.nickName,
+      avatar: params.avatar,
+      introduction: params.introduction,
+      password: params.password || oldUser.password,
+    };
+
+    await ctx.model.User.updateOne(
+      {
+        email: params.email,
+      },
+      updateData
+    );
+    return {
+      msg: `修改成功`,
     };
   }
 }

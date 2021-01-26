@@ -90,12 +90,9 @@ module.exports = (app) => {
   // 前台接口
   const webRouter = baseRouter + "/web";
 
-
-  
   router.get(webRouter + "/auth", controller.auth.index); // 微信公众号验证token
   router.post(webRouter + "/auth", controller.auth.replay); // 微信公众号-自动回复消息-自己处理
   // router.post(webRouter + "/auth", controller.auth.weChat); // 微信公众号-自动回复消息-co-wechat库来处理
-
 
   router.post(webRouter + "/weChat/createMenu", controller.auth.createMenu); // 微信公众号-创建自定义菜单
   router.get(webRouter + "/weChat/removeMenu", controller.auth.removeMenu); // 微信公众号-删除自定义菜单
@@ -103,27 +100,31 @@ module.exports = (app) => {
   router.post(webRouter + "/weChat/uploadMedia", controller.auth.uploadMedia); // 微信公众号-上传临时素材
   router.get(webRouter + "/weChat/getMedia", controller.auth.getMedia); // 微信公众号-获取临时素材
 
-  router.post(webRouter + "/weChat/uploadMaterial", controller.auth.uploadMaterial); // 微信公众号-上传永久素材-图片，语音，缩略图
-  router.post(webRouter + "/weChat/uploadVideoMaterial", controller.auth.uploadVideoMaterial); // 微信公众号-上传永久素材-视频
-  router.post(webRouter + "/weChat/uploadNewsMaterial", controller.auth.uploadNewsMaterial); // 微信公众号-上传永久素材-图文
+  router.post(
+    webRouter + "/weChat/uploadMaterial",
+    controller.auth.uploadMaterial
+  ); // 微信公众号-上传永久素材-图片，语音，缩略图
+  router.post(
+    webRouter + "/weChat/uploadVideoMaterial",
+    controller.auth.uploadVideoMaterial
+  ); // 微信公众号-上传永久素材-视频
+  router.post(
+    webRouter + "/weChat/uploadNewsMaterial",
+    controller.auth.uploadNewsMaterial
+  ); // 微信公众号-上传永久素材-图文
 
-  router.post(webRouter + "/weChat/uploadPermanentMaterial", controller.auth.uploadPermanentMaterial); // 微信公众号-上传永久素材-上面三个的合体
+  router.post(
+    webRouter + "/weChat/uploadPermanentMaterial",
+    controller.auth.uploadPermanentMaterial
+  ); // 微信公众号-上传永久素材-上面三个的合体
 
-  
-
-  router.post(webRouter + "/weChat/updateNewsMaterial", controller.auth.updateNewsMaterial); // 微信公众号-上传永久素材-图文修改
+  router.post(
+    webRouter + "/weChat/updateNewsMaterial",
+    controller.auth.updateNewsMaterial
+  ); // 微信公众号-上传永久素材-图文修改
   router.get(webRouter + "/weChat/getMaterial", controller.auth.getMaterial); // 微信公众号-获取永久素材
-  
-  
-
-
-  
-
 
   router.get(webRouter + "/signature", controller.auth.signature); // 微信公众号获取signature
-
-
-
 
   router.get(webRouter + "/home", controller.web.home.index); //首页信息获取
   router.get(webRouter + "/header", controller.web.header.index); //导航栏信息获取
@@ -149,13 +150,22 @@ module.exports = (app) => {
   router.post(webRouter + "/register", controller.web.user.register); //注册
   router.post(webRouter + "/login", controller.web.user.login); //登录
   router.post(webRouter + "/logout", controller.web.user.logout); //退出登录
+  router.get(webRouter + "/user", jwt, controller.web.user.info); //获取用户资料
+  router.post(webRouter + "/user/update", jwt, controller.web.user.update); //用户资料-修改
   router.get(webRouter + "/captcha", controller.web.user.captcha); // 生成验证码
-
   router.post(webRouter + "/comment", jwt, controller.web.comment.submit); //提交评论
   router.get(webRouter + "/comment/list", controller.web.comment.list); //评论列表
+
   router.post(webRouter + "/like", jwt, controller.web.like.submit); //点赞
+  router.post(webRouter + "/collect", jwt, controller.web.like.collect); //用户-收藏
+  router.get(webRouter + "/collect", jwt, controller.web.like.collectList); //用户-收藏列表
+  router.post(
+    webRouter + "/collect/cancel",
+    jwt,
+    controller.web.like.cancelCollect
+  ); //用户-取消收藏
+
+  router.post(webRouter + "/upload", jwt, controller.utils.uploadFiles); //pc端文件上传-头像
 
   router.get(webRouter + "/resume", controller.web.resume.index); //简历列表获取
-
-  
 };

@@ -63,7 +63,7 @@
       </mu-button>
       <mu-popover :open.sync="openUser" :trigger="trigger">
         <mu-list>
-          <mu-list-item button>
+          <mu-list-item button @click="$router.push('/user')">
             <mu-list-item-title>个人中心</mu-list-item-title>
           </mu-list-item>
           <mu-list-item button @click="logout">
@@ -288,7 +288,7 @@ export default {
       const res = await this.$axios.post("/logout");
       if (res) {
         localStorage.removeItem("user");
-        sessionStorage.removeItem("liked");
+        sessionStorage.removeItem("like");
         this.openUser = false;
         this.user = null;
         this.$toast.success(res.msg);

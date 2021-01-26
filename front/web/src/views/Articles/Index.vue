@@ -11,12 +11,13 @@
           class="card"
           v-for="item in info.list"
           :key="item._id"
+          @click="goDetail(item)"
         >
           <div v-if="isPC" class="cover">
             <img class="cover-img" v-lazy="item.cover" />
           </div>
           <div class="card-box">
-            <div class="title" @click="goDetail(item)">{{item.title}}</div>
+            <div class="title">{{item.title}}</div>
             <mu-card-actions class="sub-title">
               <mu-button class="cursor-default" flat color="info">查看({{item.views}})</mu-button>
               <mu-button class="cursor-default" flat color="error">评论({{item.comment}})</mu-button>
@@ -120,6 +121,7 @@ export default {
       flex: 9;
       .card {
         width: 80%;
+        float: left;
         margin: 0.42667rem auto 0;
         display: flex;
         flex-wrap: wrap;

@@ -79,6 +79,12 @@ export default new Router({
         import(/* webpackChunkName: "resume" */ "./views/Resume.vue"),
     },
     {
+      path: "/user",
+      name: "user",
+      component: () =>
+        import(/* webpackChunkName: "user" */ "./views/User/Index.vue"),
+    },
+    {
       path: "*",
       name: "notFound",
       component: () =>

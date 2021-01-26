@@ -2,7 +2,7 @@
   <div class="register-form">
     <mu-dialog
       scrollable
-      title="注册"
+      title="修改资料"
       width="500"
       max-width="90%"
       :esc-press-close="false"
@@ -10,15 +10,15 @@
       :open.sync="open"
     >
       <mu-form ref="form" :model="validateForm">
-        <mu-form-item label="Email（必填）" prop="email" :rules="emailRules">
-          <mu-text-field v-model.trim="validateForm.email" prop="email"></mu-text-field>
-        </mu-form-item>
+        <!-- <mu-form-item label="Email（不可修改）" prop="email">
+          <mu-text-field disabled v-model.trim="validateForm.email" prop="email"></mu-text-field>
+        </mu-form-item>-->
 
         <mu-form-item label="昵称" prop="nickName" :rules="nickNameRules">
           <mu-text-field v-model.trim="validateForm.nickName" prop="nickName"></mu-text-field>
         </mu-form-item>
 
-        <mu-form-item label="密码（必填）" prop="password" :rules="passwordRules">
+        <mu-form-item label="登录密码" prop="password" :rules="passwordRules">
           <mu-text-field
             v-model.trim="validateForm.password"
             prop="password"
@@ -36,12 +36,6 @@
           ></mu-text-field>
         </mu-form-item>
 
-        <mu-form-item label="验证码" prop="captcha" :rules="captchaRules">
-          <mu-text-field placeholder="区分大小写" v-model.trim="validateForm.captcha" prop="captcha">
-            <div @click="getCaptcha" class="captcha" v-html="captcha"></div>
-          </mu-text-field>
-        </mu-form-item>
-
         <mu-form-item label="个人简介" prop="introduction" :rules="introductionRules">
           <mu-text-field
             v-model="validateForm.introduction"
@@ -54,7 +48,7 @@
       </mu-form>
 
       <mu-button slot="actions" flat small @click="clear">取消</mu-button>
-      <mu-button slot="actions" flat small color="primary" @click="submit">注册</mu-button>
+      <mu-button slot="actions" flat small color="primary" @click="submit">保存</mu-button>
     </mu-dialog>
   </div>
 </template>
@@ -70,37 +64,42 @@ export default {
     },
     ok() {
       this.close();
+    },
+    userInfo: {
+      type: Object,
+      default: null
     }
   },
   data() {
     return {
       visibility: false,
-      captcha: "",
-      emailRules: [
-        { validate: val => !!val, message: "邮箱必填！" },
-        {
-          validate: val => {
-            let reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
-            return reg.test(val);
-          },
-          message: "邮箱格式错误！"
-        }
-      ],
       nickNameRules: [
         { validate: val => val.length <= 20, message: "昵称最大20个字符！" }
       ],
       passwordRules: [
-        { validate: val => !!val, message: "密码必填！" },
         {
           validate: val => {
-            let reg = /^[a-zA-Z]\w{5,19}$/;
-            return reg.test(val);
+            if (val) {
+              let reg = /^[a-zA-Z]\w{5,19}$/;
+              return reg.test(val);
+            } else {
+              return true;
+            }
           },
           message: "以字母开头，长度在6~20之间，只能包含字母、数字和下划线！"
         }
       ],
       confirmPasswordRules: [
-        { validate: val => !!val, message: "请填写确认密码！" },
+        {
+          validate: val => {
+            if (this.validateForm.password) {
+              return !!val;
+            } else {
+              return true;
+            }
+          },
+          message: "请填写确认密码！"
+        },
         {
           validate: val => {
             return this.validateForm.password === val;
@@ -108,7 +107,6 @@ export default {
           message: "密码不一致，请重新输入！"
         }
       ],
-      captchaRules: [{ validate: val => !!val, message: "请输入验证码" }],
       introductionRules: [
         {
           validate: val => val.length <= 1000,
@@ -116,37 +114,47 @@ export default {
         }
       ],
       validateForm: {
-        email: "",
-        nickName: "",
+        ...this.userInfo,
         password: "",
-        confirmPassword: "",
-        introduction: "",
-        captcha: ""
+        confirmPassword: ""
       }
     };
   },
   methods: {
-    async getCaptcha() {
-      const res = await this.$axios.get("/captcha");
-      if (res) {
-        this.captcha = res.data;
-      }
-    },
     submit() {
       this.$refs.form.validate().then(async result => {
         if (result) {
-          const res = await this.$axios.post("/register", this.validateForm);
-          if (res.data) {
-            localStorage.setItem("user", JSON.stringify(res.data));
-            this.$toast.success("注册成功");
-            location.reload();
-            this.$emit("toggle", false);
+          const res = await this.$axios.post("/user/update", this.validateForm);
+          if (res.code === 0) {
+            this.$toast.success("修改成功");
+            // 修改了密码则-退出登录
+            if (this.validateForm.password) {
+              this.logout();
+            } else {
+              const user = JSON.parse(localStorage.getItem("user"));
+              localStorage.setItem(
+                "user",
+                JSON.stringify({
+                  email: this.validateForm.email,
+                  token: user.token,
+                  nickName: this.validateForm.nickName
+                })
+              );
+              this.$emit("toggle", false, true); // true则代表告诉父组件需要更新
+            }
           } else {
             this.$toast.error(res.msg);
-            this.getCaptcha();
           }
         }
       });
+    },
+    async logout() {
+      const res = await this.$axios.post("/logout");
+      if (res) {
+        localStorage.removeItem("user");
+        sessionStorage.removeItem("like");
+        this.$router.go(-1);
+      }
     },
     clear() {
       this.$refs.form.clear();
@@ -155,26 +163,21 @@ export default {
         nickName: "",
         password: "",
         confirmPassword: "",
-        introduction: "",
-        captcha: ""
+        introduction: ""
       };
       this.$emit("toggle", false);
     }
   },
   watch: {
-    open(newVal) {
-      if (newVal) {
-        this.getCaptcha();
-      }
+    userInfo(val) {
+      this.validateForm = {
+        ...val,
+        password: "",
+        confirmPassword: ""
+      };
     }
   }
 };
 </script>
 <style lang="less" scoped>
-.captcha {
-  cursor: pointer;
-  /deep/ svg {
-    vertical-align: middle;
-  }
-}
 </style>

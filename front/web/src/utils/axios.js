@@ -19,20 +19,6 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => {
     const data = response.data;
-
-    // let code = response.data.code;
-    // if (code === 71001 || code === 1008) {
-    //   sessionStorage.removeItem("token");
-    //   vue.$router.push({
-    //     name: "login",
-    //   });
-    // }
-    // if (code === 71006) {
-    //   sessionStorage.removeItem("token");
-    //   vue.$router.push({
-    //     name: "402",
-    //   });
-    // }
     if (response.status === 200) {
       if (data.code === 0) {
         return data;
@@ -46,9 +32,15 @@ axios.interceptors.response.use(
     const status = error.response.status;
     const obj = {
       401: "请注册或登录",
+      402: "不存在该用户",
       422: "参数错误",
     };
     if (status) {
+      if (status === 402) {
+        localStorage.removeItem("user");
+        sessionStorage.removeItem("like");
+        vue.$router.go(-1);
+      }
       vue.$toast.error(obj[status]);
     } else {
       vue.$toast.error("服务器连接异常");
@@ -58,9 +50,14 @@ axios.interceptors.response.use(
 );
 
 const get = (url, data) => {
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
   return axios({
     method: "get",
     url,
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      Authorization: "Bearer " + user.token || "",
+    },
     data,
   }).then((response) => {
     return response;

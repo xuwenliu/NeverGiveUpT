@@ -19,7 +19,7 @@
         </mu-tooltip>
 
         <mu-tooltip v-if="info.isCollect" placement="top" content="收藏">
-          <mu-button fab color="purple500">
+          <mu-button @click="collect" fab color="purple500">
             <mu-icon value="grade"></mu-icon>
           </mu-button>
         </mu-tooltip>
@@ -92,7 +92,7 @@
             </mu-tooltip>
 
             <mu-tooltip v-if="info.isCollect" placement="top" content="收藏">
-              <mu-button fab color="purple500">
+              <mu-button @click="collect" fab color="purple500">
                 <mu-icon value="grade"></mu-icon>
               </mu-button>
             </mu-tooltip>
@@ -292,13 +292,24 @@ export default {
       const res = await this.$axios.post("/like", postData);
       if (res.data) {
         this.$toast.success(res.msg);
-        this.getInfo();
         const oldLikeArr = JSON.parse(sessionStorage.getItem("like"));
         let save = [postData.articleId];
         if (oldLikeArr) {
           save = [...oldLikeArr, postData.articleId];
         }
         sessionStorage.setItem("like", JSON.stringify(save));
+      }
+    },
+    async collect() {
+      const postData = {
+        email: JSON.parse(localStorage.getItem("user")).email,
+        articleId: this.info._id
+      };
+      const res = await this.$axios.post("/collect", postData);
+      if (res.code === 0) {
+        this.$toast.success(res.msg);
+      } else {
+        this.$toast.error(res.msg);
       }
     }
   },

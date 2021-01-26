@@ -3,12 +3,12 @@
     <div class="panel">
       <div class="text-center">
         <h2 class="padding-top">
-          <stong>404错误！抱歉您要找的页面不存在</stong>
+          <span>{{title}}</span>
         </h2>
         <div>
           <div class="float-left">
             <img src="http://www.nevergiveupt.top/ds-1.gif" />
-            <div class="alert">卧槽！页面不见了！</div>
+            <div class="alert">{{desc}}</div>
           </div>
           <div class="float-right">
             <img src="http://www.nevergiveupt.top/ds-2.png" width="260" />
@@ -25,7 +25,17 @@
 
 <script>
 export default {
-  name: "notFound"
+  name: "notFound",
+  props: {
+    title: {
+      type: String,
+      default: "404错误！抱歉您要找的页面不存在"
+    },
+    desc: {
+      type: String,
+      default: "卧槽！页面不见了！"
+    }
+  }
 };
 </script>
 
@@ -47,7 +57,6 @@ export default {
       border-radius: 5px;
       padding: 15px;
       border: solid 1px #ddd;
-      background-color: #f5f5f5;
     }
   }
   .float-right {

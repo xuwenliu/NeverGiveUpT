@@ -9,7 +9,7 @@
       :open.sync="open"
     >
       <mu-form ref="form" :model="validateForm">
-        <mu-form-item label="邮箱/昵称" prop="email" :rules="emailRules">
+        <mu-form-item label="Email" prop="email" :rules="emailRules">
           <mu-text-field v-model.trim="validateForm.email" prop="email"></mu-text-field>
         </mu-form-item>
 
@@ -18,7 +18,7 @@
         </mu-form-item>
 
         <mu-form-item label="验证码" prop="captcha" :rules="captchaRules">
-          <mu-text-field v-model.trim="validateForm.captcha" prop="captcha">
+          <mu-text-field placeholder="区分大小写" v-model.trim="validateForm.captcha" prop="captcha">
             <div @click="getCaptcha" class="captcha" v-html="captcha"></div>
           </mu-text-field>
         </mu-form-item>
@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       captcha: "",
-      emailRules: [{ validate: val => !!val, message: "邮箱/昵称必填！" }],
+      emailRules: [{ validate: val => !!val, message: "邮箱必填！" }],
       passwordRules: [{ validate: val => !!val, message: "密码必填！" }],
       captchaRules: [{ validate: val => !!val, message: "请输入验证码" }],
       validateForm: {

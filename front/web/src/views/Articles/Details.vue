@@ -102,7 +102,7 @@
             <Comment @comment="comment" :comment-success="commentSuccess"></Comment>
           </mu-card>
 
-          <mu-card class="card">
+          <mu-card class="card" v-if="commentList.length > 0">
             <mu-card-title :title="commentTitle"></mu-card-title>
             <mu-divider></mu-divider>
             <CommentList

@@ -21,9 +21,7 @@ class CommentService extends Service {
       {
         _id: params.articleId,
       },
-      {
-        comment: oldComment.comment + 1,
-      }
+      { $inc: { comment: 1 } } // 删除评论则将该文章中统计的评论数自增一
     );
 
     return {

@@ -67,6 +67,13 @@ class CommentService extends Service {
         msg: "评论不存在",
       };
     }
+    const articleId = oldComment.articleId;
+    await ctx.model.Articles.updateOne(
+      {
+        _id: articleId,
+      },
+      { $inc: { comment: -1 } } // 删除评论则将该文章中统计的评论数自减一
+    );
 
     await ctx.model.Comment.deleteOne({
       _id: id,

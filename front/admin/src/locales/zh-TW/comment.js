@@ -10,4 +10,6 @@ export default {
   'comment.commentTime': '評論時間',
   'comment.auditTime': '稽核時間',
   'comment.p_remove_tip': '你確定删除文章【{name}】的評論嗎？',
+  'comment.p_audit_type': '請選擇稽核類型',
+  'comment.all_audit': '一鍵稽核',
 };

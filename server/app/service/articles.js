@@ -244,7 +244,6 @@ class ArticlesService extends Service {
     const updateData = {
       publishStatus: params.publishStatus,
     };
-    console.log(updateData);
     await ctx.model.Articles.updateOne(
       {
         _id: params.id,
@@ -290,6 +289,20 @@ class ArticlesService extends Service {
     );
     return {
       msg: `文章排序成功`,
+    };
+  }
+
+  async changeCollectStatus(params) {
+    const { ctx } = this;
+    const res = await ctx.model.Articles.updateMany(
+      {},
+      {
+        isCollect: params.isCollect,
+      }
+    );
+    return {
+      data: res,
+      msg: `文章${params.isCollect ? "一键开启" : "一键关闭"}收藏成功`,
     };
   }
 }

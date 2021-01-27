@@ -30,4 +30,8 @@ export default {
   'articles.p_input': '請輸入{name}',
   'articles.publish_success': '文章發佈成功！',
   'articles.save_draft_success': '文章保存草稿成功！',
+
+  'articles.all_collect_error_tip': '一鍵開啟收藏/一鍵關閉收藏失敗請重試！',
+  'articles.open_collect': '開啟收藏',
+  'articles.close_collect': '關閉收藏',
 };

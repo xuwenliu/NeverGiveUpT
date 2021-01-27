@@ -78,6 +78,19 @@ class CommentService extends Service {
 
   async update(params) {
     const { ctx } = this;
+    if (params.id == 0) {
+      // 批量审核 id 前端传0
+      await ctx.model.Comment.updateMany(
+        {},
+        {
+          auditStatus: params.auditStatus,
+          auditTime: ctx.helper.moment().unix(),
+        }
+      );
+      return {
+        msg: `评论一键${params.auditStatus === 1 ? "审核通过" : "驳回"}成功`,
+      };
+    }
 
     const oldIdComment = await ctx.model.Comment.findOne({
       _id: params.id,
@@ -99,8 +112,9 @@ class CommentService extends Service {
       },
       updateData
     );
+
     return {
-      msg: "评论审核状态修改成功",
+      msg: `评论${params.auditStatus === 1 ? "审核通过" : "驳回"}成功`,
     };
   }
 

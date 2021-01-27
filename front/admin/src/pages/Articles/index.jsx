@@ -10,6 +10,7 @@ import {
   Tooltip,
   Badge,
   Tag,
+  Radio,
 } from 'antd';
 import {
   CloudDownloadOutlined,
@@ -31,6 +32,7 @@ import {
   updateArticlesPublishStatus,
   removeArticles,
   updateSort,
+  updateArticlesCollectStatus,
 } from './service';
 import { queryCategories } from '@/pages/Categories/service';
 import { queryTags } from '@/pages/Tags/service';
@@ -86,6 +88,22 @@ const Articles = () => {
    */
   const goEdit = (type, id) => {
     history.push(`/articles/${type}/${id ? id : 0}`);
+  };
+
+  const handleCollect = async (e) => {
+    const isCollect = e.target.value;
+    try {
+      const res = await updateArticlesCollectStatus({ isCollect });
+      if (res.code === 0) {
+        message.success(res.msg);
+      }
+    } catch (error) {
+      message.error(
+        intl.formatMessage({
+          id: 'articles.all_collect_error_tip',
+        }),
+      );
+    }
   };
 
   const handleUpdateStatus = async (status, params, actionRef) => {
@@ -608,7 +626,15 @@ const Articles = () => {
         actionRef={actionRef}
         rowKey="_id"
         toolBarRender={(action, { selectedRows }) => [
-          <Button type="primary" onClick={() => goEdit(1)}>
+          <Radio.Group key="collect" buttonStyle="solid" onChange={handleCollect}>
+            <Radio.Button value={true}>
+              <FormattedMessage id="articles.open_collect" />
+            </Radio.Button>
+            <Radio.Button value={false}>
+              <FormattedMessage id="articles.close_collect" />
+            </Radio.Button>
+          </Radio.Group>,
+          <Button key="add" type="primary" onClick={() => goEdit(1)}>
             <PlusOutlined /> <FormattedMessage id="articles.createArticle" />
           </Button>,
         ]}

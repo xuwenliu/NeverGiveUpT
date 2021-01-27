@@ -35,4 +35,9 @@ export default {
   'articles.p_input': 'Please enter {name}',
   'articles.publish_success': 'Article published successfully!',
   'articles.save_draft_success': 'Draft saved successfully!',
+
+  'articles.all_collect_error_tip':
+    'one click to open / close collection failed, please try again!',
+  'articles.open_collect': 'Open collection',
+  'articles.close_collect': 'Close collection',
 };

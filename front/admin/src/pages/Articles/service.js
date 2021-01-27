@@ -106,3 +106,12 @@ export async function updateSort(params) {
     },
   });
 }
+export async function updateArticlesCollectStatus(params) {
+  return request('/api/articles/collectStatus', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+

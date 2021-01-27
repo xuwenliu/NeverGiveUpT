@@ -278,6 +278,17 @@ class ArticlesController extends Controller {
       res,
     });
   }
+
+  // 一键开启关闭收藏
+  async changeCollectStatus() {
+    const { ctx, service } = this;
+    const data = ctx.request.body;
+    const res = await service.articles.changeCollectStatus(data);
+    ctx.helper.success({
+      ctx,
+      res,
+    });
+  }
 }
 
 module.exports = ArticlesController;

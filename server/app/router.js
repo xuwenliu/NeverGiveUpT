@@ -25,6 +25,13 @@ module.exports = (app) => {
     jwt,
     controller.articles.changePublishStatus
   ); // 文章-更改发布状态
+
+  router.post(
+    baseRouter + "/articles/collectStatus",
+    jwt,
+    controller.articles.changeCollectStatus
+  ); // 文章-一键开启关闭收藏
+
   router.put(
     baseRouter + "/articles/sort/:id",
     jwt,

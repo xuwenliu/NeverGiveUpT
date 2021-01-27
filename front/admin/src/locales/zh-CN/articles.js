@@ -35,4 +35,8 @@ export default {
   'articles.p_input': '请输入{name}',
   'articles.publish_success': '文章发布成功！',
   'articles.save_draft_success': '文章保存草稿成功！',
+
+  'articles.all_collect_error_tip': '一键开启收藏/一键关闭收藏失败请重试！',
+  'articles.open_collect': '开启收藏',
+  'articles.close_collect': '关闭收藏',
 };

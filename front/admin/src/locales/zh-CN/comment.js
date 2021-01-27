@@ -10,4 +10,6 @@ export default {
   'comment.commentTime': '评论时间',
   'comment.auditTime': '审核时间',
   'comment.p_remove_tip': '你确定删除文章【{name}】的评论吗？',
+  'comment.p_audit_type': '请选择审核类型',
+  'comment.all_audit': '一键审核',
 };

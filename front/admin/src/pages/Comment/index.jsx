@@ -17,7 +17,13 @@ const Comment = () => {
     _id: '',
   });
 
-  const handleUpdateStatus = async (actionRef) => {
+  const handleUpdateStatus = async () => {
+    if (params.auditStatus === 3)
+      return message.info(
+        intl.formatMessage({
+          id: 'comment.p_audit_type',
+        }),
+      );
     try {
       const res = await updateCommentStatus({ id: params._id, auditStatus: params.auditStatus });
       if (res.code === 0) {
@@ -70,8 +76,8 @@ const Comment = () => {
       return {
         ...preState,
         visible: true,
-        auditStatus: record.auditStatus,
-        _id: record._id,
+        auditStatus: record ? record.auditStatus : 3,
+        _id: record ? record._id : '0',
       };
     });
   };
@@ -287,6 +293,11 @@ const Comment = () => {
       <ProTable
         rowKey="_id"
         actionRef={actionRef}
+        toolBarRender={(action, { selectedRows }) => [
+          <Button key="audit" type="primary" onClick={() => showAuditModal(null)}>
+            <FormattedMessage id="comment.all_audit" />
+          </Button>,
+        ]}
         request={(params, sorter, filter) => queryComment({ ...params })}
         columns={columns}
         scroll={{ x: 1800 }}
@@ -296,7 +307,7 @@ const Comment = () => {
           id: 'comment.audit',
         })}
         visible={params.visible}
-        onOk={() => handleUpdateStatus(actionRef)}
+        onOk={handleUpdateStatus}
         onCancel={() =>
           setParams((preState) => {
             return {

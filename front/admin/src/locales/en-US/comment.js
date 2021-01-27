@@ -10,4 +10,6 @@ export default {
   'comment.commentTime': 'Comment time',
   'comment.auditTime': 'Audit time',
   'comment.p_remove_tip': 'Are you sure you want to delete the comment of the article 【{name}】?',
+  'comment.p_audit_type': 'Please select audit type',
+  'comment.all_audit': 'One click audit',
 };

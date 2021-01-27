@@ -264,7 +264,9 @@ export default {
     },
     async comment(data) {
       const postData = {
-        nickName: data.email ? data.email : data.nickName,
+        avatar: data.avatar,
+        email: data.email,
+        nickName: data.nickName,
         articleId: this.info._id,
         articleTitle: this.info.title,
         currentReplayContent: data.content
@@ -301,8 +303,12 @@ export default {
       }
     },
     async collect() {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user) {
+        return this.$toast.info("登录/注册后才能收藏哦");
+      }
       const postData = {
-        email: JSON.parse(localStorage.getItem("user")).email,
+        email: user.email,
         articleId: this.info._id
       };
       const res = await this.$axios.post("/collect", postData);

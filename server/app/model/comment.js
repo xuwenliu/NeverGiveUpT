@@ -8,6 +8,15 @@ module.exports = (app) => {
         required: false,
         max: 20,
       },
+      email: {
+        type: "string",
+        required: true,
+        match: /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/,
+      },
+      avatar: {
+        type: "string",
+        required: false,
+      },
       articleId: {
         type: "ObjectId",
       },

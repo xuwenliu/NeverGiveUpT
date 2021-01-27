@@ -135,8 +135,7 @@ export default {
               localStorage.setItem(
                 "user",
                 JSON.stringify({
-                  email: this.validateForm.email,
-                  token: user.token,
+                  ...user,
                   nickName: this.validateForm.nickName
                 })
               );

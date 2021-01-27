@@ -119,11 +119,20 @@ export default {
       formData.append("file", file);
       const res = await this.$axios.post("/upload", formData);
       if (res.data) {
+        const avatar = res.data[0].url;
         const result = await this.$axios.post("/user/update", {
           ...this.userInfo,
-          avatar: res.data[0].url
+          avatar
         });
         if (result.code === 0) {
+          const user = JSON.parse(localStorage.getItem("user"));
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              ...user,
+              avatar
+            })
+          );
           this.$toast.success("头像修改成功");
           this.getUserInfo();
         } else {

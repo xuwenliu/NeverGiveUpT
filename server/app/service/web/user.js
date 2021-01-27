@@ -56,6 +56,7 @@ class UserService extends Service {
         token,
         email,
         nickName,
+        avatar: app.config.defaultUserAvatar,
       },
     };
   }
@@ -110,6 +111,7 @@ class UserService extends Service {
         email,
         token,
         nickName: passwordRes.nickName,
+        avatar: passwordRes.avatar || app.config.defaultUserAvatar,
       },
     };
   }
@@ -137,8 +139,7 @@ class UserService extends Service {
     }
     return {
       data: {
-        avatar:
-          queryRes.avatar || "http://www.nevergiveupt.top/user_avatar.png",
+        avatar: queryRes.avatar || app.config.defaultUserAvatar,
         email: queryRes.email,
         introduction: queryRes.introduction,
         nickName: queryRes.nickName,
@@ -172,6 +173,16 @@ class UserService extends Service {
         email: params.email,
       },
       updateData
+    );
+
+    // 更新头像则同时将评论的头像给更新了
+    await ctx.model.Comment.updateMany(
+      {
+        email: params.email,
+      },
+      {
+        avatar: params.avatar,
+      }
     );
     return {
       msg: `修改成功`,

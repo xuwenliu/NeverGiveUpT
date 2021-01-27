@@ -9,7 +9,7 @@
       >
         <mu-card-header :title="item.nickName" :sub-title="item.commentTime | filterDate">
           <mu-avatar slot="avatar">
-            <img src="http://www.nevergiveupt.top/user_avatar.png" />
+            <img :src="item.avatar" />
           </mu-avatar>
         </mu-card-header>
         <mu-card-text>
@@ -17,7 +17,10 @@
           {{item.currentReplayContent}}
           <mu-badge v-if="item.auditStatus == 3" content="未审核" color="#ccc"></mu-badge>
         </mu-card-text>
-        <mu-card-actions v-if="!user || user.email !== item.nickName">
+
+        <mu-card-actions
+          v-if="user && (user.nickName !== item.nickName) && (user.email !== item.email)"
+        >
           <mu-button @click="replay(item)" small color="primary">回复</mu-button>
         </mu-card-actions>
 
@@ -148,7 +151,9 @@ export default {
     },
     async replaySubmit() {
       const postData = {
-        nickName: this.user.email ? this.user.email : this.user.nickName,
+        avatar: this.user.avatar,
+        email: this.user.email,
+        nickName: this.user.nickName,
         articleId: this.articleId,
         articleTitle: this.articleTitle,
         targetReplayId: this.replayItem._id,

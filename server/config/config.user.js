@@ -3,6 +3,7 @@ module.exports = {
   baseRouter: "/api/v1", // 基本路由
   PAGE: 1,
   PAGE_SIZE: 10,
+  defaultUserAvatar: "http://www.nevergiveupt.top/user_avatar.png",
   // 七牛云配置
   bucket: "nevergiveupt-blog", //要上传的空间名
   cdn: "http://img.nevergiveupt.top/", // 空间绑定的域名

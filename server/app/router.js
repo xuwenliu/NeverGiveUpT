@@ -178,7 +178,7 @@ module.exports = (app) => {
 
   // github登录挂载鉴权路由
   const github = app.passport.authenticate("github", {
-    successRedirect: "/user", // 指定鉴权成功后的 redirect 地址
+    successRedirect: "/articles", // 指定鉴权成功后的 redirect 地址
   });
 
   // 前端直接 <a href="/api/v1/web/github/login">Github登录</a> 即可跳转到Github登录页面

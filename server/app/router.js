@@ -187,6 +187,6 @@ module.exports = (app) => {
   // 授权后回调地址
   // 需要和 Authorization callback URL 一致：
   // 本地：http://localhost:8090/api/v1/web/github/callback
-  // 线上：http://www.nevergiveupt.top/api/v1/web/github/callback
+  // 线上：http://nevergiveupt.top/api/v1/web/github/callback
   router.get(webRouter + "/github/callback", github);
 };

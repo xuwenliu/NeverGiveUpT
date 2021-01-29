@@ -56,7 +56,7 @@ class UserService extends Service {
         token,
         email,
         nickName,
-        avatar: app.config.defaultUserAvatar,
+        avatar: params.avatar || app.config.defaultUserAvatar,
       },
     };
   }
@@ -120,6 +120,7 @@ class UserService extends Service {
     ctx.cookies.set("token", "", {
       maxAge: 0, //清除cookie
     });
+    ctx.logout(); // github登录的用户退出登录时调用这个即可将用户信息从 session 中清除
     return {
       msg: "退出登录成功",
     };

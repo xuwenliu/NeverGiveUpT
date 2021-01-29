@@ -5549,6 +5549,11 @@ muse-ui-loading@^0.2.0:
   resolved "http://npm.choicesaas.cn/muse-ui-loading/-/muse-ui-loading-0.2.0.tgz#a5ab50617b66314ef2490dc0703f694c255673ee"
   integrity sha1-patQYXtmMU7ySQ3AcD9pTCVWc+4=
 
+muse-ui-message@^0.2.1:
+  version "0.2.1"
+  resolved "http://npm.choicesaas.cn/muse-ui-message/-/muse-ui-message-0.2.1.tgz#01689945b2e82236981ead78e3f34d80fe690824"
+  integrity sha1-AWiZRbLoIjaYHq144/NNgP5pCCQ=
+
 muse-ui-progress@^0.1.0:
   version "0.1.0"
   resolved "http://npm.choicesaas.cn/muse-ui-progress/-/muse-ui-progress-0.1.0.tgz#dc61e6cbc68e3e4d2eb8e93ba330df22df01c9f5"

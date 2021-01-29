@@ -3,6 +3,15 @@ module.exports = (app) => {
   const Schema = mongoose.Schema;
   const UserSchema = new Schema(
     {
+      uid: {
+        type: "string",
+        required: false,
+      },
+      provider: {
+        type: "string",
+        default: "local",
+        required: false,
+      },
       email: {
         type: "string",
         required: true,

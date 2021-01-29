@@ -50,6 +50,16 @@ module.exports = (appInfo) => {
     secret: "NeverGiveUpT",
   };
 
+  // github 登录配置
+  config.passportGithub = {
+    key: "bd7e5f72e4af0d117892",
+    secret: "2906a61065549951da6cd297b67e916a42bedf7c",
+    callbackURL: "/api/v1/web/github/callback",
+    proxy: true,
+  };
+
+  // 配置github登录成功后的跳转地址
+  config.passportGithubPassword = "123456";
   return {
     ...config,
     ...userConfig,

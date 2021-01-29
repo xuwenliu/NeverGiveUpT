@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       email: JSON.parse(localStorage.getItem("user")).email,
-      openUpdateModal: false,
+      openUpdateModal: this.$route.query.id == 1,
       collectList: null,
       userInfo: {
         avatar: "",

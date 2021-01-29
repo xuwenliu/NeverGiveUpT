@@ -6,20 +6,28 @@ module.exports = {
   // }
   validate: {
     enable: true,
-    package: 'egg-validate',
+    package: "egg-validate",
   },
   mongoose: {
     enable: true,
-    package: 'egg-mongoose',
+    package: "egg-mongoose",
   },
   jwt: {
     enable: true,
-    package: 'egg-jwt',
+    package: "egg-jwt",
   },
-//   cors: {
-//     enable: true,
-//     package: 'egg-cors',
-//   },
+  passport: {
+    enable: true,
+    package: "egg-passport",
+  },
+  passportGithub: {
+    enable: true,
+    package: "egg-passport-github",
+  },
+  //   cors: {
+  //     enable: true,
+  //     package: 'egg-cors',
+  //   },
   // bcrypt: {
   //   enable: true,
   //   package: 'egg-bcrypt',

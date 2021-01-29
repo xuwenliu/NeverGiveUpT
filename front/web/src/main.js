@@ -46,6 +46,10 @@ import NProgress from "muse-ui-progress";
 import Helpers from "muse-ui/lib/Helpers";
 import Toast from "muse-ui-toast";
 
+import "muse-ui-message/dist/muse-ui-message.css";
+import Message from "muse-ui-message";
+Vue.use(Message);
+
 import "muse-ui-loading/dist/muse-ui-loading.css";
 import Loading from "muse-ui-loading";
 Vue.use(Loading, {

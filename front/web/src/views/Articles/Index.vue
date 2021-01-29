@@ -88,7 +88,6 @@ export default {
     async getList() {
       this.$progress.start();
       const loading = this.$loading();
-
       const res = await this.$axios.get(
         `/articles?page=${this.page}&pageSize=${this.pageSize}`
       );
@@ -96,6 +95,25 @@ export default {
         this.info = res.data;
         this.$progress.done();
         loading.close();
+        // 如果文章列表返回的有user则代表是使用GitHub登录后跳转到文章列表页面的。则自动登录用户
+        if (this.info.user) {
+          const oldUser = localStorage.getItem("user");
+          if (!oldUser) {
+            localStorage.setItem("user", JSON.stringify(this.info.user));
+            const res = await this.$alert(
+              "登录成功，初始密码：123456，请前往个人中心修改密码。",
+              "温馨提示"
+            );
+            if (res.result) {
+              this.$router.push({
+                name: "user",
+                query: {
+                  id: 1
+                }
+              });
+            }
+          }
+        }
       }
     },
     pageChange(page) {
@@ -111,6 +129,7 @@ export default {
   }
 };
 </script>
+
 <style lang="less" scoped>
 .articles {
   padding-top: 64px;

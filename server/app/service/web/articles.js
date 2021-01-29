@@ -7,7 +7,7 @@ class ArticlesService extends Service {
 
   // 文章列表
   async index(params) {
-    const { ctx } = this;
+    const { ctx, app } = this;
     const page = params.page * 1;
     const pageSize = params.pageSize * 1;
     const queryCon = {
@@ -22,6 +22,36 @@ class ArticlesService extends Service {
       .skip((page - 1) * pageSize)
       .limit(pageSize);
 
+    if (ctx.user) {
+      //生成token
+      const token = app.jwt.sign(
+        {
+          email: ctx.user.email,
+        },
+        app.config.jwt.secret
+      );
+
+      //登录成功后设置cookie
+      ctx.cookies.set("token", token, {
+        maxAge: 86400000, //一天过期时间
+        httpOnly: true, //是否只是服务器可访问 cookie, 默认是 true
+      });
+      return {
+        data: {
+          page,
+          pageSize,
+          totalCount,
+          list,
+          user: {
+            token,
+            email: ctx.user.email,
+            nickName: ctx.user.nickName,
+            avatar: ctx.user.avatar,
+          },
+        },
+        msg: "文章列表获取成功",
+      };
+    }
     return {
       data: {
         page,

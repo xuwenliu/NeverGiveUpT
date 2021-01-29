@@ -55,4 +55,24 @@
 	
 	```
 
+5. 线上启动和终止MongoDB
+
+/var/mongodb/data blog数据存在这里
+/var/mongodb/logs/log.log 日志存在这里
+没有使用mongod.conf配置文件
+
+```bash
+# 终止
+$  mongod --dbpath /var/mongodb/data --logpath /var/mongodb/logs/log.log --shutdown
+
+# 启动
+$ mongod --dbpath /var/mongodb/data --logpath /var/mongodb/logs/log.log --fork
+$ cd /usr/local/mongodb/bin
+$ ./mongo
+
+#查看MongoDB是否启用
+$ ps aux | grep -v grep | grep mongod
+
+```
+
 

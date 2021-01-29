@@ -24,12 +24,21 @@
         </mu-form-item>
       </mu-form>
 
+      <mu-button slot="actions" flat href="/api/v1/web/github/login">
+        <mu-avatar style="margin-right:10px" size="30">
+          <img :src="Icon.github" alt />
+        </mu-avatar>
+        Github
+      </mu-button>
+
       <mu-button slot="actions" flat small @click="clear">取消</mu-button>
       <mu-button slot="actions" flat small color="primary" @click="submit">登录</mu-button>
     </mu-dialog>
   </div>
 </template>
 <script>
+import { Icon } from "@/utils";
+
 export default {
   props: {
     open: {
@@ -52,7 +61,8 @@ export default {
       validateForm: {
         email: "",
         password: ""
-      }
+      },
+      Icon
     };
   },
   methods: {

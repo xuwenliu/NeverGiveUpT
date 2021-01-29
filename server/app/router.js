@@ -175,4 +175,18 @@ module.exports = (app) => {
   router.post(webRouter + "/upload", jwt, controller.utils.uploadFiles); //pc端文件上传-头像
 
   router.get(webRouter + "/resume", controller.web.resume.index); //简历列表获取
+
+  // github登录挂载鉴权路由
+  const github = app.passport.authenticate("github", {
+    successRedirect: "/user", // 指定鉴权成功后的 redirect 地址
+  });
+
+  // 前端直接 <a href="/api/v1/web/github/login">Github登录</a> 即可跳转到Github登录页面
+  router.get(webRouter + "/github/login", github);
+
+  // 授权后回调地址
+  // 需要和 Authorization callback URL 一致：
+  // 本地：http://localhost:8090/api/v1/web/github/callback
+  // 线上：http://www.nevergiveupt.top/api/v1/web/github/callback
+  router.get(webRouter + "/github/callback", github);
 };

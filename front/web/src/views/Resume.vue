@@ -1,193 +1,198 @@
 <template>
   <div class="resume">
     <mu-date-picker v-if="isPC" class="pc-date-picker"></mu-date-picker>
+    <mu-button v-if="isPC" class="print-btn" @click="printResume" fab color="info">
+      <mu-icon value="cloud_download"></mu-icon>
+    </mu-button>
 
     <mu-card raised :class="isPC?'card':'wap-card'">
       <mu-date-picker v-if="!isPC" class="date-picker"></mu-date-picker>
       <mu-alert v-if="!resume" color="error">
         <div class="no-resume">暂无简历</div>
       </mu-alert>
-      <div v-else class="resume-preview">
-        <div class="resume-box" :style="{'padding':isPC?'0 50px 45px':'0 20px'}">
-          <div class="resume-item resume-userinfo">
-            <div class="item-primary">
-              <div class="info-flex">
-                <div class="info-flex-item">
-                  <h2 class="name">
-                    {{resume.name}}
-                    <svg
-                      v-if="resume.gender === '男'"
-                      class="icon-svg"
-                      viewBox="0 0 1024 1024"
-                    >
-                      <path d="M64 512a448 448 0 1 0 896 0 448 448 0 1 0-896 0z" fill="#4BA1F1" />
-                      <path
-                        d="M638.4 340.352h-69.248a32 32 0 0 1 0-64h178.496v179.712a32 32 0 1 1-64 0v-70.4l-83.008 82.88a192 192 0 1 1-45.248-45.248l83.008-83.008zM353.6 670.4a128 128 0 1 0 181.056-181.056A128 128 0 0 0 353.6 670.4z"
-                        fill="#FFF"
-                      />
-                    </svg>
-                    <svg v-if="resume.gender === '女'" class="icon-svg" viewBox="0 0 1024 1024">
-                      <path
-                        d="M38.39999999999998 512a473.6 473.6 0 1 0 947.2 0 473.6 473.6 0 1 0-947.2 0z"
-                        fill="#FF4A55"
-                      />
-                      <path
-                        d="M421.504 647.744l45.248 45.248a32 32 0 0 1-45.248 45.312l-45.248-45.312-45.248 45.312a32 32 0 0 1-45.312-45.312l45.312-45.248-45.312-45.248a32 32 0 0 1 45.312-45.248l45.248 45.248 47.104-47.104a192 192 0 1 1 45.248 45.248l-47.104 47.104zM670.4 353.6a128 128 0 1 0-181.056 181.056A128 128 0 0 0 670.4 353.6z"
-                        fill="#FFF"
-                      />
-                    </svg>
-                  </h2>
-                  <div class="info-labels">
-                    <p :style="{'flex-direction':isPC?'row':'column'}">
-                      <span>
-                        <i class="fz-resume fz-experience"></i>
-                        {{resume.experience}}年经验
-                      </span>
-                      <span v-if="resume.education" class="prev-line" :class="{'no-line':!isPC}">
-                        <i class="fz-resume fz-degree"></i>
-                        {{resume.education}}
-                      </span>
-                      <span class="prev-line" :class="{'no-line':!isPC}">
-                        <i class="fz-resume fz-status"></i>
-                        {{resume.jobStatus}}
-                      </span>
-                    </p>
-                    <p :style="{'flex-direction':isPC?'row':'column'}">
-                      <span>
-                        <i class="fz-resume fz-tel"></i>
-                        {{resume.mobile}}
-                      </span>
-                      <span v-if="resume.weChat" class="prev-line" :class="{'no-line':!isPC}">
-                        <i class="fz-resume fz-weixin"></i>
-                        {{resume.weChat}}
-                      </span>
-                      <span class="prev-line" :class="{'no-line':!isPC}">
-                        <i class="fz-resume fz-mail"></i>
-                        {{resume.email}}
-                      </span>
-                    </p>
+      <div v-else id="printContent">
+        <div class="resume-preview">
+          <div class="resume-box" :style="{'padding':isPC?'0 50px 45px':'0 20px'}">
+            <div class="resume-item resume-userinfo">
+              <div class="item-primary">
+                <div class="info-flex">
+                  <div class="info-flex-item">
+                    <h2 class="name">
+                      {{resume.name}}
+                      <svg
+                        v-if="resume.gender === '男'"
+                        class="icon-svg"
+                        viewBox="0 0 1024 1024"
+                      >
+                        <path d="M64 512a448 448 0 1 0 896 0 448 448 0 1 0-896 0z" fill="#4BA1F1" />
+                        <path
+                          d="M638.4 340.352h-69.248a32 32 0 0 1 0-64h178.496v179.712a32 32 0 1 1-64 0v-70.4l-83.008 82.88a192 192 0 1 1-45.248-45.248l83.008-83.008zM353.6 670.4a128 128 0 1 0 181.056-181.056A128 128 0 0 0 353.6 670.4z"
+                          fill="#FFF"
+                        />
+                      </svg>
+                      <svg v-if="resume.gender === '女'" class="icon-svg" viewBox="0 0 1024 1024">
+                        <path
+                          d="M38.39999999999998 512a473.6 473.6 0 1 0 947.2 0 473.6 473.6 0 1 0-947.2 0z"
+                          fill="#FF4A55"
+                        />
+                        <path
+                          d="M421.504 647.744l45.248 45.248a32 32 0 0 1-45.248 45.312l-45.248-45.312-45.248 45.312a32 32 0 0 1-45.312-45.312l45.312-45.248-45.312-45.248a32 32 0 0 1 45.312-45.248l45.248 45.248 47.104-47.104a192 192 0 1 1 45.248 45.248l-47.104 47.104zM670.4 353.6a128 128 0 1 0-181.056 181.056A128 128 0 0 0 670.4 353.6z"
+                          fill="#FFF"
+                        />
+                      </svg>
+                    </h2>
+                    <div class="info-labels">
+                      <p :style="{'flex-direction':isPC?'row':'column'}">
+                        <span>
+                          <i class="fz-resume fz-experience"></i>
+                          {{resume.experience}}年经验
+                        </span>
+                        <span v-if="resume.education" class="prev-line" :class="{'no-line':!isPC}">
+                          <i class="fz-resume fz-degree"></i>
+                          {{resume.education}}
+                        </span>
+                        <span class="prev-line" :class="{'no-line':!isPC}">
+                          <i class="fz-resume fz-status"></i>
+                          {{resume.jobStatus}}
+                        </span>
+                      </p>
+                      <p :style="{'flex-direction':isPC?'row':'column'}">
+                        <span>
+                          <i class="fz-resume fz-tel"></i>
+                          {{resume.mobile}}
+                        </span>
+                        <span v-if="resume.weChat" class="prev-line" :class="{'no-line':!isPC}">
+                          <i class="fz-resume fz-weixin"></i>
+                          {{resume.weChat}}
+                        </span>
+                        <span class="prev-line" :class="{'no-line':!isPC}">
+                          <i class="fz-resume fz-mail"></i>
+                          {{resume.email}}
+                        </span>
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div v-if="resume.avatar" class="info-flex-item header-upload">
-                  <div class="header-box">
-                    <img :src="resume.avatar" class="header-img" />
+                  <div v-if="resume.avatar" class="info-flex-item header-upload">
+                    <div class="header-box">
+                      <img :src="resume.avatar" class="header-img" />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="resume-item resume-purpose">
-            <div class="item-primary">
-              <h3 class="title">期望职位 (Expected position)</h3>
-              <ul>
-                <li style="padding:8px 0;">
-                  <div class="primary-info">
-                    <div class="ui-select-inner" :style="{'flex-direction':isPC?'row':'column'}">
-                      <span>
-                        <span class="label-text">
-                          <i class="fz-resume fz-job"></i>
-                          {{resume.jobName}}
+            <div class="resume-item resume-purpose">
+              <div class="item-primary">
+                <h3 class="title">期望职位 (Expected position)</h3>
+                <ul>
+                  <li style="padding:8px 0;">
+                    <div class="primary-info">
+                      <div class="ui-select-inner" :style="{'flex-direction':isPC?'row':'column'}">
+                        <span>
+                          <span class="label-text">
+                            <i class="fz-resume fz-job"></i>
+                            {{resume.jobName}}
+                          </span>
                         </span>
-                      </span>
-                      <span class="prev-line" :class="{'no-line':!isPC}">
-                        <i class="fz-resume fz-place"></i>
-                        {{resume.city}}
-                      </span>
-                      <span class="prev-line" :class="{'no-line':!isPC}">
-                        <i class="fz-resume fz-salary"></i>
-                        {{resume.salary}}K
-                      </span>
-                      <span class="prev-line" :class="{'no-line':!isPC}">
-                        <i class="fz-resume fz-industry"></i>
-                        {{resume.jobType}}
-                      </span>
+                        <span class="prev-line" :class="{'no-line':!isPC}">
+                          <i class="fz-resume fz-place"></i>
+                          {{resume.city}}
+                        </span>
+                        <span class="prev-line" :class="{'no-line':!isPC}">
+                          <i class="fz-resume fz-salary"></i>
+                          {{resume.salary}}K
+                        </span>
+                        <span class="prev-line" :class="{'no-line':!isPC}">
+                          <i class="fz-resume fz-industry"></i>
+                          {{resume.jobType}}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              </ul>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
-          <div v-if="resume.experiences" class="resume-item resume-project">
-            <div class="item-primary">
-              <h3 class="title">工作经历 (Experience)</h3>
-              <ul>
-                <li v-for="(item,index) in resume.experiences" :key="index">
-                  <div class="primary-info">
-                    <div class="info-text">
-                      <h4 class="name">{{item.companyName}}</h4>
-                      <span
-                        class="gray period"
-                      >{{item.startTime | filterDate('YYYY-MM-DD')}}至{{item.endTime | filterDate('YYYY-MM-DD')}}</span>
+            <div v-if="resume.experiences" class="resume-item resume-project">
+              <div class="item-primary">
+                <h3 class="title">工作经历 (Experience)</h3>
+                <ul>
+                  <li v-for="(item,index) in resume.experiences" :key="index">
+                    <div class="primary-info">
+                      <div class="info-text">
+                        <h4 class="name">{{item.companyName}}</h4>
+                        <span
+                          class="gray period"
+                        >{{item.startTime | filterDate('YYYY-MM-DD')}}至{{item.endTime | filterDate('YYYY-MM-DD')}}</span>
+                      </div>
+                      <div class="info-text" v-html="item.projectContent"></div>
+                      <div class="info-text">
+                        <span class="text-type">技术栈：</span>
+                        {{item.technologyStack}}
+                      </div>
                     </div>
-                    <div class="info-text" v-html="item.projectContent"></div>
-                    <div class="info-text">
-                      <span class="text-type">技术栈：</span>
-                      {{item.technologyStack}}
-                    </div>
-                  </div>
-                </li>
-              </ul>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
-          <div v-if="resume.projectExp" class="resume-item resume-history">
-            <div class="item-primary">
-              <h3 class="title">项目经历 (Project exp)</h3>
-              <ul>
-                <li
-                  v-for="(item,index) in resume.projectExp"
-                  :key="index"
-                  :class="{'active':item.open}"
-                >
-                  <div class="primary-info">
-                    <div class="info-text">
-                      <h4 class="name">{{item.projectName}}</h4>
-                      <span
-                        class="gray period"
-                      >{{item.startTime | filterDate('YYYY-MM-DD')}}至{{item.endTime | filterDate('YYYY-MM-DD')}}</span>
-                      <mu-button
-                        v-if="item.pictures && item.pictures[0].imgUrl"
-                        @click="handleView(item)"
-                        flat
-                        small
-                        style="float:right"
-                        color="primary"
-                      >项目预览</mu-button>
-                      <mu-drawer :width="isPC?'25%':'75%'" :open.sync="item.open" :docked="false">
-                        <mu-grid-list :cols="1">
-                          <div class="modal-img" v-for="item in pictures" :key="item.imgUrl">
-                            <img :src="item.imgUrl" />
-                          </div>
-                        </mu-grid-list>
-                      </mu-drawer>
+            <div v-if="resume.projectExp" class="resume-item resume-history">
+              <div class="item-primary">
+                <h3 class="title">项目经历 (Project exp)</h3>
+                <ul>
+                  <li
+                    v-for="(item,index) in resume.projectExp"
+                    :key="index"
+                    :class="{'active':item.open}"
+                  >
+                    <div class="primary-info">
+                      <div class="info-text">
+                        <h4 class="name">{{item.projectName}}</h4>
+                        <span
+                          class="gray period"
+                        >{{item.startTime | filterDate('YYYY-MM-DD')}}至{{item.endTime | filterDate('YYYY-MM-DD')}}</span>
+                        <mu-button
+                          v-if="item.pictures && item.pictures[0].imgUrl"
+                          @click="handleView(item)"
+                          flat
+                          small
+                          style="float:right"
+                          color="primary"
+                        >项目预览</mu-button>
+                        <mu-drawer :width="isPC?'25%':'75%'" :open.sync="item.open" :docked="false">
+                          <mu-grid-list :cols="1">
+                            <div class="modal-img" v-for="item in pictures" :key="item.imgUrl">
+                              <img :src="item.imgUrl" />
+                            </div>
+                          </mu-grid-list>
+                        </mu-drawer>
+                      </div>
+                      <h4 v-if="item.department || item.department">
+                        <span v-if="item.department" class="prev-line no-line">{{item.department}}</span>
+                        <span v-if="item.job" :class="{'prev-line':item.department}">{{item.job}}</span>
+                      </h4>
+                      <div class="info-text">
+                        <p class="text-type">项目内容：</p>
+                        <div v-html="item.projectDesc"></div>
+                      </div>
+                      <div class="keywords">
+                        <span v-for="sub in item.projectTags" :key="sub">{{sub}}</span>
+                      </div>
                     </div>
-                    <h4 v-if="item.department || item.department">
-                      <span v-if="item.department" class="prev-line no-line">{{item.department}}</span>
-                      <span v-if="item.job" :class="{'prev-line':item.department}">{{item.job}}</span>
-                    </h4>
-                    <div class="info-text">
-                      <p class="text-type">项目内容：</p>
-                      <div v-html="item.projectDesc"></div>
-                    </div>
-                    <div class="keywords">
-                      <span v-for="sub in item.projectTags" :key="sub">{{sub}}</span>
-                    </div>
-                  </div>
-                </li>
-              </ul>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
 
-          <div class="resume-item resume-summary">
-            <div class="item-primary advantage-show">
-              <h3 class="title">个人总结 (Summary)</h3>
-              <ul>
-                <li>
-                  <div class="primary-info">
-                    <div class="info-text advantage-text">{{resume.summary}}</div>
-                  </div>
-                </li>
-              </ul>
+            <div class="resume-item resume-summary">
+              <div class="item-primary advantage-show">
+                <h3 class="title">个人总结 (Summary)</h3>
+                <ul>
+                  <li>
+                    <div class="primary-info">
+                      <div class="info-text advantage-text">{{resume.summary}}</div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -196,6 +201,7 @@
   </div>
 </template>
 <script>
+import pdf from "@/utils/pdf";
 export default {
   name: "resume",
   components: {},
@@ -238,6 +244,18 @@ export default {
         this.resume = res.data.list ? res.data.list[0] : null;
         this.$progress.done();
         loading.close();
+      }
+    },
+    async printResume() {
+      const res = await this.$confirm("即将下载简历为pdf格式", "提示");
+      if (res.result) {
+        const result = await pdf(document.getElementById("printContent"), true);
+        result.save(
+          `${this.resume.name}的简历-${this.filterDate(
+            new Date(),
+            "YYYY-MM-DD"
+          )}.pdf`
+        );
       }
     }
   }
@@ -586,6 +604,19 @@ export default {
   background: #ccc;
   img {
     vertical-align: middle;
+  }
+}
+
+.print-btn {
+  position: fixed;
+  left: 310px;
+  bottom: 20px;
+}
+
+@media print {
+  ul,
+  li {
+    list-style: none;
   }
 }
 </style>

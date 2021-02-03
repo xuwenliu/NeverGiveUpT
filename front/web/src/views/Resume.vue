@@ -249,7 +249,7 @@ export default {
     async printResume() {
       const res = await this.$confirm("即将下载简历为pdf格式", "提示");
       if (res.result) {
-        const result = await pdf(document.getElementById("printContent"), true);
+        const result = await pdf(document.getElementById("printContent"));
         result.save(
           `${this.resume.name}的简历-${this.filterDate(
             new Date(),

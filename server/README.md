@@ -31,32 +31,31 @@ $ npm stop
 
 [egg]: https://eggjs.org
 
+### 1.修改项目默认启动端口为 6666
 
-### 1.修改项目默认启动端口为7002
 config.default.js 配置如下：
 
 ```js
 config.cluster = {
   listen: {
-    path: '',
-    port: 7002,
-    hostname: '0.0.0.0',
-  }
+    path: "",
+    port: 6666,
+    hostname: "0.0.0.0",
+  },
 };
-
 ```
 
-### 2.MongoDB Mac启动步骤
-```js
-cd /usr/local/mongodb/bin  
-sudo ./mongod
-新开终端 
-cd /usr/local/mongodb/bin 
-./mongod
+### 2.MongoDB Mac 启动步骤
+
+```bash
+$ cd /usr/local/mongodb/bin
+$ sudo ./mongod
+# 新开终端
+$ cd /usr/local/mongodb/bin
+$ ./mongod
 ```
 
-
-### 3.post请求csrf问题忽略
+### 3.post 请求 csrf 问题忽略
 
 config.default.js 配置如下：
 
@@ -69,7 +68,7 @@ config.security = {
 };
 ```
 
-### 4.RESTful风格的URL定义
+### 4.RESTful 风格的 URL 定义
 
 ```js
 router.resources("topics", baseRouter + "/topics", jwt, controller.topics);
@@ -94,7 +93,7 @@ router.post("/api/v1/playlist", controller.playlist.create);
 
 - github: https://github.com/okoala/egg-jwt
 
-1.config.default.js
+  1.config.default.js
 
 ```js
 config.jwt = {
@@ -130,4 +129,4 @@ module.exports = (app) => {
 
 - https://github.com/heimi-block/egg-RESTfulAPI
 - https://github.com/xuwenliu/node-phone/blob/master/v2 node+koa2+mongoose
-- https://www.jianshu.com/p/c3c9b1469fee  Egg上传文件到七牛云
+- https://www.jianshu.com/p/c3c9b1469fee Egg 上传文件到七牛云

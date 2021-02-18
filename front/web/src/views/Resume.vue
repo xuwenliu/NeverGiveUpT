@@ -1,9 +1,9 @@
 <template>
   <div class="resume">
     <mu-date-picker v-if="isPC" class="pc-date-picker"></mu-date-picker>
-    <mu-button v-if="isPC" class="print-btn" @click="printResume" fab color="info">
+    <!-- <mu-button v-if="isPC" class="print-btn" @click="printResume" fab color="info">
       <mu-icon value="cloud_download"></mu-icon>
-    </mu-button>
+    </mu-button> -->
 
     <mu-card raised :class="isPC?'card':'wap-card'">
       <mu-date-picker v-if="!isPC" class="date-picker"></mu-date-picker>
